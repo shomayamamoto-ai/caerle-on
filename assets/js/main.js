@@ -11,15 +11,22 @@
     window.addEventListener('load', () => setTimeout(hideLoader, 600));
   }
 
-  // ---------- Sticky header & floating CTA ----------
+  // ---------- Sticky header, floating CTA, progress bar ----------
   const header = document.getElementById('siteHeader');
   const cta = document.querySelector('.floating-cta');
+  const progress = document.getElementById('progressFill');
   const onScroll = () => {
     const y = window.scrollY;
     if (header) header.classList.toggle('is-scrolled', y > 20);
     if (cta) cta.classList.toggle('is-visible', y > window.innerHeight * 0.6);
+    if (progress) {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = max > 0 ? Math.min(100, (y / max) * 100) : 0;
+      progress.style.width = pct + '%';
+    }
   };
   window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
   onScroll();
 
   // ---------- Mobile nav ----------

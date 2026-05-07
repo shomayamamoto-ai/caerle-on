@@ -52,6 +52,81 @@ button { font: inherit; }
 .sp-only { display: none; }
 @media (max-width: 720px) { .sp-only { display: inline; } }
 
+/* ---------- Scroll Progress ---------- */
+.progress-bar {
+  position: fixed; left: 0; top: 0; right: 0;
+  height: 2px; z-index: 60;
+  background: transparent;
+  pointer-events: none;
+}
+.progress-bar > span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(to right, var(--gold-3), var(--gold), var(--gold-2));
+  box-shadow: 0 0 12px rgba(231,199,148,0.5);
+  transition: width .1s linear;
+}
+
+/* ---------- News ---------- */
+.news {
+  background: var(--bg-2);
+  padding: clamp(40px, 7vw, 80px) clamp(20px, 4vw, 56px);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.news__inner { max-width: var(--container); margin: 0 auto; }
+.news__panel {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: clamp(20px, 3vw, 40px);
+  align-items: start;
+}
+.news__label {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(28px, 3.4vw, 38px);
+  letter-spacing: 0.16em;
+  color: var(--gold-2);
+  position: relative;
+  padding-bottom: 16px;
+}
+.news__label::after {
+  content: ""; position: absolute;
+  left: 0; bottom: 0; width: 36px; height: 1px;
+  background: var(--gold);
+}
+.news__list { list-style: none; padding: 0; margin: 0; }
+.news__list li {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 24px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+  align-items: baseline;
+}
+.news__list li:last-child { border-bottom: 0; }
+.news__list time {
+  font-family: var(--serif);
+  font-style: italic;
+  letter-spacing: 0.18em;
+  color: var(--gold-2);
+  font-size: 13px;
+}
+.news__list p {
+  margin: 0;
+  font-family: var(--serif-jp);
+  letter-spacing: 0.08em;
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.9;
+}
+@media (max-width: 720px) {
+  .news__panel { grid-template-columns: 1fr; }
+  .news__label { padding-bottom: 12px; }
+  .news__list li { grid-template-columns: 80px 1fr; gap: 12px; padding: 12px 0; }
+}
+
 /* ---------- Loader ---------- */
 .loader {
   position: fixed; inset: 0; z-index: 100;
