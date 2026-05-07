@@ -3,26 +3,26 @@
    ========================================================= */
 
 :root {
-  --bg: #0a0807;
-  --bg-2: #100c0a;
-  --bg-3: #18120f;
-  --ink: #f0e7dc;
-  --ink-2: #c9bfb1;
-  --ink-3: #8a8073;
-  --line: rgba(239, 231, 220, 0.12);
-  --line-2: rgba(239, 231, 220, 0.22);
-  --gold: #c9a36a;
-  --gold-2: #e7c794;
-  --gold-3: #f6e2bd;
+  --bg: #0a0806;
+  --bg-2: #0e0b09;
+  --bg-3: #14100d;
+  --ink: #ece4d6;
+  --ink-2: #b9b0a1;
+  --ink-3: #7e7568;
+  --line: rgba(236, 228, 214, 0.10);
+  --line-2: rgba(236, 228, 214, 0.20);
+  --gold: #b89569;        /* champagne, slightly muted */
+  --gold-2: #d8b984;
+  --gold-3: #efd6a8;
   --rose: #c46b7a;
   --shadow-1: 0 30px 80px rgba(0, 0, 0, 0.55);
   --shadow-2: 0 8px 30px rgba(0, 0, 0, 0.45);
-  --serif: "Cormorant Garamond", "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
-  --serif-jp: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --serif: "Cormorant Garamond", "Shippori Mincho", "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --serif-jp: "Shippori Mincho", "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
   --sans: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", system-ui, sans-serif;
-  --container: 1240px;
+  --container: 1200px;
   --gap: clamp(20px, 4vw, 56px);
-  --radius: 2px;
+  --radius: 1px;
   --ease: cubic-bezier(.7,0,.2,1);
 }
 
@@ -32,11 +32,11 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: var(--sans);
+  font-family: var(--serif-jp);
   font-weight: 300;
-  font-size: 16px;
-  line-height: 1.9;
-  letter-spacing: 0.04em;
+  font-size: 15px;
+  line-height: 2.0;
+  letter-spacing: 0.06em;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
@@ -570,15 +570,17 @@ button { font: inherit; }
   display: inline-block;
   font-family: var(--serif);
   font-style: italic;
-  font-size: 14px;
-  letter-spacing: 0.42em;
+  font-size: 12px;
+  letter-spacing: 0.5em;
   color: var(--gold-2);
-  margin-bottom: 18px;
-  position: relative; padding: 0 28px;
+  margin-bottom: 22px;
+  position: relative; padding: 0 36px;
+  text-transform: uppercase;
 }
 .eyebrow::before, .eyebrow::after {
   content: ""; position: absolute; top: 50%;
-  width: 18px; height: 1px; background: var(--gold);
+  width: 22px; height: 1px; background: var(--gold);
+  opacity: .8;
 }
 .eyebrow::before { left: 0; }
 .eyebrow::after  { right: 0; }
@@ -587,11 +589,12 @@ button { font: inherit; }
 
 .heading {
   font-family: var(--serif-jp);
-  font-weight: 300;
-  font-size: clamp(24px, 3.6vw, 42px);
-  letter-spacing: 0.16em;
+  font-weight: 400;
+  font-size: clamp(26px, 3.6vw, 40px);
+  letter-spacing: 0.20em;
   margin: 0;
-  line-height: 1.5;
+  line-height: 1.7;
+  color: var(--ink);
 }
 .heading--light { color: var(--ink); }
 
@@ -687,14 +690,16 @@ button { font: inherit; }
 .feature__media img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.95); }
 .feature__body { padding: 36px 28px 40px; }
 .feature__num {
-  display: block;
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 48px;
+  display: inline-block;
+  font-family: var(--serif-jp);
+  font-weight: 400;
+  font-size: 26px;
   line-height: 1;
-  color: transparent;
-  -webkit-text-stroke: 1px var(--gold);
+  color: var(--gold-2);
   margin-bottom: 18px;
+  border-bottom: 1px solid var(--line-2);
+  padding: 0 4px 8px;
+  letter-spacing: 0.08em;
 }
 .feature__title {
   font-family: var(--serif-jp);
@@ -970,6 +975,37 @@ button { font: inherit; }
   .divider__line { max-width: 140px; }
 }
 
+/* ---------- Hero – Vertical Tagline ---------- */
+.hero__vertical {
+  position: absolute;
+  right: clamp(20px, 4vw, 56px);
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+  writing-mode: vertical-rl;
+  -webkit-writing-mode: vertical-rl;
+  font-family: var(--serif-jp);
+  font-weight: 300;
+  font-size: clamp(13px, 1.4vw, 16px);
+  letter-spacing: 0.5em;
+  color: var(--ink-2);
+  z-index: 2;
+  text-shadow: 0 2px 14px rgba(0,0,0,0.7);
+  opacity: 0;
+  animation: heroVerticalIn 1.6s 1.4s var(--ease) forwards;
+}
+.hero__vsep {
+  display: inline-block;
+  width: 1em; height: 1px;
+}
+@keyframes heroVerticalIn {
+  from { opacity: 0; transform: translate(8px, -50%); }
+  to   { opacity: 1; transform: translate(0, -50%); }
+}
+@media (max-width: 720px) {
+  .hero__vertical { right: 14px; font-size: 12px; letter-spacing: 0.42em; }
+}
+
 /* ---------- Hero refinements ---------- */
 .hero__eyebrow em { font-style: italic; }
 .hero__logo-wrap {
@@ -1105,11 +1141,11 @@ button { font: inherit; }
 }
 .drink__num {
   display: inline-block;
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 28px;
+  font-family: var(--serif-jp);
+  font-weight: 400;
+  font-size: 26px;
   color: var(--gold-2);
-  letter-spacing: 0;
+  letter-spacing: 0.08em;
   margin-bottom: 18px;
   border-bottom: 1px solid var(--line-2);
   padding: 0 4px 6px;
@@ -1200,41 +1236,6 @@ button { font: inherit; }
 .lightbox__nav--prev { top: 50%; left: 24px; transform: translateY(-50%); }
 .lightbox__nav--next { top: 50%; right: 24px; transform: translateY(-50%); }
 .gallery__item { cursor: zoom-in; }
-
-/* ---------- Custom Cursor ---------- */
-.cursor {
-  position: fixed; top: 0; left: 0;
-  pointer-events: none;
-  z-index: 90;
-  mix-blend-mode: difference;
-  display: none;
-}
-@media (hover: hover) and (pointer: fine) {
-  .cursor { display: block; }
-  body { cursor: none; }
-  a, button, .gallery__item { cursor: none; }
-}
-.cursor__dot, .cursor__ring {
-  position: absolute; left: 0; top: 0;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-}
-.cursor__dot {
-  width: 6px; height: 6px;
-  background: #fff;
-  transition: transform .15s ease;
-}
-.cursor__ring {
-  width: 36px; height: 36px;
-  border: 1px solid rgba(255,255,255,.55);
-  transition: width .25s ease, height .25s ease, border-color .25s ease, background .25s ease;
-}
-.cursor.is-hover .cursor__ring {
-  width: 56px; height: 56px;
-  background: rgba(255,255,255,.08);
-  border-color: rgba(255,255,255,.85);
-}
-.cursor.is-hover .cursor__dot { transform: translate(-50%, -50%) scale(0); }
 
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
