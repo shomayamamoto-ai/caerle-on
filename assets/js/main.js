@@ -125,44 +125,6 @@
     });
   }
 
-  // ---------- Custom Cursor ----------
-  const cursor = document.getElementById('cursor');
-  if (cursor && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-    let x = window.innerWidth / 2, y = window.innerHeight / 2;
-    let rx = x, ry = y;
-    const dot = cursor.querySelector('.cursor__dot');
-    const ring = cursor.querySelector('.cursor__ring');
-    document.addEventListener('mousemove', (e) => { x = e.clientX; y = e.clientY; });
-    const tick = () => {
-      rx += (x - rx) * 0.22;
-      ry += (y - ry) * 0.22;
-      dot.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
-      ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
-      requestAnimationFrame(tick);
-    };
-    tick();
-    const hoverable = 'a, button, .gallery__item, input, textarea, label, [data-cursor]';
-    document.addEventListener('mouseover', (e) => {
-      if (e.target.closest(hoverable)) cursor.classList.add('is-hover');
-    });
-    document.addEventListener('mouseout', (e) => {
-      if (e.target.closest(hoverable)) cursor.classList.remove('is-hover');
-    });
-  }
-
-  // ---------- Magnetic buttons ----------
-  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-    document.querySelectorAll('.btn').forEach(btn => {
-      const inner = btn.querySelector('span') || btn;
-      btn.addEventListener('mousemove', (e) => {
-        const r = btn.getBoundingClientRect();
-        const mx = e.clientX - r.left - r.width / 2;
-        const my = e.clientY - r.top - r.height / 2;
-        inner.style.transform = `translate(${mx * 0.18}px, ${my * 0.25}px)`;
-      });
-      btn.addEventListener('mouseleave', () => { inner.style.transform = ''; });
-    });
-  }
 
   // ---------- Year ----------
   const y = document.getElementById('year');
