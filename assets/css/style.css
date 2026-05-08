@@ -758,6 +758,8 @@ button { font: inherit; }
   font-weight: 700;
   font-size: 22px;
   letter-spacing: 0.14em;
+  line-height: 1.45;
+  min-height: 2.9em;
   margin: 0 0 14px;
   color: var(--ink);
 }
