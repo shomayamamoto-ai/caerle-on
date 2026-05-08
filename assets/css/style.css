@@ -6,11 +6,11 @@
   --bg: #0a0806;
   --bg-2: #0e0b09;
   --bg-3: #14100d;
-  --ink: #ece4d6;
-  --ink-2: #b9b0a1;
-  --ink-3: #7e7568;
-  --line: rgba(236, 228, 214, 0.10);
-  --line-2: rgba(236, 228, 214, 0.20);
+  --ink: #f5efe4;
+  --ink-2: #d9d0c0;
+  --ink-3: #a39a8b;
+  --line: rgba(236, 228, 214, 0.16);
+  --line-2: rgba(236, 228, 214, 0.30);
   --gold: #b89569;        /* champagne, slightly muted */
   --gold-2: #d8b984;
   --gold-3: #efd6a8;
@@ -33,10 +33,10 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: var(--serif-jp);
-  font-weight: 300;
-  font-size: 15px;
-  line-height: 2.0;
-  letter-spacing: 0.06em;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.95;
+  letter-spacing: 0.04em;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
@@ -116,9 +116,10 @@ button { font: inherit; }
 .news__list p {
   margin: 0;
   font-family: var(--serif-jp);
-  letter-spacing: 0.08em;
-  color: var(--ink-2);
-  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  font-size: 16px;
   line-height: 1.9;
 }
 @media (max-width: 720px) {
@@ -210,18 +211,18 @@ button { font: inherit; }
 .timeline__body { padding-left: 24px; }
 .timeline__body h3 {
   font-family: var(--serif-jp);
-  font-weight: 400;
+  font-weight: 600;
   font-size: 19px;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   color: var(--ink);
   margin: 0 0 10px;
 }
 .timeline__body p {
   font-family: var(--serif-jp);
   margin: 0;
-  color: var(--ink-2);
-  font-size: 15px;
-  line-height: 2;
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.95;
   letter-spacing: 0.08em;
 }
 @media (max-width: 720px) {
@@ -253,9 +254,10 @@ button { font: inherit; }
 .access__steps li {
   display: flex; align-items: center; gap: 12px;
   font-family: var(--serif-jp);
-  color: var(--ink-2);
-  font-size: 14px;
-  letter-spacing: 0.10em;
+  font-weight: 500;
+  color: var(--ink);
+  font-size: 15px;
+  letter-spacing: 0.08em;
 }
 .access__line {
   display: inline-block;
@@ -625,14 +627,14 @@ button { font: inherit; }
 
 .heading {
   font-family: var(--serif-jp);
-  font-weight: 400;
+  font-weight: 500;
   font-size: clamp(26px, 3.6vw, 40px);
-  letter-spacing: 0.20em;
+  letter-spacing: 0.18em;
   margin: 0;
   line-height: 1.7;
   color: var(--ink);
 }
-.heading--light { color: var(--ink); }
+.heading--light { color: #fff; }
 
 /* ---------- Concept ---------- */
 .section--concept { background: linear-gradient(to bottom, var(--bg) 0%, var(--bg-2) 100%); }
@@ -651,21 +653,21 @@ button { font: inherit; }
 }
 .concept__lead {
   font-family: var(--serif-jp);
-  font-weight: 300;
-  font-size: clamp(18px, 1.6vw, 22px);
-  line-height: 2.2;
+  font-weight: 500;
+  font-size: clamp(19px, 1.7vw, 24px);
+  line-height: 2.1;
   color: var(--ink);
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   margin: 0 0 1.6em;
 }
 .concept__text p {
   margin: 0 0 1.6em;
   font-family: var(--serif-jp);
-  font-weight: 300;
-  font-size: clamp(15px, 1.2vw, 16px);
-  line-height: 2.2;
-  color: var(--ink-2);
-  letter-spacing: 0.12em;
+  font-weight: 400;
+  font-size: clamp(16px, 1.2vw, 17px);
+  line-height: 2.1;
+  color: var(--ink);
+  letter-spacing: 0.10em;
 }
 .concept__sign {
   font-family: var(--serif) !important;
@@ -748,17 +750,17 @@ button { font: inherit; }
 }
 .feature__title {
   font-family: var(--serif-jp);
-  font-weight: 400;
+  font-weight: 500;
   font-size: 22px;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   margin: 0 0 14px;
   color: var(--ink);
 }
 .feature__body p {
   margin: 0;
-  color: var(--ink-2);
-  font-size: 15px;
-  line-height: 2;
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.95;
 }
 
 /* ---------- Gallery ---------- */
@@ -835,10 +837,12 @@ button { font: inherit; }
 .piano__text .heading { margin-top: 16px; }
 .piano__text p {
   font-family: var(--serif-jp);
+  font-weight: 500;
   margin: 28px 0 0;
-  color: var(--ink-2);
-  letter-spacing: 0.12em;
-  line-height: 2.2;
+  color: var(--ink);
+  font-size: 16px;
+  letter-spacing: 0.10em;
+  line-height: 2.1;
 }
 .piano__small {
   font-family: var(--serif) !important;
@@ -873,20 +877,21 @@ button { font: inherit; }
 .info__row:first-child { border-top: 1px solid var(--line); }
 .info__row dt {
   font-family: var(--serif);
-  letter-spacing: 0.24em;
+  font-weight: 600;
+  letter-spacing: 0.22em;
   color: var(--gold-2);
-  font-size: 13px;
+  font-size: 14px;
   align-self: center;
 }
 .info__row dd {
   margin: 0;
   font-family: var(--serif-jp);
-  font-weight: 300;
+  font-weight: 500;
   color: var(--ink);
-  letter-spacing: 0.08em;
-  font-size: 15px;
+  letter-spacing: 0.06em;
+  font-size: 16px;
 }
-.info__row dd small { color: var(--ink-3); margin-left: 8px; font-size: 12px; letter-spacing: .12em; }
+.info__row dd small { color: var(--ink-2); margin-left: 8px; font-size: 13px; letter-spacing: .10em; }
 
 @media (max-width: 880px) {
   .info-wrap { grid-template-columns: 1fr; }
@@ -900,13 +905,13 @@ button { font: inherit; }
   gap: clamp(32px, 5vw, 72px);
   align-items: start;
 }
-.access__note { color: var(--ink-2); margin: 0 0 28px; line-height: 2.0; font-size: 14px; }
+.access__note { color: var(--ink); margin: 0 0 28px; line-height: 2.0; font-size: 15px; }
 @media (max-width: 880px) { .access { grid-template-columns: 1fr; } }
 
 /* ---------- Contact ---------- */
 .section--contact { background: var(--bg); }
 .contact { max-width: 880px; margin: 0 auto; }
-.contact__lead { text-align: center; color: var(--ink-2); margin-bottom: 56px; line-height: 2.2; }
+.contact__lead { text-align: center; color: var(--ink); font-size: 16px; font-weight: 500; margin-bottom: 56px; line-height: 2.1; }
 .contact__form { display: grid; grid-template-columns: 1fr 1fr; gap: 28px 36px; }
 .field { display: flex; flex-direction: column; gap: 8px; }
 .field--full { grid-column: 1 / -1; }
@@ -1148,12 +1153,13 @@ button { font: inherit; }
 
 /* ---------- Section lead ---------- */
 .section__lead {
-  margin: 18px auto 0;
-  max-width: 640px;
-  color: var(--ink-2);
+  margin: 22px auto 0;
+  max-width: 660px;
+  color: var(--ink);
   font-family: var(--serif-jp);
-  font-size: 15px;
-  letter-spacing: 0.14em;
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: 0.12em;
   line-height: 2;
 }
 
@@ -1206,17 +1212,18 @@ button { font: inherit; }
 }
 .menu__title h3 {
   font-family: var(--serif);
-  font-weight: 500;
-  font-size: 19px;
-  letter-spacing: 0.18em;
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 0.16em;
   margin: 0 0 4px;
   color: var(--ink);
 }
 .menu__title p {
   font-family: var(--serif-jp);
-  font-size: 11px;
-  letter-spacing: 0.26em;
-  color: var(--ink-3);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  color: var(--ink-2);
   margin: 0;
 }
 
@@ -1225,10 +1232,11 @@ button { font: inherit; }
 }
 .menu__list li {
   font-family: var(--serif);
-  font-size: 14px;
-  letter-spacing: 0.08em;
-  color: var(--ink-2);
-  padding: 6px 0;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  padding: 7px 0;
   position: relative;
 }
 .menu__list li::before {
