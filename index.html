@@ -135,7 +135,7 @@
   </div>
 
   <!-- CONCEPT -->
-  <section class="section section--concept" id="concept">
+  <section class="section section--concept" id="concept" data-section-no="01" data-section-label="Concept">
     <div class="section__bg" aria-hidden="true"></div>
     <div class="section__inner">
       <header class="section__head" data-reveal>
@@ -148,22 +148,18 @@
           <p class="concept__lead">Caerle&rsquo;on―。<br />選ばれた紳士のためにだけ、<br />夜は静かに扉を開く。</p>
           <p>2011 年 9 月、六本木の地に灯した一軒の社交場。<br />重厚な木の格子、漆黒の卓、灯りに浮かぶ大理石。<br />季節の花が空間に色を添え、揺らぐ光がグラスの琥珀を照らします。</p>
           <p>会話に集中できる、心地よい距離感。<br />どこにもない、一夜限りの景色を。<br />私たちは静寂と気品をもって、<br />あなただけの夜をお迎えいたします。</p>
-          <p class="concept__sign" aria-hidden="true">― IXI de Caerle&rsquo;on / 2011 ―</p>
+          <p class="concept__sign" aria-hidden="true">― IXI de Caerle&rsquo;on / Since 2011 ―</p>
         </div>
-        <div class="concept__visual" data-reveal>
-          <figure class="concept__figure concept__figure--lg">
-            <img src="images/hero-flowers.jpg" alt="フラワーアレンジメントとエントランス" loading="lazy" />
-          </figure>
-          <figure class="concept__figure concept__figure--sm">
-            <img src="images/flowers-pink.jpg" alt="百合と躑躅のアレンジメント" loading="lazy" />
-          </figure>
-        </div>
+        <figure class="concept__hero" data-reveal>
+          <img src="images/hero-flowers.jpg" alt="フラワーアレンジメントとエントランス" loading="lazy" />
+          <figcaption>季節の花が、夜を彩る。</figcaption>
+        </figure>
       </div>
     </div>
   </section>
 
   <!-- STORY (沿革) -->
-  <section class="section section--story" id="story">
+  <section class="section section--story" id="story" data-section-no="02" data-section-label="Story">
     <div class="section__inner">
       <header class="section__head" data-reveal>
         <span class="eyebrow">Story</span>
@@ -205,7 +201,7 @@
   </section>
 
   <!-- FEATURES -->
-  <section class="section section--features" id="interior">
+  <section class="section section--features" id="interior" data-section-no="03" data-section-label="Interior">
     <div class="section__inner">
       <header class="section__head" data-reveal>
         <span class="eyebrow">Interior &amp; Hospitality</span>
@@ -242,7 +238,7 @@
   </section>
 
   <!-- GALLERY -->
-  <section class="section section--gallery" id="gallery">
+  <section class="section section--gallery" id="gallery" data-section-no="04" data-section-label="Gallery">
     <div class="section__inner">
       <header class="section__head" data-reveal>
         <span class="eyebrow">Gallery</span>
@@ -298,64 +294,82 @@
   </section>
 
   <!-- DRINKS / SELECTION -->
-  <section class="section section--drinks" id="drinks">
+  <section class="section section--drinks" id="drinks" data-section-no="05" data-section-label="Selection">
     <div class="section__inner">
       <header class="section__head" data-reveal>
         <span class="eyebrow">Selection</span>
         <h2 class="heading">夜に寄り添う、<br class="sp-only" />一杯の選択。</h2>
         <p class="section__lead">世界中から取り寄せた一級の銘柄を、ご用意しております。<br />お好みやその夜の気分を伺いながら、最適な一杯をご提案いたします。</p>
       </header>
-      <div class="drinks">
-        <article class="drink" data-reveal>
-          <span class="drink__num">壱</span>
-          <h3 class="drink__title">Champagne</h3>
-          <p class="drink__sub">シャンパーニュ／スパークリング</p>
-          <ul class="drink__list">
+
+      <div class="menu" data-reveal>
+        <div class="menu__col">
+          <header class="menu__head">
+            <span class="menu__num">壱</span>
+            <div class="menu__title">
+              <h3>Champagne</h3>
+              <p>シャンパーニュ</p>
+            </div>
+          </header>
+          <ul class="menu__list">
             <li>Krug Grande Cuvée</li>
             <li>Dom Pérignon</li>
             <li>Ruinart Blanc de Blancs</li>
-            <li>― and more</li>
           </ul>
-        </article>
-        <article class="drink" data-reveal>
-          <span class="drink__num">弐</span>
-          <h3 class="drink__title">Whisky</h3>
-          <p class="drink__sub">スコッチ／ジャパニーズ</p>
-          <ul class="drink__list">
+        </div>
+
+        <div class="menu__col">
+          <header class="menu__head">
+            <span class="menu__num">弐</span>
+            <div class="menu__title">
+              <h3>Whisky</h3>
+              <p>スコッチ／ジャパニーズ</p>
+            </div>
+          </header>
+          <ul class="menu__list">
             <li>Macallan 18 / 25</li>
             <li>Yamazaki 12 / 18</li>
             <li>Hibiki Harmony</li>
-            <li>― and more</li>
           </ul>
-        </article>
-        <article class="drink" data-reveal>
-          <span class="drink__num">参</span>
-          <h3 class="drink__title">Cocktail</h3>
-          <p class="drink__sub">シーズナル／クラシック</p>
-          <ul class="drink__list">
+        </div>
+
+        <div class="menu__col">
+          <header class="menu__head">
+            <span class="menu__num">参</span>
+            <div class="menu__title">
+              <h3>Cocktail</h3>
+              <p>シーズナル／クラシック</p>
+            </div>
+          </header>
+          <ul class="menu__list">
             <li>Seasonal Fruits Martini</li>
             <li>Old Fashioned</li>
             <li>Negroni / Manhattan</li>
-            <li>― お好みでお作りします</li>
           </ul>
-        </article>
-        <article class="drink" data-reveal>
-          <span class="drink__num">肆</span>
-          <h3 class="drink__title">Wine &amp; Others</h3>
-          <p class="drink__sub">ワイン／ノンアルコール</p>
-          <ul class="drink__list">
+        </div>
+
+        <div class="menu__col">
+          <header class="menu__head">
+            <span class="menu__num">肆</span>
+            <div class="menu__title">
+              <h3>Wine &amp; Others</h3>
+              <p>ワイン／ノンアルコール</p>
+            </div>
+          </header>
+          <ul class="menu__list">
             <li>Bourgogne / Bordeaux</li>
             <li>Italian Red &amp; White</li>
-            <li>Mocktail / Tea Selection</li>
-            <li>― お気軽にご相談ください</li>
+            <li>Mocktail / Tea</li>
           </ul>
-        </article>
+        </div>
       </div>
+
+      <p class="menu__note" data-reveal>― 上記は一例です。お好みに応じてお作りいたします ―</p>
     </div>
   </section>
 
   <!-- PIANO -->
-  <section class="section section--piano" id="piano">
+  <section class="section section--piano" id="piano" data-section-no="06" data-section-label="Piano">
     <div class="piano-bg" style="background-image:url('images/piano.jpg')" aria-hidden="true"></div>
     <div class="piano-veil" aria-hidden="true"></div>
     <div class="section__inner">
@@ -371,7 +385,7 @@
   </section>
 
   <!-- INFORMATION -->
-  <section class="section section--info" id="information">
+  <section class="section section--info" id="information" data-section-no="07" data-section-label="Information">
     <div class="section__inner">
       <header class="section__head" data-reveal>
         <span class="eyebrow">Information</span>
@@ -425,7 +439,7 @@
   </section>
 
   <!-- ACCESS -->
-  <section class="section section--access" id="access">
+  <section class="section section--access" id="access" data-section-no="08" data-section-label="Access">
     <div class="section__inner">
       <header class="section__head" data-reveal>
         <span class="eyebrow">Access</span>
@@ -460,7 +474,7 @@
   </section>
 
   <!-- CONTACT -->
-  <section class="section section--contact" id="contact">
+  <section class="section section--contact" id="contact" data-section-no="09" data-section-label="Reservation">
     <div class="section__inner">
       <header class="section__head" data-reveal>
         <span class="eyebrow">Reservation</span>
