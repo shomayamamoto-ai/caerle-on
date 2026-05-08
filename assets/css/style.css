@@ -757,11 +757,11 @@ button { font: inherit; }
   font-family: var(--serif-jp);
   font-weight: 700;
   font-size: 22px;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.10em;
   line-height: 1.45;
-  min-height: 2.9em;
   margin: 0 0 14px;
   color: var(--ink);
+  word-break: keep-all;
 }
 .feature__body p {
   margin: 0;
