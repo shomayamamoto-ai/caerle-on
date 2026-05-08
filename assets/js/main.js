@@ -2,15 +2,6 @@
 (() => {
   'use strict';
 
-  // ---------- Loader ----------
-  const loader = document.getElementById('loader');
-  const hideLoader = () => loader && loader.classList.add('is-hidden');
-  if (document.readyState === 'complete') {
-    setTimeout(hideLoader, 600);
-  } else {
-    window.addEventListener('load', () => setTimeout(hideLoader, 600));
-  }
-
   // ---------- Sticky header, floating CTA, progress bar ----------
   const header = document.getElementById('siteHeader');
   const cta = document.querySelector('.floating-cta');
