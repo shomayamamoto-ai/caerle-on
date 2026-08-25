@@ -89,47 +89,20 @@ img { display: block; max-width: 100%; height: auto; }
   cursor: pointer;
 }
 
-/* ロゴの各文字を独立してフェードイン */
-.header__logo .char {
-  display: inline-block;
+/* ロゴ画像のフェードイン */
+.header__logo-img {
+  height: 24px;
+  width: auto;
+  display: block;
   opacity: 0;
-  transform: translateY(20px);
-  animation: charFadeIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform: translateY(12px);
+  animation: charFadeIn 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards;
 }
-
-/* 各文字の遅延 */
-.header__logo .char:nth-child(1) { animation-delay: 0.2s; }
-.header__logo .char:nth-child(2) { animation-delay: 0.28s; }
-.header__logo .char:nth-child(3) { animation-delay: 0.36s; }
-.header__logo .char:nth-child(4) { animation-delay: 0.44s; }
-.header__logo .char:nth-child(5) { animation-delay: 0.52s; }
-.header__logo .char:nth-child(6) { animation-delay: 0.60s; }
-.header__logo .char:nth-child(7) { animation-delay: 0.68s; }
-.header__logo .char:nth-child(8) { animation-delay: 0.76s; }
-.header__logo .char:nth-child(9) { animation-delay: 0.84s; }
 
 @keyframes charFadeIn {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-/* アポストロフィに常時ほのかな明滅 */
-.header__logo .char--apostrophe {
-  color: var(--gold);
-  animation: charFadeIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.52s forwards,
-             apostropheGlow 3.5s ease-in-out 2s infinite;
-}
-
-@keyframes apostropheGlow {
-  0%, 100% { 
-    text-shadow: 0 0 0 transparent;
-    color: var(--gold);
-  }
-  50% { 
-    text-shadow: 0 0 12px rgba(217, 185, 119, 0.6);
-    color: var(--gold-bright);
   }
 }
 
@@ -174,9 +147,9 @@ img { display: block; max-width: 100%; height: auto; }
   left: 100%;
 }
 
-.header__logo:hover .char {
-  color: var(--gold-bright);
-  transition: color 0.4s;
+.header__logo:hover .header__logo-img {
+  filter: drop-shadow(0 0 10px rgba(217, 185, 119, 0.45));
+  transition: filter 0.4s;
 }
 
 /* ロゴ左のオーナメント(細い縦ライン) */
@@ -287,19 +260,16 @@ img { display: block; max-width: 100%; height: auto; }
 }
 
 .hero__title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(72px, 12vw, 200px);
-  font-weight: 300;
-  letter-spacing: -0.02em;
-  line-height: 0.92;
-  color: var(--ink);
-  margin-bottom: 32px;
+  margin-bottom: 40px;
+  line-height: 0;
 }
 
-.hero__title .italic {
-  font-style: italic;
-  color: var(--gold-bright);
-  font-weight: 300;
+.hero__title-img {
+  width: clamp(320px, 62vw, 820px);
+  height: auto;
+  margin: 0 auto;
+  filter: drop-shadow(0 6px 32px rgba(0, 0, 0, 0.55))
+          drop-shadow(0 0 46px rgba(217, 185, 119, 0.14));
 }
 
 .hero__sub {
@@ -914,19 +884,16 @@ section {
 }
 
 .footer__brand {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(80px, 16vw, 240px);
-  font-weight: 300;
-  font-style: italic;
-  line-height: 0.9;
-  letter-spacing: -0.02em;
   margin-bottom: 80px;
-  background: linear-gradient(180deg, var(--gold-bright) 0%, var(--gold) 50%, rgba(196,162,95,0.4) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
   border-bottom: 1px solid var(--line);
   padding-bottom: 48px;
+  line-height: 0;
+}
+
+.footer__brand img {
+  width: min(760px, 88%);
+  height: auto;
+  opacity: 0.9;
 }
 
 .footer__grid {
@@ -995,7 +962,7 @@ section {
 <header class="header" id="siteHeader">
   <a href="#" class="header__logo" aria-label="Caerle'on">
     <span class="header__logo-ornament" aria-hidden="true"></span>
-    <span class="char">C</span><span class="char">a</span><span class="char">e</span><span class="char">r</span><span class="char">l</span><span class="char">e</span><span class="char char--apostrophe">'</span><span class="char">o</span><span class="char">n</span>
+    <img src="assets/logo-light.png" alt="Caerle'on" class="header__logo-img">
   </a>
   <nav class="header__nav">
     <a href="#concept">Concept</a>
@@ -1016,7 +983,7 @@ section {
   <div class="hero__content">
     <div class="hero__crown">A Private Sanctuary</div>
     <h1 class="hero__title">
-      Caerle<span class="italic">'</span>on
+      <img src="assets/logo-light.png" alt="Caerle'on" class="hero__title-img">
     </h1>
     <div class="hero__sub">完 全 会 員 制 ラ ウ ン ジ</div>
   </div>
@@ -1206,7 +1173,7 @@ section {
 
 <footer class="footer">
   <div class="footer__inner">
-    <div class="footer__brand">Caerle'on</div>
+    <div class="footer__brand"><img src="assets/logo-gold.png" alt="Caerle'on"></div>
 
     <div class="footer__grid">
       <div class="footer__col">
