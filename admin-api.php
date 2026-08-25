@@ -141,5 +141,31 @@ if ($action === 'news_save' && $_SERVER['REQUEST_METHOD'] === 'POST') {
   exit;
 }
 
+// ---- ギャラリー表示設定（サイトから消す／表示に戻す） ----
+if ($action === 'photos_save' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+  $body = json_decode(file_get_contents('php://input'), true);
+  $hidden = isset($body['hidden']) ? $body['hidden'] : null;
+  if (!is_array($hidden) || count($hidden) > count($ALLOWED)) {
+    http_response_code(400);
+    echo json_encode(array('ok' => false, 'error' => '表示設定データが不正です'));
+    exit;
+  }
+  // 許可リストにあるファイル名のみを保存
+  $clean = array();
+  foreach ($hidden as $f) {
+    if (is_string($f) && in_array($f, $ALLOWED, true) && !in_array($f, $clean, true)) {
+      $clean[] = $f;
+    }
+  }
+  $json = json_encode(array('hidden' => $clean), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+  if (file_put_contents(__DIR__ . DIRECTORY_SEPARATOR . 'photos.json', $json) === false) {
+    http_response_code(500);
+    echo json_encode(array('ok' => false, 'error' => 'photos.json に書き込めません（権限を確認してください）'));
+    exit;
+  }
+  echo json_encode(array('ok' => true, 'hidden' => $clean));
+  exit;
+}
+
 http_response_code(400);
 echo json_encode(array('ok' => false, 'error' => '不明なリクエストです'));

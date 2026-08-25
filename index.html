@@ -1340,7 +1340,7 @@ section {
     </p>
   </div>
 
-  <div class="gallery__grid">
+  <div class="gallery__grid" id="galleryGrid">
     <figure class="gallery__item gallery__item--1 fade-in">
       <img src="images/c0209891.jpg" alt="メインフロア" loading="lazy">
       <figcaption class="gallery__caption">— Main Floor</figcaption>
@@ -1719,6 +1719,35 @@ fetch('news.json?t=' + Date.now())
     ).join('');
   })
   .catch(() => { /* news.json が無い場合は HTML 内の内容を表示 */ });
+
+// ギャラリーの表示制御（管理ページの「サイトから消す」と連動）
+const GALLERY_ITEMS = [
+  { file: 'c0209891.jpg', caption: '— Main Floor',    alt: 'メインフロア' },
+  { file: 'p0004.jpg',    caption: '— Live Piano',    alt: 'グランドピアノの鍵盤' },
+  { file: 'c0209615.jpg', caption: '— Lounge',        alt: 'ソファ席' },
+  { file: 'c0209876.jpg', caption: '— Floral Art',    alt: 'フローラル' },
+  { file: 'c0209824.jpg', caption: '— Detail',        alt: '詳細' },
+  { file: 'c0209748.jpg', caption: '— Private Booth', alt: 'プライベート' },
+  { file: 'c0209962.jpg', caption: '— Seasonal',      alt: '花' },
+  { file: 'p0002.jpg',    caption: '— Bouquet',       alt: 'ダリアと百合のアレンジメント' },
+  { file: 'p0003.jpg',    caption: '— Texture',       alt: '大理石とガラスのディテール' },
+  { file: 'p0005.jpg',    caption: '— Salon',         alt: 'ボックス席' },
+];
+fetch('photos.json?t=' + Date.now())
+  .then(r => (r.ok ? r.json() : null))
+  .then(cfg => {
+    const hidden = cfg && Array.isArray(cfg.hidden) ? cfg.hidden : [];
+    if (!hidden.length) return;
+    const grid = document.getElementById('galleryGrid');
+    if (!grid) return;
+    const visible = GALLERY_ITEMS.filter(g => !hidden.includes(g.file));
+    grid.innerHTML = visible.map((g, i) =>
+      `<figure class="gallery__item gallery__item--${i + 1} fade-in visible">` +
+      `<img src="images/${g.file}" alt="${g.alt}" loading="lazy">` +
+      `<figcaption class="gallery__caption">${g.caption}</figcaption></figure>`
+    ).join('');
+  })
+  .catch(() => { /* photos.json が無い場合は全て表示 */ });
 </script>
 
 <a href="#access" class="sticky-cta" id="stickyCta">Reservation</a>
