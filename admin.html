@@ -431,6 +431,45 @@ function ghHeaders() {
   };
 }
 
+/* ---- GitHub 書き込み共通処理 ----
+   GitHub API の GET はブラウザに最大 60 秒キャッシュされるため、
+   直後の再保存で古い sha を掴み「does not match」になる。
+   cache:'no-store' + sha 競合時の自動リトライで回避する。 */
+async function ghGetSha(path) {
+  const res = await fetch(`${GH_API}${path}?ref=${BRANCH}&t=${Date.now()}`, {
+    headers: ghHeaders(),
+    cache: 'no-store',
+  });
+  if (res.status === 404) return undefined;   // 新規ファイル
+  if (!res.ok) throw new Error(`現在のファイル情報を取得できません (${res.status})`);
+  return (await res.json()).sha;
+}
+
+async function ghPut(path, base64content, message) {
+  let lastErr = '';
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const sha = await ghGetSha(path);
+    const body = { message, content: base64content, branch: BRANCH };
+    if (sha) body.sha = sha;
+    const res = await fetch(`${GH_API}${path}`, {
+      method: 'PUT',
+      headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
+      cache: 'no-store',
+      body: JSON.stringify(body),
+    });
+    if (res.ok) return;
+    const err = await res.json().catch(() => ({}));
+    lastErr = err.message || `保存に失敗しました (${res.status})`;
+    // sha 競合（does not match / 409）は取り直して再試行
+    if (res.status === 409 || res.status === 422 || /does not match/i.test(lastErr)) {
+      await new Promise(r => setTimeout(r, 600));
+      continue;
+    }
+    throw new Error(lastErr);
+  }
+  throw new Error(lastErr || '保存に失敗しました（時間をおいて再度お試しください）');
+}
+
 async function verifyAuth() {
   if (MODE === 'php') {
     const res = await fetch(`${PHP_API}?action=verify`, { headers: { 'X-Admin-Token': TOKEN } });
@@ -497,23 +536,7 @@ async function saveImage(slot, base64) {
     return '✓ 保存しました。サイトに即時反映されます（キャッシュにより数分かかる場合があります）。';
   }
   // GitHub モード
-  const getRes = await fetch(`${GH_API}images/${slot.file}?ref=${BRANCH}`, { headers: ghHeaders() });
-  if (!getRes.ok) throw new Error(`現在のファイル情報を取得できません (${getRes.status})`);
-  const current = await getRes.json();
-  const putRes = await fetch(`${GH_API}images/${slot.file}`, {
-    method: 'PUT',
-    headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      message: `photo: ${slot.label} の写真を差し替え (via admin)`,
-      content: base64,
-      sha: current.sha,
-      branch: BRANCH,
-    }),
-  });
-  if (!putRes.ok) {
-    const body = await putRes.json().catch(() => ({}));
-    throw new Error(body.message || `保存に失敗しました (${putRes.status})`);
-  }
+  await ghPut(`images/${slot.file}`, base64, `photo: ${slot.label} の写真を差し替え (via admin)`);
   return '✓ 保存しました。1〜2 分でサイトに反映されます。';
 }
 
@@ -541,24 +564,7 @@ async function saveHidden() {
     return 'サイトに即時反映されます。';
   }
   const json = JSON.stringify({ hidden }, null, 2) + '\n';
-  let sha;
-  const getRes = await fetch(`${GH_API}photos.json?ref=${BRANCH}`, { headers: ghHeaders() });
-  if (getRes.ok) sha = (await getRes.json()).sha;
-  const putBody = {
-    message: 'photos: ギャラリー表示設定を更新 (via admin)',
-    content: utf8ToBase64(json),
-    branch: BRANCH,
-  };
-  if (sha) putBody.sha = sha;
-  const putRes = await fetch(`${GH_API}photos.json`, {
-    method: 'PUT',
-    headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
-    body: JSON.stringify(putBody),
-  });
-  if (!putRes.ok) {
-    const body = await putRes.json().catch(() => ({}));
-    throw new Error(body.message || `保存に失敗しました (${putRes.status})`);
-  }
+  await ghPut('photos.json', utf8ToBase64(json), 'photos: ギャラリー表示設定を更新 (via admin)');
   return '1〜2 分でサイトに反映されます。';
 }
 
@@ -779,25 +785,7 @@ document.getElementById('newsSaveBtn').addEventListener('click', async () => {
       newsStatus.textContent = '✓ 保存しました。サイトに即時反映されます。';
     } else {
       const json = JSON.stringify(items, null, 2) + '\n';
-      // 既存ファイルの SHA（無ければ新規作成）
-      let sha;
-      const getRes = await fetch(`${GH_API}news.json?ref=${BRANCH}`, { headers: ghHeaders() });
-      if (getRes.ok) sha = (await getRes.json()).sha;
-      const putBody = {
-        message: 'news: お知らせを更新 (via admin)',
-        content: utf8ToBase64(json),
-        branch: BRANCH,
-      };
-      if (sha) putBody.sha = sha;
-      const putRes = await fetch(`${GH_API}news.json`, {
-        method: 'PUT',
-        headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
-        body: JSON.stringify(putBody),
-      });
-      if (!putRes.ok) {
-        const body = await putRes.json().catch(() => ({}));
-        throw new Error(body.message || `保存に失敗しました (${putRes.status})`);
-      }
+      await ghPut('news.json', utf8ToBase64(json), 'news: お知らせを更新 (via admin)');
       newsStatus.className = 'status ok';
       newsStatus.textContent = '✓ 保存しました。1〜2 分でサイトに反映されます。';
     }
