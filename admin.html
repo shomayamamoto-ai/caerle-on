@@ -249,8 +249,8 @@ input[type="file"] { display: none; }
   <p class="note" id="footNote">
     ・選んだ写真は自動で横 1920px・JPEG に最適化されてから保存されます。<br>
     ・「取り出し」は現在サイトに表示されている写真をそのままダウンロードします。<br>
-    ・このページは GitHub Pages 上では GitHub 連携で、PHP が動くサーバーへ移管した後は
-    同梱の <code>admin-api.php</code> 経由で動作します（自動判別）。
+    ・差し替え後、サイトへの反映まで数分かかる場合があります。表示が変わらないときは
+    ページを強制再読み込み（Mac: ⌘+Shift+R / Windows: Ctrl+F5）してください。
   </p>
 </main>
 
@@ -321,20 +321,19 @@ async function detectBackend() {
 function storageKey() { return MODE === 'php' ? 'caerleon_admin_pw' : 'caerleon_admin_token'; }
 
 function setupAuthUI() {
-  modeBadge.textContent = MODE === 'php' ? 'Server Mode' : 'GitHub Mode';
+  modeBadge.textContent = MODE === 'php' ? 'Server' : 'Cloud';
+  authTitle.textContent = '管理者ログイン';
   if (MODE === 'php') {
-    authTitle.textContent = 'ログイン';
     authDesc.innerHTML = phpConfigured
-      ? '管理パスワードを入力してください（サーバーの admin-api.php に設定したもの）。'
-      : '<span style="color:var(--err)">サーバーの admin-api.php にパスワードが未設定です。ファイル内の $ADMIN_PASSWORD を変更してください。</span>';
+      ? 'サイト管理用のパスワードを入力してください。パスワードはこの端末のブラウザにのみ保存され、外部へ送信されることはありません。'
+      : '<span style="color:var(--err)">サーバー側のパスワードが未設定です。サーバー上の admin-api.php を開き、$ADMIN_PASSWORD を設定してください。</span>';
     tokenInput.placeholder = '管理パスワード';
   } else {
-    authTitle.textContent = 'GitHub 接続設定';
     authDesc.innerHTML =
-      `GitHub の Fine-grained personal access token（対象リポジトリ：<code>${OWNER}/${REPO}</code>、権限：Contents – Read and write）を入力してください。` +
-      'トークンはこの端末のブラウザにのみ保存され、GitHub 以外へ送信されることはありません。 ' +
-      '<a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">トークンを作成する ↗</a>';
-    tokenInput.placeholder = 'github_pat_...';
+      'サイト管理用のアクセスキーを入力してください。キーはこの端末のブラウザにのみ保存され、外部へ送信されることはありません。' +
+      '紛失した場合は <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">こちらから再発行 ↗</a> できます' +
+      `（対象：${OWNER}/${REPO}、権限：Contents – Read and write）。`;
+    tokenInput.placeholder = 'アクセスキー';
   }
 }
 
@@ -385,7 +384,7 @@ connectBtn.addEventListener('click', () => {
   TOKEN = tokenInput.value.trim();
   if (!TOKEN) {
     tokenStatus.className = 'status err';
-    tokenStatus.textContent = MODE === 'php' ? 'パスワードを入力してください' : 'トークンを入力してください';
+    tokenStatus.textContent = MODE === 'php' ? '管理パスワードを入力してください' : 'アクセスキーを入力してください';
     return;
   }
   connect(true);
