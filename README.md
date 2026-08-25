@@ -1,46 +1,39 @@
 # Caerle'on（カーリアン）
 
-会員制ラウンジ Caerle'on の公式ホームページ。  
-深い木目・大理石・季節の花々で彩られる夜の隠れ家を、ダーク基調・ゴールドアクセントの一枚もので表現したシングルページサイトです。
+会員制ラウンジ Caerle'on の公式ホームページ。
+黒×金を基調としたシングルページ構成で、CSS / JS は `index.html` に一体化しています。
 
 ## 構成
 
 ```
 caerle-on/
-├── index.html              ─ シングルページ本体
+├── index.html          # 本体（CSS / JS 込みの単一ファイル）
+├── images/             # 店内写真 10 枚（対応表は images/README.md）
 ├── assets/
-│   ├── css/style.css       ─ スタイル（カスタムプロパティで配色管理）
-│   └── js/main.js          ─ スクロール検知・ヒーロー切替・モバイルメニュー等
-└── images/                 ─ 画像（プレースホルダーを差し替えてご利用ください）
-    └── README.md           ─ 推奨サイズ・ファイル名の対応表
+│   ├── favicon.svg     # ブラウザタブ用アイコン
+│   └── logo-*.png      # 透過ロゴ（dark / light / gold）
+└── .github/workflows/  # GitHub Pages 自動デプロイ
 ```
 
-## 主なセクション
+## セクション
 
-- Hero（メインビジュアル：自動切替スライド + コピー）
-- Concept（コンセプト紹介）
-- Gallery（メーソンリー風ギャラリー）
-- Interior & Hospitality（3 つのこだわり）
-- Information（店舗情報）
-- Access（所在地）
-- Reservation / Contact（予約フォーム）
+Hero ／ Concept ／ Gallery ／ System（会員制・料金）／ Access ／ Recruit ／ Footer
 
-## 使い方
+## 実装済みの演出
 
-ローカルで確認するだけであれば、`index.html` をブラウザで直接開いてください。  
-画像差し替え時のファイル名は `images/README.md` をご確認ください。
+- ヘッダーロゴ：ロード時の文字別フェードイン、ゴールドライン伸長、アポストロフィの明滅、ホバー時のシマー
+- スクロール時のヘッダー縮小
+- 各セクションのスクロール連動フェードイン
+- ギャラリー写真のホバーズーム＋ゴールド枠
 
-## カラーパレット
+## 本番前に要差し替え（ダミー箇所）
 
-| 用途       | カラー                              |
-| ---------- | ----------------------------------- |
-| Background | `#0c0907` / `#110d0b` / `#1a1411`   |
-| Ink (text) | `#efe7dc` / `#c9bfb1` / `#8a8073`   |
-| Gold       | `#c9a36a` / `#e7c794`               |
-| Rose       | `#c46b7a`                           |
+- 電話番号：`03-XXXX-XXXX`
+- メール：`contact@caerleon.tokyo`
+- 料金表の金額（仮の数値）
+- SNS リンク／予約・応募ボタンのリンク先
 
-## 使用フォント
+## 公開
 
-- 見出し（欧文）：Cormorant Garamond
-- 見出し（和文）：Noto Serif JP
-- 本文（和文）：Noto Sans JP
+main ブランチへ push すると GitHub Actions で GitHub Pages に自動デプロイされます。
+公開 URL: https://shomayamamoto-ai.github.io/caerle-on/
