@@ -725,7 +725,8 @@ section {
 }
 
 .access__visual {
-  background: url('images/c0209646.jpg') center/cover no-repeat;
+  /* ロゴの文字が欠けないよう、切り抜き(cover)ではなく全体表示(contain) */
+  background: #000 url('images/c0209646.jpg') center/contain no-repeat;
   position: relative;
   filter: saturate(1.1);
 }
@@ -734,9 +735,7 @@ section {
   content: '';
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse at center, transparent 40%, rgba(10,9,8,0.5) 100%),
-    linear-gradient(135deg, rgba(196,162,95,0.05), transparent);
+  background: linear-gradient(135deg, rgba(196,162,95,0.05), transparent);
 }
 
 @media (max-width: 900px) {
@@ -1744,12 +1743,6 @@ fetch('photos.json?t=' + Date.now())
       'p0001.jpg': () => {
         const el = document.querySelector('.concept__visual');
         const wrap = document.querySelector('.concept');
-        if (el) el.style.display = 'none';
-        if (wrap) wrap.style.gridTemplateColumns = '1fr';
-      },
-      'c0209646.jpg': () => {
-        const el = document.querySelector('.access__visual');
-        const wrap = document.querySelector('.access__grid');
         if (el) el.style.display = 'none';
         if (wrap) wrap.style.gridTemplateColumns = '1fr';
       },
