@@ -329,8 +329,8 @@ input[type="file"] { display: none; }
 
   <p class="note" id="footNote">
     ・選んだ写真は自動で横 1920px・JPEG に最適化されてから保存されます。<br>
-    ・「サイトから消す」でその写真をギャラリーから非表示にできます（残りの写真は自動で詰めて配置）。
-    「表示に戻す」でいつでも元どおりにできます。<br>
+    ・「サイトから消す」でその写真をサイトから非表示にできます（ギャラリーは残りの写真を自動で詰めて配置、
+    Concept / Access / Recruit は文章のみの表示に切り替わります）。「表示に戻す」でいつでも元どおりにできます。<br>
     ・反映まで数分かかる場合があります。表示が変わらないときは
     ページを強制再読み込み（Mac: ⌘+Shift+R / Windows: Ctrl+F5）してください。
   </p>
@@ -354,7 +354,7 @@ const PHP_API = 'admin-api.php';
 
 const SLOTS = [
   { file: 'c0209891.jpg', label: 'ヒーロー背景',        note: 'トップの全画面背景 / Gallery「Main Floor」', hideable: true },
-  { file: 'p0001.jpg',    label: 'Concept',             note: 'コンセプトの額装写真' },
+  { file: 'p0001.jpg',    label: 'Concept',             note: 'コンセプトの額装写真', hideable: true },
   { file: 'p0004.jpg',    label: 'Gallery — Live Piano', note: 'ギャラリー上段・右', hideable: true },
   { file: 'c0209615.jpg', label: 'Gallery — Lounge',    note: 'ギャラリー中段・左', hideable: true },
   { file: 'c0209876.jpg', label: 'Gallery — Floral Art', note: 'ギャラリー中段・中央', hideable: true },
@@ -364,8 +364,8 @@ const SLOTS = [
   { file: 'p0002.jpg',    label: 'Gallery — Bouquet',   note: 'ギャラリー末尾・左', hideable: true },
   { file: 'p0003.jpg',    label: 'Gallery — Texture',   note: 'ギャラリー末尾・中央', hideable: true },
   { file: 'p0005.jpg',    label: 'Gallery — Salon',     note: 'ギャラリー末尾・右', hideable: true },
-  { file: 'c0209646.jpg', label: 'Access',              note: 'アクセス欄の看板写真' },
-  { file: 'c0209948.jpg', label: 'Recruit',             note: 'リクルート欄の写真' },
+  { file: 'c0209646.jpg', label: 'Access',              note: 'アクセス欄の看板写真', hideable: true },
+  { file: 'c0209948.jpg', label: 'Recruit',             note: 'リクルート欄の写真', hideable: true },
 ];
 
 /* ギャラリー非表示ファイルの集合（photos.json と同期） */
