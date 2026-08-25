@@ -214,6 +214,62 @@ h1 .italic { font-style: italic; color: var(--gold-bright); }
   line-height: 2;
 }
 input[type="file"] { display: none; }
+
+/* ---- news editor ---- */
+.news-admin {
+  margin-top: 56px;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--gold);
+  padding: 24px;
+}
+.news-admin h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--gold-bright);
+  font-weight: 400;
+  margin-bottom: 6px;
+  letter-spacing: 0.08em;
+}
+.news-admin > p { font-size: 12.5px; color: var(--ink-soft); margin-bottom: 18px; }
+
+.news-row {
+  display: grid;
+  grid-template-columns: 110px 110px 1fr 40px;
+  gap: 10px;
+  align-items: start;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.news-row input, .news-row textarea {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 10px 12px;
+  font-family: 'Noto Serif JP', serif;
+  font-size: 13px;
+  width: 100%;
+}
+.news-row textarea { resize: vertical; min-height: 44px; line-height: 1.7; }
+.news-row input:focus, .news-row textarea:focus { outline: none; border-color: var(--gold); }
+.news-row .del {
+  width: 40px; height: 40px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--mute);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.news-row .del:hover { border-color: var(--err); color: var(--err); }
+
+.news-actions { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+
+@media (max-width: 640px) {
+  .news-row { grid-template-columns: 1fr 1fr 40px; }
+  .news-row textarea { grid-column: 1 / -1; }
+}
 </style>
 </head>
 <body>
@@ -230,8 +286,8 @@ input[type="file"] { display: none; }
 </header>
 
 <main class="wrap">
-  <h1>写真の<span class="italic">出し入れ</span></h1>
-  <p class="lead">各枠の「写真を選ぶ」→「保存」で差し替え、「取り出し」で現在の写真をダウンロードできます。</p>
+  <h1>サイトの<span class="italic">管理</span></h1>
+  <p class="lead">写真の差し替え・取り出しと、お知らせ（News）の編集ができます。</p>
 
   <section class="token-panel" id="tokenPanel">
     <h2 id="authTitle">接続設定</h2>
@@ -245,6 +301,17 @@ input[type="file"] { display: none; }
   </section>
 
   <section class="slots" id="slots" hidden></section>
+
+  <section class="news-admin" id="newsAdmin" hidden>
+    <h2>News の編集</h2>
+    <p>サイトの「Latest Information」に表示されるお知らせです。上の行ほど新しく表示されます。</p>
+    <div id="newsRows"></div>
+    <div class="news-actions">
+      <button class="btn" id="newsAddBtn">行を追加</button>
+      <button class="btn btn--solid" id="newsSaveBtn">ニュースを保存</button>
+    </div>
+    <p class="status" id="newsStatus"></p>
+  </section>
 
   <p class="note" id="footNote">
     ・選んだ写真は自動で横 1920px・JPEG に最適化されてから保存されます。<br>
@@ -368,12 +435,14 @@ async function connect(saveToken) {
     await verifyAuth();
     if (saveToken) localStorage.setItem(storageKey(), TOKEN);
     tokenStatus.className = 'status ok';
-    tokenStatus.textContent = '✓ 接続しました。下の一覧から写真を出し入れできます。';
+    tokenStatus.textContent = '✓ 接続しました。写真の出し入れとニュースの編集ができます。';
     connectBtn.hidden = true;
     tokenInput.hidden = true;
     forgetBtn.hidden = false;
     renderSlots();
     slotsEl.hidden = false;
+    document.getElementById('newsAdmin').hidden = false;
+    loadNews();
   } catch (e) {
     tokenStatus.className = 'status err';
     tokenStatus.textContent = '✗ ' + e.message;
@@ -537,6 +606,110 @@ async function onSave(e) {
     m.textContent = '✗ ' + err.message;
   }
 }
+
+/* ---- News 編集 ---- */
+const newsRowsEl = document.getElementById('newsRows');
+const newsStatus = document.getElementById('newsStatus');
+
+function newsRowHtml(item) {
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+  ));
+  return `
+    <div class="news-row">
+      <input type="text" class="n-date" placeholder="2026.08" value="${esc(item.date)}">
+      <input type="text" class="n-tag" placeholder="Floral" value="${esc(item.tag)}">
+      <textarea class="n-text" placeholder="お知らせの本文" rows="2">${esc(item.text)}</textarea>
+      <button type="button" class="del" title="この行を削除">✕</button>
+    </div>`;
+}
+
+function bindNewsRowEvents() {
+  newsRowsEl.querySelectorAll('.del').forEach(btn => {
+    btn.onclick = () => { btn.closest('.news-row').remove(); };
+  });
+}
+
+async function loadNews() {
+  newsStatus.className = 'status';
+  newsStatus.textContent = '読み込み中…';
+  let items = [];
+  try {
+    const res = await fetch('news.json?t=' + Date.now());
+    if (res.ok) items = await res.json();
+  } catch (e) { /* 初回は空でも OK */ }
+  if (!Array.isArray(items)) items = [];
+  if (!items.length) items = [{ date: '', tag: '', text: '' }];
+  newsRowsEl.innerHTML = items.map(newsRowHtml).join('');
+  bindNewsRowEvents();
+  newsStatus.textContent = '';
+}
+
+document.getElementById('newsAddBtn').addEventListener('click', () => {
+  newsRowsEl.insertAdjacentHTML('beforeend', newsRowHtml({ date: '', tag: '', text: '' }));
+  bindNewsRowEvents();
+});
+
+function collectNews() {
+  return Array.from(newsRowsEl.querySelectorAll('.news-row')).map(row => ({
+    date: row.querySelector('.n-date').value.trim(),
+    tag: row.querySelector('.n-tag').value.trim(),
+    text: row.querySelector('.n-text').value.trim(),
+  })).filter(n => n.text !== '');
+}
+
+function utf8ToBase64(str) {
+  return btoa(String.fromCharCode(...new TextEncoder().encode(str)));
+}
+
+document.getElementById('newsSaveBtn').addEventListener('click', async () => {
+  const items = collectNews();
+  const btn = document.getElementById('newsSaveBtn');
+  btn.disabled = true;
+  newsStatus.className = 'status';
+  newsStatus.textContent = '保存中…';
+  try {
+    if (MODE === 'php') {
+      const res = await fetch(`${PHP_API}?action=news_save`, {
+        method: 'POST',
+        headers: { 'X-Admin-Token': TOKEN, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) throw new Error(data.error || `保存に失敗しました (${res.status})`);
+      newsStatus.className = 'status ok';
+      newsStatus.textContent = '✓ 保存しました。サイトに即時反映されます。';
+    } else {
+      const json = JSON.stringify(items, null, 2) + '\n';
+      // 既存ファイルの SHA（無ければ新規作成）
+      let sha;
+      const getRes = await fetch(`${GH_API}news.json?ref=${BRANCH}`, { headers: ghHeaders() });
+      if (getRes.ok) sha = (await getRes.json()).sha;
+      const putBody = {
+        message: 'news: お知らせを更新 (via admin)',
+        content: utf8ToBase64(json),
+        branch: BRANCH,
+      };
+      if (sha) putBody.sha = sha;
+      const putRes = await fetch(`${GH_API}news.json`, {
+        method: 'PUT',
+        headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(putBody),
+      });
+      if (!putRes.ok) {
+        const body = await putRes.json().catch(() => ({}));
+        throw new Error(body.message || `保存に失敗しました (${putRes.status})`);
+      }
+      newsStatus.className = 'status ok';
+      newsStatus.textContent = '✓ 保存しました。1〜2 分でサイトに反映されます。';
+    }
+  } catch (err) {
+    newsStatus.className = 'status err';
+    newsStatus.textContent = '✗ ' + err.message;
+  } finally {
+    btn.disabled = false;
+  }
+});
 
 /* ---- 起動 ---- */
 (async () => {
