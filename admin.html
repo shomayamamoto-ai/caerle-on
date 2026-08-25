@@ -229,6 +229,48 @@ h1 .italic { font-style: italic; color: var(--gold-bright); }
 }
 input[type="file"] { display: none; }
 
+/* ---- login gate ---- */
+.login-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 24px;
+}
+.login-gate img { height: 26px; opacity: 0.95; }
+.login-gate h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 15px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.login-gate form {
+  display: flex;
+  gap: 10px;
+  width: min(420px, 90vw);
+}
+.login-gate input {
+  flex: 1;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 14px 16px;
+  font-family: monospace;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+}
+.login-gate input:focus { outline: none; border-color: var(--gold); }
+.login-gate .status { text-align: center; }
+.login-gate[hidden] { display: none; }
+
 /* ---- news editor ---- */
 .news-admin {
   margin-top: 56px;
@@ -288,6 +330,17 @@ input[type="file"] { display: none; }
 </head>
 <body>
 
+<!-- ログインゲート -->
+<div class="login-gate" id="loginGate">
+  <img src="assets/logo-light.png" alt="Caerle'on">
+  <h2>Admin Login</h2>
+  <form id="loginForm">
+    <input type="password" id="loginPw" placeholder="パスワード" autocomplete="current-password" autofocus>
+    <button type="submit" class="btn btn--solid">ログイン</button>
+  </form>
+  <p class="status" id="loginStatus"></p>
+</div>
+
 <header class="bar">
   <div class="wrap">
     <div class="bar__brand">
@@ -295,7 +348,10 @@ input[type="file"] { display: none; }
       <span class="bar__label">Photo Admin</span>
       <span class="bar__mode" id="modeBadge">…</span>
     </div>
-    <a class="site-link" href="index.html">← サイトを表示</a>
+    <div style="display:flex; gap:10px; align-items:center;">
+      <a class="site-link" href="index.html">← サイトを表示</a>
+      <button class="site-link" id="logoutBtn" style="background:transparent; color:var(--ink-soft); cursor:pointer; font-family:inherit;">ログアウト</button>
+    </div>
   </div>
 </header>
 
@@ -338,6 +394,48 @@ input[type="file"] { display: none; }
 
 <script>
 'use strict';
+
+/* ============================================================
+   ログインゲート:
+   パスワードの SHA-256 ハッシュのみを保持（平文はコードに含めない）。
+   認証状態はこのタブのセッション中のみ有効（sessionStorage）。
+   ============================================================ */
+const LOGIN_SALT = 'caerleon-admin-v1:';
+const LOGIN_HASH = '6e25ed25aa9a42baa3528dafb5f738fec1319d8ae6e80f0053a5c47050ccf69c';
+const LOGIN_KEY = 'caerleon_admin_login';
+
+async function sha256hex(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+const loginGate = document.getElementById('loginGate');
+const loginForm = document.getElementById('loginForm');
+const loginStatus = document.getElementById('loginStatus');
+
+function isLoggedIn() {
+  try { return sessionStorage.getItem(LOGIN_KEY) === LOGIN_HASH; } catch (e) { return false; }
+}
+
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const pw = document.getElementById('loginPw').value;
+  const h = await sha256hex(LOGIN_SALT + pw);
+  if (h === LOGIN_HASH) {
+    try { sessionStorage.setItem(LOGIN_KEY, LOGIN_HASH); } catch (err) {}
+    loginGate.hidden = true;
+    startAdmin();
+  } else {
+    loginStatus.className = 'status err';
+    loginStatus.textContent = '✗ パスワードが違います';
+    document.getElementById('loginPw').value = '';
+  }
+});
+
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  try { sessionStorage.removeItem(LOGIN_KEY); } catch (e) {}
+  location.reload();
+});
 
 /* ============================================================
    バックエンド抽象化:
@@ -407,7 +505,7 @@ function storageKey() { return MODE === 'php' ? 'caerleon_admin_pw' : 'caerleon_
 
 function setupAuthUI() {
   modeBadge.textContent = MODE === 'php' ? 'Server' : 'Cloud';
-  authTitle.textContent = '管理者ログイン';
+  authTitle.textContent = '接続設定';
   if (MODE === 'php') {
     authDesc.innerHTML = phpConfigured
       ? 'サイト管理用のパスワードを入力してください。パスワードはこの端末のブラウザにのみ保存され、外部へ送信されることはありません。'
@@ -797,8 +895,8 @@ document.getElementById('newsSaveBtn').addEventListener('click', async () => {
   }
 });
 
-/* ---- 起動 ---- */
-(async () => {
+/* ---- 起動（ログイン後に実行） ---- */
+async function startAdmin() {
   await detectBackend();
   setupAuthUI();
   TOKEN = localStorage.getItem(storageKey()) || '';
@@ -806,7 +904,14 @@ document.getElementById('newsSaveBtn').addEventListener('click', async () => {
     tokenInput.value = TOKEN;
     connect(false);
   }
-})();
+}
+
+if (isLoggedIn()) {
+  loginGate.hidden = true;
+  startAdmin();
+} else {
+  document.getElementById('loginPw').focus();
+}
 </script>
 
 </body>
