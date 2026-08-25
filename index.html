@@ -1,574 +1,1278 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="Caerle'on（カーリアン）｜六本木の会員制ラウンジ。2011年開業以来、選び抜かれた紳士のための隠れ家として、静謐と上質な時間をお届けしています。" />
-<meta name="theme-color" content="#0a0807" />
-<meta property="og:title" content="Caerle'on｜六本木 会員制ラウンジ" />
-<meta property="og:description" content="2011年開業、六本木の隠れ家。静謐な夜に咲く、選ばれた紳士のための社交空間。" />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="images/hero-flowers.jpg" />
-<title>Caerle'on｜六本木 会員制ラウンジ</title>
-<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
-<link rel="preload" as="image" href="images/hero-flowers.jpg" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Shippori+Mincho:wght@500;600;700;800&family=Noto+Serif+JP:wght@500;600;700;900&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="assets/css/style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caerle'on｜Members Only Lounge</title>
+<meta name="description" content="洗練された大人のためのプライベートラウンジ Caerle'on（カーリアン）。完全会員制。">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Serif+JP:wght@200;300;400&family=Cormorant:ital,wght@1,300&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #0a0908;
+  --bg-alt: #131210;
+  --bg-card: #1a1815;
+  --ink: #f4ede1;
+  --ink-soft: #c8bfae;
+  --mute: #807868;
+  --line: rgba(196, 162, 95, 0.18);
+  --gold: #c4a25f;
+  --gold-bright: #d9b977;
+  --max: 1440px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Noto Serif JP', 'Cormorant Garamond', serif;
+  font-weight: 300;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* 全体に薄いノイズテクスチャを重ねる */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+}
+
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; height: auto; }
+
+/* ============ HEADER ============ */
+.header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 28px 56px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(180deg, rgba(10,9,8,0.95), rgba(10,9,8,0));
+  backdrop-filter: blur(8px);
+  transition: padding 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* スクロール後はヘッダーがコンパクトに */
+.header.scrolled {
+  padding: 18px 56px;
+  background: rgba(10, 9, 8, 0.88);
+  border-bottom: 1px solid var(--line);
+}
+
+/* ===== ロゴアニメーション ===== */
+.header__logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  letter-spacing: 0.18em;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--gold-bright);
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding: 6px 0;
+  cursor: pointer;
+}
+
+/* ロゴの各文字を独立してフェードイン */
+.header__logo .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: charFadeIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 各文字の遅延 */
+.header__logo .char:nth-child(1) { animation-delay: 0.2s; }
+.header__logo .char:nth-child(2) { animation-delay: 0.28s; }
+.header__logo .char:nth-child(3) { animation-delay: 0.36s; }
+.header__logo .char:nth-child(4) { animation-delay: 0.44s; }
+.header__logo .char:nth-child(5) { animation-delay: 0.52s; }
+.header__logo .char:nth-child(6) { animation-delay: 0.60s; }
+.header__logo .char:nth-child(7) { animation-delay: 0.68s; }
+.header__logo .char:nth-child(8) { animation-delay: 0.76s; }
+.header__logo .char:nth-child(9) { animation-delay: 0.84s; }
+
+@keyframes charFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* アポストロフィに常時ほのかな明滅 */
+.header__logo .char--apostrophe {
+  color: var(--gold);
+  animation: charFadeIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.52s forwards,
+             apostropheGlow 3.5s ease-in-out 2s infinite;
+}
+
+@keyframes apostropheGlow {
+  0%, 100% { 
+    text-shadow: 0 0 0 transparent;
+    color: var(--gold);
+  }
+  50% { 
+    text-shadow: 0 0 12px rgba(217, 185, 119, 0.6);
+    color: var(--gold-bright);
+  }
+}
+
+/* ロゴ下のゴールドライン(初回ロード時にスッと伸びる) */
+.header__logo::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: lineExpand 1.4s cubic-bezier(0.16, 1, 0.3, 1) 1.0s forwards;
+}
+
+@keyframes lineExpand {
+  0% { transform: scaleX(0); transform-origin: left; }
+  100% { transform: scaleX(1); transform-origin: left; }
+}
+
+/* ホバー時のシマー(光の流れ) */
+.header__logo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(217, 185, 119, 0.4) 50%,
+    transparent 100%
+  );
+  transition: left 0.8s cubic-bezier(0.7, 0, 0.3, 1);
+  pointer-events: none;
+}
+
+.header__logo:hover::before {
+  left: 100%;
+}
+
+.header__logo:hover .char {
+  color: var(--gold-bright);
+  transition: color 0.4s;
+}
+
+/* ロゴ左のオーナメント(細い縦ライン) */
+.header__logo-ornament {
+  display: inline-block;
+  width: 1px;
+  height: 22px;
+  background: linear-gradient(180deg, transparent, var(--gold), transparent);
+  margin-right: 16px;
+  opacity: 0;
+  animation: ornamentFade 1.2s ease 0.1s forwards;
+}
+
+@keyframes ornamentFade {
+  to { opacity: 1; }
+}
+
+.header__nav {
+  display: flex;
+  gap: 40px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.header__nav a {
+  position: relative;
+  padding: 4px 0;
+  transition: color 0.3s;
+}
+
+.header__nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background: var(--gold);
+  transition: all 0.4s;
+  transform: translateX(-50%);
+}
+
+.header__nav a:hover { color: var(--gold-bright); }
+.header__nav a:hover::after { width: 100%; }
+
+@media (max-width: 768px) {
+  .header { padding: 20px 24px; }
+  .header__nav { display: none; }
+}
+
+/* ============ HERO ============ */
+.hero {
+  height: 100vh;
+  min-height: 760px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  background: url('images/c0209891.jpg') center/cover no-repeat;
+  filter: brightness(0.55) saturate(1.1);
+}
+
+.hero__bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at center, transparent 30%, rgba(10,9,8,0.7) 80%),
+    linear-gradient(180deg, rgba(10,9,8,0.4) 0%, transparent 30%, rgba(10,9,8,0.85) 100%);
+}
+
+.hero__content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 32px;
+}
+
+.hero__crown {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 12px;
+  letter-spacing: 0.6em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.hero__crown::before,
+.hero__crown::after {
+  content: '';
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.hero__title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(72px, 12vw, 200px);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 0.92;
+  color: var(--ink);
+  margin-bottom: 32px;
+}
+
+.hero__title .italic {
+  font-style: italic;
+  color: var(--gold-bright);
+  font-weight: 300;
+}
+
+.hero__sub {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 14px;
+  letter-spacing: 0.5em;
+  color: var(--ink-soft);
+  font-weight: 300;
+}
+
+.hero__sub::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 40px;
+  background: var(--gold);
+  margin: 48px auto 0;
+  animation: pulse 2.5s ease-in-out infinite;
+  transform-origin: top;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scaleY(0.4); opacity: 0.4; }
+  50% { transform: scaleY(1); opacity: 1; }
+}
+
+.hero__corner {
+  position: absolute;
+  z-index: 2;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.hero__corner--tl { top: 100px; left: 56px; }
+.hero__corner--tr { top: 100px; right: 56px; }
+.hero__corner--bl { bottom: 56px; left: 56px; }
+.hero__corner--br { bottom: 56px; right: 56px; }
+
+@media (max-width: 768px) {
+  .hero__corner { display: none; }
+}
+
+/* ============ SECTION COMMON ============ */
+section {
+  padding: 160px 56px;
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 768px) {
+  section { padding: 90px 24px; }
+}
+
+.section__label {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 13px;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.section__label::before {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.section__title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(44px, 5.5vw, 84px);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  margin-bottom: 56px;
+  color: var(--ink);
+}
+
+.section__title .italic {
+  font-style: italic;
+  color: var(--gold-bright);
+}
+
+/* ============ CONCEPT ============ */
+.concept {
+  max-width: var(--max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 120px;
+  align-items: center;
+}
+
+.concept__visual {
+  position: relative;
+  aspect-ratio: 4/5;
+}
+
+.concept__visual::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('images/c0209799.jpg') center/cover no-repeat;
+  z-index: 0;
+}
+
+.concept__visual::after {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  border: 1px solid var(--gold);
+  z-index: -1;
+  opacity: 0.5;
+}
+
+.concept__visual-frame {
+  position: absolute;
+  inset: 20px;
+  border: 1px solid rgba(196, 162, 95, 0.3);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.concept__text p {
+  font-size: 15px;
+  line-height: 2.3;
+  color: var(--ink-soft);
+  margin-bottom: 28px;
+  font-weight: 300;
+}
+
+.concept__quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 26px;
+  line-height: 1.6;
+  color: var(--gold-bright);
+  border-left: 1px solid var(--gold);
+  padding-left: 28px;
+  margin: 48px 0;
+  font-weight: 300;
+}
+
+.concept__sig {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--gold);
+  margin-top: 32px;
+}
+
+@media (max-width: 900px) {
+  .concept { grid-template-columns: 1fr; gap: 60px; }
+}
+
+/* ============ GALLERY ============ */
+.gallery {
+  background: var(--bg-alt);
+  padding-top: 160px;
+  padding-bottom: 160px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.gallery__head {
+  max-width: var(--max);
+  margin: 0 auto 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 60px;
+}
+
+.gallery__head p {
+  max-width: 440px;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 2;
+}
+
+.gallery__grid {
+  max-width: var(--max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 20px;
+}
+
+.gallery__item {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.gallery__item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid transparent;
+  transition: all 0.5s;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.gallery__item:hover::after {
+  border-color: var(--gold);
+  inset: 8px;
+}
+
+.gallery__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: brightness(0.9);
+}
+
+.gallery__item:hover img {
+  transform: scale(1.05);
+  filter: brightness(1);
+}
+
+.gallery__item--1 { grid-column: 1 / 7; aspect-ratio: 4/3; }
+.gallery__item--2 { grid-column: 7 / 13; aspect-ratio: 4/3; }
+.gallery__item--3 { grid-column: 1 / 5; aspect-ratio: 3/4; }
+.gallery__item--4 { grid-column: 5 / 9; aspect-ratio: 3/4; }
+.gallery__item--5 { grid-column: 9 / 13; aspect-ratio: 3/4; }
+.gallery__item--6 { grid-column: 1 / 8; aspect-ratio: 16/10; }
+.gallery__item--7 { grid-column: 8 / 13; aspect-ratio: 4/5; }
+
+.gallery__caption {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 14px;
+  letter-spacing: 0.2em;
+  color: var(--gold-bright);
+  text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+  z-index: 3;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all 0.4s;
+}
+
+.gallery__item:hover .gallery__caption {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .gallery__grid { grid-template-columns: 1fr; }
+  .gallery__item--1, .gallery__item--2, .gallery__item--3,
+  .gallery__item--4, .gallery__item--5, .gallery__item--6,
+  .gallery__item--7 {
+    grid-column: 1;
+    aspect-ratio: 4/3;
+  }
+  .gallery__head { flex-direction: column; align-items: flex-start; }
+}
+
+/* ============ SYSTEM ============ */
+.system { background: var(--bg); }
+
+.system__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.system__intro {
+  text-align: center;
+  margin-bottom: 100px;
+}
+
+.system__intro p {
+  max-width: 560px;
+  margin: 0 auto;
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 2.1;
+}
+
+.system__intro .section__label {
+  justify-content: center;
+}
+
+.system__intro .section__label::before {
+  display: none;
+}
+
+.system__cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+.system__card {
+  background: var(--bg-card);
+  padding: 48px 40px;
+  position: relative;
+  transition: all 0.4s;
+}
+
+.system__card:hover {
+  background: linear-gradient(135deg, var(--bg-card), rgba(196, 162, 95, 0.05));
+}
+
+.system__card-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+
+.system__card-name {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 14px;
+  color: var(--ink-soft);
+  margin-bottom: 24px;
+}
+
+.system__card-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 42px;
+  font-weight: 300;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+}
+
+.system__card-price small {
+  font-size: 14px;
+  color: var(--mute);
+  margin-left: 8px;
+  font-style: italic;
+}
+
+.system__notes {
+  margin-top: 64px;
+  padding: 40px;
+  background: var(--bg-card);
+  border-left: 2px solid var(--gold);
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 2.1;
+}
+
+.system__notes h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--gold-bright);
+  margin-bottom: 16px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 768px) {
+  .system__cards { grid-template-columns: 1fr; }
+}
+
+/* ============ ACCESS ============ */
+.access {
+  padding: 0;
+  background: var(--bg);
+}
+
+.access__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 680px;
+}
+
+.access__info {
+  padding: 140px 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--bg-alt);
+}
+
+.access__details {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 24px 40px;
+  margin-top: 40px;
+  font-size: 15px;
+  padding-top: 40px;
+  border-top: 1px solid var(--line);
+}
+
+.access__details dt {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 13px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  padding-top: 4px;
+}
+
+.access__details dd {
+  color: var(--ink);
+  line-height: 1.9;
+}
+
+.access__visual {
+  background: url('images/c0209646.jpg') center/cover no-repeat;
+  position: relative;
+  filter: saturate(1.1);
+}
+
+.access__visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at center, transparent 40%, rgba(10,9,8,0.5) 100%),
+    linear-gradient(135deg, rgba(196,162,95,0.05), transparent);
+}
+
+@media (max-width: 900px) {
+  .access__grid { grid-template-columns: 1fr; }
+  .access__info { padding: 80px 24px; }
+  .access__visual { min-height: 360px; }
+}
+
+/* ============ RECRUIT ============ */
+.recruit {
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+}
+
+.recruit::before {
+  content: 'CAST';
+  position: absolute;
+  top: 50%;
+  left: -8%;
+  transform: translateY(-50%);
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 28vw;
+  font-weight: 300;
+  color: rgba(196, 162, 95, 0.04);
+  line-height: 1;
+  letter-spacing: -0.05em;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.recruit__inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 100px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.recruit__visual {
+  aspect-ratio: 4/5;
+  background: url('images/c0209948.jpg') center/cover no-repeat;
+  position: relative;
+  filter: brightness(0.95);
+}
+
+.recruit__visual::before {
+  content: '';
+  position: absolute;
+  inset: -16px;
+  border: 1px solid var(--gold);
+  opacity: 0.4;
+}
+
+.recruit__visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 60%, rgba(10,9,8,0.5));
+}
+
+.recruit__text h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(40px, 4.5vw, 64px);
+  font-weight: 300;
+  line-height: 1.1;
+  margin-bottom: 36px;
+  color: var(--ink);
+}
+
+.recruit__text h3 .italic { 
+  font-style: italic; 
+  color: var(--gold-bright);
+}
+
+.recruit__text p {
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 2.1;
+  margin-bottom: 24px;
+}
+
+.recruit__benefits {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+  margin: 48px 0;
+}
+
+.recruit__benefits div {
+  border-left: 1px solid var(--gold);
+  padding-left: 20px;
+}
+
+.recruit__benefits dt {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.recruit__benefits dd {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 24px;
+  color: var(--ink);
+  font-weight: 400;
+}
+
+@media (max-width: 900px) {
+  .recruit__inner { grid-template-columns: 1fr; gap: 60px; }
+}
+
+/* ============ CTA BUTTON ============ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  padding: 20px 36px;
+  border: 1px solid var(--gold);
+  background: transparent;
+  color: var(--gold-bright);
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 14px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.4s;
+  margin-top: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gold);
+  transform: translateX(-101%);
+  transition: transform 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+  z-index: -1;
+}
+
+.btn:hover {
+  color: var(--bg);
+  border-color: var(--gold-bright);
+}
+
+.btn:hover::before { transform: translateX(0); }
+
+.btn::after {
+  content: '→';
+  transition: transform 0.3s;
+}
+
+.btn:hover::after { transform: translateX(6px); }
+
+/* ============ FOOTER ============ */
+.footer {
+  background: var(--bg-alt);
+  color: var(--ink);
+  padding: 120px 56px 48px;
+  border-top: 1px solid var(--line);
+  position: relative;
+  z-index: 2;
+}
+
+.footer__inner {
+  max-width: var(--max);
+  margin: 0 auto;
+}
+
+.footer__brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(80px, 16vw, 240px);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  margin-bottom: 80px;
+  background: linear-gradient(180deg, var(--gold-bright) 0%, var(--gold) 50%, rgba(196,162,95,0.4) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 48px;
+}
+
+.footer__grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px;
+  padding-bottom: 64px;
+  border-bottom: 1px solid var(--line);
+}
+
+.footer__col h5 {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 24px;
+  font-weight: 400;
+}
+
+.footer__col p,
+.footer__col li {
+  font-size: 13px;
+  line-height: 2;
+  color: var(--ink-soft);
+  list-style: none;
+  margin-bottom: 8px;
+}
+
+.footer__col a:hover { color: var(--gold-bright); }
+
+.footer__bottom {
+  padding-top: 36px;
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 12px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+
+@media (max-width: 768px) {
+  .footer { padding: 80px 24px 40px; }
+  .footer__grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+  .footer__bottom { flex-direction: column; gap: 12px; }
+}
+
+/* ============ ANIMATION ============ */
+.fade-in {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1.2s ease, transform 1.2s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
 </head>
 <body>
 
-<!-- SCROLL PROGRESS -->
-<div class="progress-bar" aria-hidden="true"><span id="progressFill"></span></div>
-
-<header class="site-header" id="siteHeader">
-  <a href="#top" class="brand" aria-label="Caerle'on トップへ">
-    <img src="assets/logo-light.png" alt="Caerle'on" class="brand__logo" />
+<header class="header" id="siteHeader">
+  <a href="#" class="header__logo" aria-label="Caerle'on">
+    <span class="header__logo-ornament" aria-hidden="true"></span>
+    <span class="char">C</span><span class="char">a</span><span class="char">e</span><span class="char">r</span><span class="char">l</span><span class="char">e</span><span class="char char--apostrophe">'</span><span class="char">o</span><span class="char">n</span>
   </a>
-  <nav class="nav" aria-label="グローバルナビゲーション">
-    <ul class="nav__list">
-      <li><a href="#concept">Concept</a></li>
-      <li><a href="#story">Story</a></li>
-      <li><a href="#interior">Interior</a></li>
-      <li><a href="#gallery">Gallery</a></li>
-      <li><a href="#drinks">Selection</a></li>
-      <li><a href="#piano">Piano</a></li>
-      <li><a href="#information">Information</a></li>
-      <li><a href="#access">Access</a></li>
-      <li><a href="#contact" class="nav__cta">Reservation</a></li>
-    </ul>
+  <nav class="header__nav">
+    <a href="#concept">Concept</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#system">System</a>
+    <a href="#access">Access</a>
+    <a href="#recruit">Recruit</a>
   </nav>
-  <button class="nav__toggle" aria-label="メニューを開く" aria-expanded="false" aria-controls="mobileNav">
-    <span></span><span></span><span></span>
-  </button>
 </header>
 
-<nav class="nav-mobile" id="mobileNav" aria-hidden="true">
-  <ul>
-    <li><a href="#concept">Concept</a></li>
-    <li><a href="#story">Story</a></li>
-    <li><a href="#interior">Interior</a></li>
-    <li><a href="#gallery">Gallery</a></li>
-    <li><a href="#drinks">Selection</a></li>
-    <li><a href="#piano">Piano</a></li>
-    <li><a href="#information">Information</a></li>
-    <li><a href="#access">Access</a></li>
-    <li><a href="#contact">Reservation</a></li>
-  </ul>
-</nav>
+<section class="hero">
+  <div class="hero__bg"></div>
+  <div class="hero__corner hero__corner--tl">— Est. 2011</div>
+  <div class="hero__corner hero__corner--tr">Members Only —</div>
+  <div class="hero__corner hero__corner--bl">№ 001</div>
+  <div class="hero__corner hero__corner--br">Roppongi</div>
 
-<main id="top">
+  <div class="hero__content">
+    <div class="hero__crown">A Private Sanctuary</div>
+    <h1 class="hero__title">
+      Caerle<span class="italic">'</span>on
+    </h1>
+    <div class="hero__sub">完 全 会 員 制 ラ ウ ン ジ</div>
+  </div>
+</section>
 
-  <!-- HERO -->
-  <section class="hero" aria-label="メインビジュアル">
-    <div class="hero__media">
-      <div class="hero__slide is-active" style="background-image:url('images/hero-flowers.jpg')"></div>
-      <div class="hero__slide" style="background-image:url('images/hero-interior.jpg')"></div>
-      <div class="hero__slide" style="background-image:url('images/feature-flowers.jpg')"></div>
-      <div class="hero__slide" style="background-image:url('images/lounge-marble.jpg')"></div>
-      <div class="hero__veil"></div>
-      <div class="hero__noise"></div>
+<section id="concept">
+  <div class="concept">
+    <div class="concept__visual fade-in">
+      <div class="concept__visual-frame"></div>
     </div>
-
-    <p class="hero__vertical" aria-hidden="true">夜<span class="hero__vsep"></span>に<span class="hero__vsep"></span>咲<span class="hero__vsep"></span>く<span class="hero__vsep"></span>、<span class="hero__vsep"></span>静<span class="hero__vsep"></span>謐<span class="hero__vsep"></span>の<span class="hero__vsep"></span>名<span class="hero__vsep"></span>店<span class="hero__vsep"></span>。</p>
-
-    <div class="hero__inner">
-      <p class="hero__eyebrow"><span>―</span> <em>Roppongi · Members Only Lounge · Since 2011</em> <span>―</span></p>
-      <h1 class="hero__title">
-        <span class="hero__logo-wrap">
-          <img src="assets/logo-light.png" alt="Caerle'on" class="hero__logo" />
-          <span class="hero__logo-veil" aria-hidden="true"></span>
-        </span>
-      </h1>
-      <p class="hero__lead">
-        六本木の夜に、ひとつの隠れ家。<br class="sp-only" />
-        花と灯り、深い木目と大理石が迎える、<br />選ばれた紳士のための社交空間。
+    <div class="concept__text fade-in">
+      <div class="section__label">Concept</div>
+      <h2 class="section__title">夜に灯る、<br>もう一つの<span class="italic">居場所</span>。</h2>
+      <p>
+        Caerle'on は、限られた方々のための、もう一つの居場所です。
+        日常を離れ、上質な調度と静かな時間に身を委ねる。
+        その先に在るのは、語らうべき相手と、語るに足る時間。
       </p>
-      <div class="hero__actions">
-        <a href="#contact" class="btn btn--primary"><span>ご予約・お問い合わせ</span></a>
-        <a href="#concept" class="btn btn--ghost"><span>Caerle&rsquo;on を知る</span></a>
-      </div>
-    </div>
-
-    <div class="hero__scroll" aria-hidden="true">
-      <span class="hero__scroll-line"></span>
-      <span class="hero__scroll-text">Scroll</span>
-    </div>
-
-    <div class="hero__pager" aria-hidden="true">
-      <button class="hero__dot is-active" data-i="0"></button>
-      <button class="hero__dot" data-i="1"></button>
-      <button class="hero__dot" data-i="2"></button>
-      <button class="hero__dot" data-i="3"></button>
-    </div>
-  </section>
-
-  <!-- META BAR -->
-  <div class="metabar" aria-label="店舗概要">
-    <div class="metabar__inner">
-      <div class="metabar__item">
-        <span class="metabar__label">Established</span>
-        <span class="metabar__value">2011</span>
-      </div>
-      <div class="metabar__item">
-        <span class="metabar__label">Location</span>
-        <span class="metabar__value">Roppongi, Tokyo</span>
-      </div>
-      <div class="metabar__item">
-        <span class="metabar__label">Hours</span>
-        <span class="metabar__value">20:00 – 1:00</span>
-      </div>
-      <div class="metabar__item">
-        <span class="metabar__label">Style</span>
-        <span class="metabar__value">Members Only</span>
-      </div>
+      <blockquote class="concept__quote">
+        饒舌な空間ではなく、<br>
+        余白を愉しむための場所であること。
+      </blockquote>
+      <p>
+        色を抑えたインテリア、間接的な光、季節の花。
+        すべてが、お客様という主役を引き立てるための背景として誂えられています。
+      </p>
+      <p class="concept__sig">— Caerle'on</p>
     </div>
   </div>
+</section>
 
-  <!-- CONCEPT -->
-  <section class="section section--concept" id="concept" data-section-no="01" data-section-label="Concept">
-    <div class="section__bg" aria-hidden="true"></div>
-    <div class="section__inner">
-      <header class="section__head" data-reveal>
-        <span class="eyebrow">Concept</span>
-        <h2 class="heading">夜の社交場を、<br class="sp-only" />嗜むということ。</h2>
-      </header>
+<section id="gallery" class="gallery">
+  <div class="gallery__head fade-in">
+    <div>
+      <div class="section__label">Gallery</div>
+      <h2 class="section__title"><span class="italic">Interior</span><br>＆ Atmosphere</h2>
+    </div>
+    <p>
+      静かに灯る間接照明、深いベルベットのソファ、季節の花。
+      一席ごとに異なる表情を持つ、Caerle'on の店内をご覧ください。
+    </p>
+  </div>
 
-      <div class="concept">
-        <div class="concept__text" data-reveal>
-          <p class="concept__lead">Caerle&rsquo;on―。<br />選ばれた紳士のためにだけ、<br />夜は静かに扉を開く。</p>
-          <p>2011 年 9 月、六本木の地に灯した一軒の社交場。<br />重厚な木の格子、漆黒の卓、灯りに浮かぶ大理石。<br />季節の花が空間に色を添え、揺らぐ光がグラスの琥珀を照らします。</p>
-          <p>会話に集中できる、心地よい距離感。<br />どこにもない、一夜限りの景色を。<br />私たちは静寂と気品をもって、<br />あなただけの夜をお迎えいたします。</p>
-          <p class="concept__sign" aria-hidden="true">― IXI de Caerle&rsquo;on / Since 2011 ―</p>
+  <div class="gallery__grid">
+    <figure class="gallery__item gallery__item--1 fade-in">
+      <img src="images/c0209891.jpg" alt="メインフロア" loading="lazy">
+      <figcaption class="gallery__caption">— Main Floor</figcaption>
+    </figure>
+    <figure class="gallery__item gallery__item--2 fade-in">
+      <img src="images/c0209668.jpg" alt="ピアノ" loading="lazy">
+      <figcaption class="gallery__caption">— Live Piano</figcaption>
+    </figure>
+    <figure class="gallery__item gallery__item--3 fade-in">
+      <img src="images/c0209615.jpg" alt="ソファ席" loading="lazy">
+      <figcaption class="gallery__caption">— Lounge</figcaption>
+    </figure>
+    <figure class="gallery__item gallery__item--4 fade-in">
+      <img src="images/c0209876.jpg" alt="フローラル" loading="lazy">
+      <figcaption class="gallery__caption">— Floral Art</figcaption>
+    </figure>
+    <figure class="gallery__item gallery__item--5 fade-in">
+      <img src="images/c0209824.jpg" alt="詳細" loading="lazy">
+      <figcaption class="gallery__caption">— Detail</figcaption>
+    </figure>
+    <figure class="gallery__item gallery__item--6 fade-in">
+      <img src="images/c0209748.jpg" alt="プライベート" loading="lazy">
+      <figcaption class="gallery__caption">— Private Booth</figcaption>
+    </figure>
+    <figure class="gallery__item gallery__item--7 fade-in">
+      <img src="images/c0209962.jpg" alt="花" loading="lazy">
+      <figcaption class="gallery__caption">— Seasonal</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="system" class="system">
+  <div class="system__inner">
+    <div class="system__intro fade-in">
+      <div class="section__label">System</div>
+      <h2 class="section__title"><span class="italic">Membership</span><br>＆ Pricing</h2>
+      <p>
+        Caerle'on は、既存会員様のご紹介により入会いただける完全会員制ラウンジです。
+        お会計はすべて月締めにてご請求いたします。
+      </p>
+    </div>
+
+    <div class="system__cards fade-in">
+      <div class="system__card">
+        <div class="system__card-label">Membership</div>
+        <div class="system__card-name">年会費</div>
+        <div class="system__card-price">¥30,000<small>/ year</small></div>
+      </div>
+      <div class="system__card">
+        <div class="system__card-label">Set Charge</div>
+        <div class="system__card-name">セット料金（90分）</div>
+        <div class="system__card-price">¥15,000</div>
+      </div>
+      <div class="system__card">
+        <div class="system__card-label">Extension</div>
+        <div class="system__card-name">延長（30分毎）</div>
+        <div class="system__card-price">¥5,000</div>
+      </div>
+      <div class="system__card">
+        <div class="system__card-label">VIP Room</div>
+        <div class="system__card-name">プライベートルーム</div>
+        <div class="system__card-price">¥30,000<small>〜</small></div>
+      </div>
+      <div class="system__card">
+        <div class="system__card-label">Bottle</div>
+        <div class="system__card-name">ボトルキープ</div>
+        <div class="system__card-price" style="font-style:italic;font-size:28px;">Ask Staff</div>
+      </div>
+      <div class="system__card">
+        <div class="system__card-label">Service</div>
+        <div class="system__card-name">サービス料</div>
+        <div class="system__card-price">20<small>%</small></div>
+      </div>
+    </div>
+
+    <div class="system__notes fade-in">
+      <h4>Notice</h4>
+      表示価格はすべて税抜きです。別途消費税を申し受けます。<br>
+      ご入会には、既存会員様のご紹介および所定の審査が必要となります。<br>
+      ドレスコード：スマートカジュアル以上。短パン・サンダルでのご入店はお断りしております。
+    </div>
+  </div>
+</section>
+
+<section id="access" class="access">
+  <div class="access__grid">
+    <div class="access__info">
+      <div class="section__label">Access</div>
+      <h2 class="section__title"><span class="italic">Find</span><br>your way.</h2>
+      <dl class="access__details">
+        <dt>Address</dt>
+        <dd>東京都港区六本木 4-11-11<br>GM ビル 6F</dd>
+        <dt>Open</dt>
+        <dd>20:00 — 1:00<br>Sat, Sun &amp; Holidays Closed</dd>
+        <dt>Tel</dt>
+        <dd>03-XXXX-XXXX</dd>
+        <dt>Mail</dt>
+        <dd>contact@caerleon.tokyo</dd>
+      </dl>
+      <a href="#" class="btn">Reserve Now</a>
+    </div>
+    <div class="access__visual"></div>
+  </div>
+</section>
+
+<section id="recruit" class="recruit">
+  <div class="recruit__inner">
+    <div class="recruit__visual fade-in"></div>
+    <div class="recruit__text fade-in">
+      <div class="section__label">Recruit</div>
+      <h3>あなたという、<br><span class="italic">特別</span>を探しています。</h3>
+      <p>
+        Caerle'on では、共に上質な空間をつくる仲間を募集しています。
+        経験の有無は問いません。お客様への敬意と、自身を磨き続ける意欲のある方を歓迎いたします。
+      </p>
+
+      <dl class="recruit__benefits">
+        <div>
+          <dt>Hourly</dt>
+          <dd>¥6,000 〜</dd>
         </div>
-        <figure class="concept__hero" data-reveal>
-          <img src="images/hero-flowers.jpg" alt="フラワーアレンジメントとエントランス" loading="lazy" />
-          <figcaption>季節の花が、夜を彩る。</figcaption>
-        </figure>
+        <div>
+          <dt>Shift</dt>
+          <dd>Flexible</dd>
+        </div>
+        <div>
+          <dt>Dress</dt>
+          <dd>Provided</dd>
+        </div>
+        <div>
+          <dt>Welfare</dt>
+          <dd>Full Support</dd>
+        </div>
+      </dl>
+
+      <p style="font-size:13px; color:var(--mute); font-style:italic;">
+        ※ 詳細な条件・面接については、下記よりお気軽にお問い合わせください。
+      </p>
+      <a href="#" class="btn">Apply Now</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer__inner">
+    <div class="footer__brand">Caerle'on</div>
+
+    <div class="footer__grid">
+      <div class="footer__col">
+        <h5>Caerle'on Lounge</h5>
+        <p>洗練された大人のためのプライベートラウンジ。<br>完全会員制にて、選ばれた皆様をお迎えいたします。</p>
       </div>
-    </div>
-  </section>
-
-  <!-- STORY (沿革) -->
-  <section class="section section--story" id="story" data-section-no="02" data-section-label="Story">
-    <div class="section__inner">
-      <header class="section__head" data-reveal>
-        <span class="eyebrow">Story</span>
-        <h2 class="heading">十余年の、<br class="sp-only" />積み重ね。</h2>
-        <p class="section__lead">六本木に灯された一軒のともしびは、<br />選び抜かれた方々と共に、静かに重ねられてきました。</p>
-      </header>
-
-      <ol class="timeline">
-        <li class="timeline__item" data-reveal>
-          <span class="timeline__year">2011</span>
-          <div class="timeline__body">
-            <h3>開業</h3>
-            <p>9 月、六本木の地に「IXI de Caerle&rsquo;on」を開業。重厚な木組みと天然石の壁面を擁する、唯一無二の社交空間として始動しました。</p>
-          </div>
-        </li>
-        <li class="timeline__item" data-reveal>
-          <span class="timeline__year">2015</span>
-          <div class="timeline__body">
-            <h3>個室拡張</h3>
-            <p>完全個室を増室。プライバシーを重んじるお客様のための、より静謐な空間をご用意いたしました。</p>
-          </div>
-        </li>
-        <li class="timeline__item" data-reveal>
-          <span class="timeline__year">2019</span>
-          <div class="timeline__body">
-            <h3>ピアノを設置</h3>
-            <p>店内中央に YAMAHA グランドピアノを設置。週末の生演奏が、夜に新たな彩りを加えました。</p>
-          </div>
-        </li>
-        <li class="timeline__item" data-reveal>
-          <span class="timeline__year">Now</span>
-          <div class="timeline__body">
-            <h3>変わらぬ静寂</h3>
-            <p>移ろう時代の中でも、灯りと花、確かなおもてなし。Caerle&rsquo;on はこれからも、変わらぬ時間をお届けします。</p>
-          </div>
-        </li>
-      </ol>
-    </div>
-  </section>
-
-  <!-- FEATURES -->
-  <section class="section section--features" id="interior" data-section-no="03" data-section-label="Interior">
-    <div class="section__inner">
-      <header class="section__head" data-reveal>
-        <span class="eyebrow">Interior &amp; Hospitality</span>
-        <h2 class="heading">三つの、こだわり。</h2>
-      </header>
-
-      <div class="features">
-        <article class="feature" data-reveal>
-          <figure class="feature__media"><img src="images/feature-flowers.jpg" alt="花のある夜" loading="lazy" /></figure>
-          <div class="feature__body">
-            <span class="feature__num">壱</span>
-            <h3 class="feature__title">花のある夜</h3>
-            <p>季節の生花を、フロアの中心に。芍薬、百合、躑躅。香りと色彩が、ひと夜のための景色を描きます。</p>
-          </div>
-        </article>
-        <article class="feature" data-reveal>
-          <figure class="feature__media"><img src="images/lounge-marble.jpg" alt="陰影のある空間" loading="lazy" /></figure>
-          <div class="feature__body">
-            <span class="feature__num">弐</span>
-            <h3 class="feature__title">陰影のある空間</h3>
-            <p>深い木組みと、内側から灯る天然石。建築家が描く陰影が、訪れる人の所作を美しく見せます。</p>
-          </div>
-        </article>
-        <article class="feature" data-reveal>
-          <figure class="feature__media"><img src="images/booth-spotlight.jpg" alt="完全個室" loading="lazy" /></figure>
-          <div class="feature__body">
-            <span class="feature__num">参</span>
-            <h3 class="feature__title">完全個室と本席</h3>
-            <p>密やかな会話のための完全個室を10室。広やかなメインフロアと、ご用途に合わせた席をご用意しております。</p>
-          </div>
-        </article>
+      <div class="footer__col">
+        <h5>Navigation</h5>
+        <ul>
+          <li><a href="#concept">Concept</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#system">System</a></li>
+          <li><a href="#access">Access</a></li>
+          <li><a href="#recruit">Recruit</a></li>
+        </ul>
       </div>
-    </div>
-  </section>
-
-  <!-- GALLERY -->
-  <section class="section section--gallery" id="gallery" data-section-no="04" data-section-label="Gallery">
-    <div class="section__inner">
-      <header class="section__head" data-reveal>
-        <span class="eyebrow">Gallery</span>
-        <h2 class="heading">うつろう光と、<br class="sp-only" />店内の表情。</h2>
-      </header>
-
-      <div class="gallery">
-        <figure class="gallery__item gallery__item--lg" data-reveal>
-          <img src="images/hero-interior.jpg" alt="メインフロアと木の格子" loading="lazy" />
-          <figcaption>Main Floor</figcaption>
-        </figure>
-        <figure class="gallery__item" data-reveal>
-          <img src="images/booth-overhead.jpg" alt="ベルベットソファのボックス席" loading="lazy" />
-          <figcaption>Box Seat</figcaption>
-        </figure>
-        <figure class="gallery__item" data-reveal>
-          <img src="images/banquette-marble.jpg" alt="大理石壁のバンケット席" loading="lazy" />
-          <figcaption>Banquette</figcaption>
-        </figure>
-        <figure class="gallery__item" data-reveal>
-          <img src="images/flowers-pink.jpg" alt="百合と躑躅のアレンジメント" loading="lazy" />
-          <figcaption>Floral</figcaption>
-        </figure>
-        <figure class="gallery__item gallery__item--lg" data-reveal>
-          <img src="images/booth-spotlight.jpg" alt="スポットライトの灯る席" loading="lazy" />
-          <figcaption>Lounge</figcaption>
-        </figure>
+      <div class="footer__col">
+        <h5>Contact</h5>
+        <ul>
+          <li>03-XXXX-XXXX</li>
+          <li>contact@caerleon.tokyo</li>
+          <li>Open 20:00 — 1:00</li>
+        </ul>
       </div>
-    </div>
-  </section>
-
-  <!-- NEWS -->
-  <section class="news" aria-label="お知らせ">
-    <div class="news__inner">
-      <div class="news__panel" data-reveal>
-        <span class="news__label">News</span>
-        <ul class="news__list">
-          <li>
-            <time>2026.05</time>
-            <p>初夏のフラワーアレンジメントへ装いを改めました。芍薬と百合が空間を彩ります。</p>
-          </li>
-          <li>
-            <time>2026.04</time>
-            <p>金曜・土曜のピアノ生演奏を 21:00 - 23:00 にて常設開催中。</p>
-          </li>
-          <li>
-            <time>2026.03</time>
-            <p>新作シーズナルカクテル「春霞」が登場。早春の香りをお楽しみください。</p>
-          </li>
+      <div class="footer__col">
+        <h5>Follow</h5>
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">X (Twitter)</a></li>
         </ul>
       </div>
     </div>
-  </section>
 
-  <!-- DRINKS / SELECTION -->
-  <section class="section section--drinks" id="drinks" data-section-no="05" data-section-label="Selection">
-    <div class="section__inner">
-      <header class="section__head" data-reveal>
-        <span class="eyebrow">Selection</span>
-        <h2 class="heading">夜に寄り添う、<br class="sp-only" />一杯の選択。</h2>
-        <p class="section__lead">世界中から取り寄せた一級の銘柄を、ご用意しております。<br />お好みやその夜の気分を伺いながら、最適な一杯をご提案いたします。</p>
-      </header>
-
-      <div class="menu" data-reveal>
-        <div class="menu__col">
-          <header class="menu__head">
-            <span class="menu__num">壱</span>
-            <div class="menu__title">
-              <h3>Champagne</h3>
-              <p>シャンパーニュ</p>
-            </div>
-          </header>
-          <ul class="menu__list">
-            <li>Krug Grande Cuvée</li>
-            <li>Dom Pérignon</li>
-            <li>Ruinart Blanc de Blancs</li>
-          </ul>
-        </div>
-
-        <div class="menu__col">
-          <header class="menu__head">
-            <span class="menu__num">弐</span>
-            <div class="menu__title">
-              <h3>Whisky</h3>
-              <p>スコッチ／ジャパニーズ</p>
-            </div>
-          </header>
-          <ul class="menu__list">
-            <li>Macallan 18 / 25</li>
-            <li>Yamazaki 12 / 18</li>
-            <li>Hibiki Harmony</li>
-          </ul>
-        </div>
-
-        <div class="menu__col">
-          <header class="menu__head">
-            <span class="menu__num">参</span>
-            <div class="menu__title">
-              <h3>Cocktail</h3>
-              <p>シーズナル／クラシック</p>
-            </div>
-          </header>
-          <ul class="menu__list">
-            <li>Seasonal Fruits Martini</li>
-            <li>Old Fashioned</li>
-            <li>Negroni / Manhattan</li>
-          </ul>
-        </div>
-
-        <div class="menu__col">
-          <header class="menu__head">
-            <span class="menu__num">肆</span>
-            <div class="menu__title">
-              <h3>Wine &amp; Others</h3>
-              <p>ワイン／ノンアルコール</p>
-            </div>
-          </header>
-          <ul class="menu__list">
-            <li>Bourgogne / Bordeaux</li>
-            <li>Italian Red &amp; White</li>
-            <li>Mocktail / Tea</li>
-          </ul>
-        </div>
-      </div>
-
-      <p class="menu__note" data-reveal>― 上記は一例です。お好みに応じてお作りいたします ―</p>
+    <div class="footer__bottom">
+      <span>© 2026 Caerle'on. All rights reserved.</span>
+      <span>Tokyo — Members Only</span>
     </div>
-  </section>
-
-  <!-- PIANO -->
-  <section class="section section--piano" id="piano" data-section-no="06" data-section-label="Piano">
-    <div class="piano-bg" style="background-image:url('images/piano.jpg')" aria-hidden="true"></div>
-    <div class="piano-veil" aria-hidden="true"></div>
-    <div class="section__inner">
-      <div class="piano">
-        <div class="piano__text" data-reveal>
-          <span class="eyebrow eyebrow--light">Live Piano</span>
-          <h2 class="heading heading--light">夜を奏でる、<br />しらべ。</h2>
-          <p>店内中央に佇む YAMAHA グランドピアノ。<br />金曜・土曜の夜には、調べが空間にそっと溶け込みます。</p>
-          <p class="piano__small">― Friday &amp; Saturday　21:00 – 23:00 ―</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- INFORMATION -->
-  <section class="section section--info" id="information" data-section-no="07" data-section-label="Information">
-    <div class="section__inner">
-      <header class="section__head" data-reveal>
-        <span class="eyebrow">Information</span>
-        <h2 class="heading">店舗情報</h2>
-      </header>
-
-      <div class="info-wrap">
-        <figure class="info__sign" data-reveal>
-          <img src="images/hero-sign.jpg" alt="Caerle'on の看板" loading="lazy" />
-        </figure>
-        <dl class="info">
-          <div class="info__row" data-reveal>
-            <dt>店名</dt>
-            <dd>IXI de Caerle&rsquo;on<small>（イクシード・カーリアン）</small></dd>
-          </div>
-          <div class="info__row" data-reveal>
-            <dt>所在地</dt>
-            <dd>〒106-0032<br />東京都港区六本木 4-11-11　GM ビル 6F</dd>
-          </div>
-          <div class="info__row" data-reveal>
-            <dt>アクセス</dt>
-            <dd>東京メトロ 日比谷線「六本木駅」7 番出口 徒歩 2 分<br />都営大江戸線「六本木駅」7 番出口 徒歩 2 分</dd>
-          </div>
-          <div class="info__row" data-reveal>
-            <dt>営業時間</dt>
-            <dd>20:00 – 翌 1:00<small>（L.O. 翌 0:30）</small></dd>
-          </div>
-          <div class="info__row" data-reveal>
-            <dt>定休日</dt>
-            <dd>土曜日・日曜日・祝日</dd>
-          </div>
-          <div class="info__row" data-reveal>
-            <dt>席数</dt>
-            <dd>メインフロア／完全個室 10 室<small>（2 フロア構成）</small></dd>
-          </div>
-          <div class="info__row" data-reveal>
-            <dt>ご利用</dt>
-            <dd>会員制／ご紹介・ご予約優先</dd>
-          </div>
-          <div class="info__row" data-reveal>
-            <dt>ドレスコード</dt>
-            <dd>スマートエレガンス</dd>
-          </div>
-          <div class="info__row" data-reveal>
-            <dt>お支払い</dt>
-            <dd>各種クレジットカード／現金</dd>
-          </div>
-        </dl>
-      </div>
-    </div>
-  </section>
-
-  <!-- ACCESS -->
-  <section class="section section--access" id="access" data-section-no="08" data-section-label="Access">
-    <div class="section__inner">
-      <header class="section__head" data-reveal>
-        <span class="eyebrow">Access</span>
-        <h2 class="heading">所在地</h2>
-      </header>
-      <div class="access">
-        <div class="access__text" data-reveal>
-          <p class="access__addr">
-            東京都港区六本木 4-11-11<br />
-            <span class="access__addr-sub">GM ビル 6F</span>
-          </p>
-          <ul class="access__steps">
-            <li><span class="access__line">日比谷線</span>「六本木駅」7 番出口より 徒歩 2 分</li>
-            <li><span class="access__line">大江戸線</span>「六本木駅」7 番出口より 徒歩 2 分</li>
-          </ul>
-          <p class="access__note">六本木交差点よりほど近く、静かなビルの 6 階に佇みます。<br />お車の方は近隣のコインパーキングをご利用くださいませ。</p>
-          <div class="access__actions">
-            <a href="https://www.google.com/maps/search/?api=1&query=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E5%85%AD%E6%9C%AC%E6%9C%A8%204-11-11" target="_blank" rel="noopener" class="btn btn--primary"><span>Google マップで開く</span></a>
-            <a href="#contact" class="btn btn--ghost"><span>道順をお問い合わせ</span></a>
-          </div>
-        </div>
-        <div class="access__map" data-reveal>
-          <iframe
-            title="Caerle'on 所在地"
-            src="https://maps.google.com/maps?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E5%85%AD%E6%9C%AC%E6%9C%A8%204-11-11&t=&z=17&ie=UTF8&iwloc=&output=embed"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            allowfullscreen></iframe>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section class="section section--contact" id="contact" data-section-no="09" data-section-label="Reservation">
-    <div class="section__inner">
-      <header class="section__head" data-reveal>
-        <span class="eyebrow">Reservation</span>
-        <h2 class="heading">ご予約・お問い合わせ</h2>
-      </header>
-
-      <div class="contact">
-        <div class="contact__lead" data-reveal>
-          <p>当店は会員制ラウンジでございます。<br />ご新規のお客様は、ご紹介またはお問い合わせフォームよりご連絡くださいませ。<br />担当より、追ってご案内を差し上げます。</p>
-        </div>
-
-        <form class="contact__form" data-reveal onsubmit="event.preventDefault(); this.querySelector('.contact__done').hidden=false; this.reset();">
-          <div class="field">
-            <label for="f-name">お名前</label>
-            <input id="f-name" type="text" name="name" autocomplete="name" required />
-          </div>
-          <div class="field">
-            <label for="f-email">メールアドレス</label>
-            <input id="f-email" type="email" name="email" autocomplete="email" required />
-          </div>
-          <div class="field">
-            <label for="f-tel">お電話番号</label>
-            <input id="f-tel" type="tel" name="tel" autocomplete="tel" />
-          </div>
-          <div class="field">
-            <label for="f-date">ご希望日時</label>
-            <input id="f-date" type="text" name="date" placeholder="例：◯月◯日 21:00 / 2 名様" />
-          </div>
-          <div class="field field--full">
-            <label for="f-intro">ご紹介者様（ある場合）</label>
-            <input id="f-intro" type="text" name="intro" placeholder="ご紹介者のお名前" />
-          </div>
-          <div class="field field--full">
-            <label for="f-msg">ご質問・ご要望</label>
-            <textarea id="f-msg" name="message" rows="5"></textarea>
-          </div>
-          <div class="field field--full field--submit">
-            <button type="submit" class="btn btn--primary btn--lg"><span>送信する</span></button>
-            <p class="contact__done" hidden>お問い合わせを承りました。担当より追ってご連絡差し上げます。</p>
-          </div>
-        </form>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<footer class="site-footer">
-  <div class="site-footer__inner">
-    <div class="site-footer__brand">
-      <img src="assets/logo-light.png" alt="Caerle'on" class="site-footer__logo" />
-      <p class="site-footer__tag">― Roppongi · Members Only Lounge · Since 2011 ―</p>
-    </div>
-    <ul class="site-footer__nav">
-      <li><a href="#concept">Concept</a></li>
-      <li><a href="#story">Story</a></li>
-      <li><a href="#interior">Interior</a></li>
-      <li><a href="#gallery">Gallery</a></li>
-      <li><a href="#drinks">Selection</a></li>
-      <li><a href="#piano">Piano</a></li>
-      <li><a href="#information">Information</a></li>
-      <li><a href="#access">Access</a></li>
-      <li><a href="#contact">Reservation</a></li>
-    </ul>
-    <ul class="site-footer__sns" aria-label="SNS">
-      <li><a href="#" aria-label="Instagram">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4">
-          <rect x="3" y="3" width="18" height="18" rx="5" />
-          <circle cx="12" cy="12" r="4" />
-          <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" />
-        </svg>
-      </a></li>
-      <li><a href="#" aria-label="X (Twitter)">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-          <path d="M18.244 3H21l-6.52 7.45L22 21h-6.84l-4.74-6.21L4.8 21H2.04l6.97-7.96L2 3h6.95l4.27 5.65L18.244 3Zm-1.2 16h1.5L7.04 5H5.46l11.584 14Z"/>
-        </svg>
-      </a></li>
-      <li><a href="#" aria-label="LINE">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4">
-          <path d="M21 11.2c0-4.5-4.5-8.2-10-8.2S1 6.7 1 11.2c0 4 3.6 7.4 8.4 8.1.3.1.7.2.9.5.2.3.1.7.1 1l-.1.6c0 .2-.2 1 .9.5s5.7-3.4 7.7-5.8c1.4-1.6 2.1-3.2 2.1-4.9Z"/>
-        </svg>
-      </a></li>
-    </ul>
-    <p class="site-footer__copy">&copy; <span id="year"></span> IXI de Caerle&rsquo;on. All Rights Reserved.</p>
   </div>
 </footer>
 
-<a href="#contact" class="floating-cta" aria-label="ご予約">
-  <span>Reservation</span>
-</a>
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
 
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" aria-hidden="true">
-  <button class="lightbox__close" aria-label="閉じる">×</button>
-  <button class="lightbox__nav lightbox__nav--prev" aria-label="前へ">‹</button>
-  <button class="lightbox__nav lightbox__nav--next" aria-label="次へ">›</button>
-  <figure class="lightbox__figure">
-    <img alt="" />
-    <figcaption></figcaption>
-  </figure>
-</div>
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-<script src="assets/js/main.js" defer></script>
+// ヘッダーのスクロール検知
+const siteHeader = document.getElementById('siteHeader');
+let lastScroll = 0;
+
+window.addEventListener('scroll', () => {
+  const scroll = window.scrollY;
+  if (scroll > 80) {
+    siteHeader.classList.add('scrolled');
+  } else {
+    siteHeader.classList.remove('scrolled');
+  }
+  lastScroll = scroll;
+}, { passive: true });
+</script>
+
 </body>
 </html>

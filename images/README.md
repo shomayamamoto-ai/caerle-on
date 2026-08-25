@@ -1,18 +1,16 @@
 # Images
 
-サイトに使われている店内写真の対応表です。差し替える場合は、同じファイル名で上書きしてください。
+サイトで使用している写真の対応表です。差し替える場合は、同じファイル名で上書きしてください（Web 用最適化済み・横 1920px 推奨）。
 
-| ファイル名               | 用途                                       |
-| ------------------------ | ------------------------------------------ |
-| `hero-flowers.jpg`       | ヒーロー：大輪のフラワーアレンジ正面       |
-| `hero-interior.jpg`      | ヒーロー：店内全景（木の格子と中央島）     |
-| `hero-sign.jpg`          | Information：Caerle'on 看板                |
-| `feature-flowers.jpg`    | Concept / Feature：花のある夜              |
-| `lounge-marble.jpg`      | Feature：陰影のある空間（大理石壁）        |
-| `booth-overhead.jpg`     | Gallery：ボックス席の俯瞰                  |
-| `booth-spotlight.jpg`    | Feature / Gallery：スポットライトの席      |
-| `banquette-marble.jpg`   | Gallery：バンケット席                      |
-| `flowers-pink.jpg`       | Concept / Gallery：百合と躑躅クローズアップ |
-| `piano.jpg`              | Piano セクション：YAMAHA グランドピアノ    |
-
-差し替え時は **横長 2000px / 縦長 1500px** 程度を目安に書き出すと、表示と容量のバランスが取れます。
+| ファイル名     | 用途                                     |
+| -------------- | ---------------------------------------- |
+| `c0209891.jpg` | 店内全景（ヒーロー背景／Gallery 1）      |
+| `c0209799.jpg` | ソファ席＋大理石壁（Concept）            |
+| `c0209646.jpg` | ロゴサイン（Access）                     |
+| `c0209948.jpg` | 個室・コーナーソファ（Recruit）          |
+| `c0209668.jpg` | ピアノ YAMAHA（Gallery 2）               |
+| `c0209615.jpg` | ソファ席・間接照明（Gallery 3）          |
+| `c0209876.jpg` | 大型フラワーアレンジ（Gallery 4）        |
+| `c0209824.jpg` | フラワー＋ソファ（Gallery 5）            |
+| `c0209748.jpg` | メインフロア俯瞰（Gallery 6）            |
+| `c0209962.jpg` | シンメトリーフラワー（Gallery 7）        |
