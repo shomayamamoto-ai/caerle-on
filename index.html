@@ -1388,7 +1388,7 @@ section {
   <div class="news__inner fade-in">
     <div class="section__label">News</div>
     <h2 class="section__title">Latest <span class="italic">Information</span></h2>
-    <ul class="news__list">
+    <ul class="news__list" id="newsList">
       <li>
         <span class="news__date">2026.08</span>
         <span class="news__tag">Floral</span>
@@ -1701,6 +1701,24 @@ document.querySelectorAll('.faq__q').forEach(btn => {
 if (pageTop) {
   pageTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 }
+
+// News を news.json から読み込み（管理ページから編集可能）
+fetch('news.json?t=' + Date.now())
+  .then(r => (r.ok ? r.json() : null))
+  .then(items => {
+    if (!Array.isArray(items) || !items.length) return;
+    const ul = document.getElementById('newsList');
+    if (!ul) return;
+    const esc = s => String(s).replace(/[&<>"']/g, c => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+    ));
+    ul.innerHTML = items.map(n =>
+      `<li><span class="news__date">${esc(n.date || '')}</span>` +
+      `<span class="news__tag">${esc(n.tag || '')}</span>` +
+      `<p class="news__text">${esc(n.text || '')}</p></li>`
+    ).join('');
+  })
+  .catch(() => { /* news.json が無い場合は HTML 内の内容を表示 */ });
 </script>
 
 <a href="#access" class="sticky-cta" id="stickyCta">Reservation</a>
