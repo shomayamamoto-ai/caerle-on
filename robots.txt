@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://shomayamamoto-ai.github.io/caerle-on/sitemap.xml
