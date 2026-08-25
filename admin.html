@@ -54,6 +54,15 @@ header.bar {
   text-transform: uppercase;
   color: var(--gold);
 }
+.bar__mode {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mute);
+  border: 1px solid var(--line);
+  padding: 5px 12px;
+}
 .bar a.site-link {
   font-size: 12px;
   letter-spacing: 0.1em;
@@ -71,7 +80,7 @@ h1 {
 h1 .italic { font-style: italic; color: var(--gold-bright); }
 .lead { color: var(--ink-soft); font-size: 14px; margin-bottom: 36px; }
 
-/* ---- token panel ---- */
+/* ---- auth panel ---- */
 .token-panel {
   background: var(--bg-card);
   border: 1px solid var(--line);
@@ -185,7 +194,6 @@ h1 .italic { font-style: italic; color: var(--gold-bright); }
 .slot__msg.err { color: var(--err); }
 .slot__msg.busy { color: var(--gold-bright); }
 
-/* preview overlay before commit */
 .slot.pending .slot__thumb::after {
   content: '未保存のプレビュー';
   position: absolute;
@@ -215,24 +223,21 @@ input[type="file"] { display: none; }
     <div class="bar__brand">
       <img src="assets/logo-light.png" alt="Caerle'on">
       <span class="bar__label">Photo Admin</span>
+      <span class="bar__mode" id="modeBadge">…</span>
     </div>
     <a class="site-link" href="index.html">← サイトを表示</a>
   </div>
 </header>
 
 <main class="wrap">
-  <h1>写真の<span class="italic">差し替え</span></h1>
-  <p class="lead">各枠の「写真を選ぶ」から新しい写真を選択し、「保存」を押すとサイトに反映されます（反映まで 1〜2 分）。</p>
+  <h1>写真の<span class="italic">出し入れ</span></h1>
+  <p class="lead">各枠の「写真を選ぶ」→「保存」で差し替え、「取り出し」で現在の写真をダウンロードできます。</p>
 
   <section class="token-panel" id="tokenPanel">
-    <h2>接続設定</h2>
-    <p>
-      GitHub の Fine-grained personal access token（対象リポジトリ：<code>shomayamamoto-ai/caerle-on</code>、権限：Contents – Read and write）を入力してください。
-      トークンはこの端末のブラウザにのみ保存され、GitHub 以外へ送信されることはありません。
-      <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">トークンを作成する ↗</a>
-    </p>
+    <h2 id="authTitle">接続設定</h2>
+    <p id="authDesc">接続方法を確認しています…</p>
     <div class="token-row">
-      <input type="password" id="tokenInput" placeholder="github_pat_..." autocomplete="off">
+      <input type="password" id="tokenInput" placeholder="" autocomplete="off">
       <button class="btn btn--solid" id="connectBtn">接続</button>
       <button class="btn" id="forgetBtn" hidden>接続を解除</button>
     </div>
@@ -241,22 +246,30 @@ input[type="file"] { display: none; }
 
   <section class="slots" id="slots" hidden></section>
 
-  <p class="note">
+  <p class="note" id="footNote">
     ・選んだ写真は自動で横 1920px・JPEG に最適化されてから保存されます。<br>
-    ・保存すると main ブランチに直接コミットされ、GitHub Pages が自動で再公開します。<br>
-    ・反映後に古い写真が表示される場合は、ブラウザを強制リロード（Mac: ⌘+Shift+R / Windows: Ctrl+F5）してください。
+    ・「取り出し」は現在サイトに表示されている写真をそのままダウンロードします。<br>
+    ・このページは GitHub Pages 上では GitHub 連携で、PHP が動くサーバーへ移管した後は
+    同梱の <code>admin-api.php</code> 経由で動作します（自動判別）。
   </p>
 </main>
 
 <script>
 'use strict';
 
+/* ============================================================
+   バックエンド抽象化:
+   - github : GitHub Contents API でコミット（GitHub Pages 運用時）
+   - php    : 同梱 admin-api.php が images/ へ直接書き込み（移管後）
+   ページ読み込み時に admin-api.php の応答を見て自動判別します。
+   ============================================================ */
+
 const OWNER = 'shomayamamoto-ai';
 const REPO = 'caerle-on';
 const BRANCH = 'main';
-const API = `https://api.github.com/repos/${OWNER}/${REPO}/contents/`;
+const GH_API = `https://api.github.com/repos/${OWNER}/${REPO}/contents/`;
+const PHP_API = 'admin-api.php';
 
-/* サイト内の写真スロット定義（images/README.md と対応） */
 const SLOTS = [
   { file: 'c0209891.jpg', label: 'ヒーロー背景',        note: 'トップの全画面背景 / Gallery「Main Floor」' },
   { file: 'p0001.jpg',    label: 'Concept',             note: 'コンセプトの額装写真' },
@@ -278,10 +291,55 @@ const tokenStatus = document.getElementById('tokenStatus');
 const connectBtn = document.getElementById('connectBtn');
 const forgetBtn = document.getElementById('forgetBtn');
 const slotsEl = document.getElementById('slots');
+const modeBadge = document.getElementById('modeBadge');
+const authTitle = document.getElementById('authTitle');
+const authDesc = document.getElementById('authDesc');
 
-let TOKEN = localStorage.getItem('caerleon_admin_token') || '';
+let MODE = 'github';          // 'github' | 'php'
+let TOKEN = '';
+let phpConfigured = false;
 
-function headers() {
+/* ---- バックエンド判別 ---- */
+async function detectBackend() {
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 4000);
+    const res = await fetch(`${PHP_API}?action=ping&t=${Date.now()}`, { signal: ctrl.signal });
+    clearTimeout(timer);
+    if (res.ok) {
+      const data = await res.json();          // PHP が動いていなければ JSON パースで失敗する
+      if (data && data.ok && data.backend === 'php') {
+        MODE = 'php';
+        phpConfigured = !!data.configured;
+        return;
+      }
+    }
+  } catch (e) { /* GitHub Pages 等 — PHP なし */ }
+  MODE = 'github';
+}
+
+function storageKey() { return MODE === 'php' ? 'caerleon_admin_pw' : 'caerleon_admin_token'; }
+
+function setupAuthUI() {
+  modeBadge.textContent = MODE === 'php' ? 'Server Mode' : 'GitHub Mode';
+  if (MODE === 'php') {
+    authTitle.textContent = 'ログイン';
+    authDesc.innerHTML = phpConfigured
+      ? '管理パスワードを入力してください（サーバーの admin-api.php に設定したもの）。'
+      : '<span style="color:var(--err)">サーバーの admin-api.php にパスワードが未設定です。ファイル内の $ADMIN_PASSWORD を変更してください。</span>';
+    tokenInput.placeholder = '管理パスワード';
+  } else {
+    authTitle.textContent = 'GitHub 接続設定';
+    authDesc.innerHTML =
+      `GitHub の Fine-grained personal access token（対象リポジトリ：<code>${OWNER}/${REPO}</code>、権限：Contents – Read and write）を入力してください。` +
+      'トークンはこの端末のブラウザにのみ保存され、GitHub 以外へ送信されることはありません。 ' +
+      '<a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">トークンを作成する ↗</a>';
+    tokenInput.placeholder = 'github_pat_...';
+  }
+}
+
+/* ---- 認証 ---- */
+function ghHeaders() {
   return {
     'Authorization': `Bearer ${TOKEN}`,
     'Accept': 'application/vnd.github+json',
@@ -289,24 +347,29 @@ function headers() {
   };
 }
 
-async function verifyToken() {
-  const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}`, { headers: headers() });
+async function verifyAuth() {
+  if (MODE === 'php') {
+    const res = await fetch(`${PHP_API}?action=verify`, { headers: { 'X-Admin-Token': TOKEN } });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.ok) throw new Error(data.error || `認証エラー (${res.status})`);
+    return;
+  }
+  const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}`, { headers: ghHeaders() });
   if (!res.ok) throw new Error(`認証エラー (${res.status})`);
   const data = await res.json();
   if (!data.permissions || !(data.permissions.push || data.permissions.admin)) {
     throw new Error('このトークンには書き込み権限がありません');
   }
-  return data;
 }
 
 async function connect(saveToken) {
   tokenStatus.className = 'status';
   tokenStatus.textContent = '確認中…';
   try {
-    await verifyToken();
-    if (saveToken) localStorage.setItem('caerleon_admin_token', TOKEN);
+    await verifyAuth();
+    if (saveToken) localStorage.setItem(storageKey(), TOKEN);
     tokenStatus.className = 'status ok';
-    tokenStatus.textContent = '✓ 接続しました。下の一覧から写真を差し替えられます。';
+    tokenStatus.textContent = '✓ 接続しました。下の一覧から写真を出し入れできます。';
     connectBtn.hidden = true;
     tokenInput.hidden = true;
     forgetBtn.hidden = false;
@@ -314,7 +377,7 @@ async function connect(saveToken) {
     slotsEl.hidden = false;
   } catch (e) {
     tokenStatus.className = 'status err';
-    tokenStatus.textContent = '✗ ' + e.message + '（トークンと権限をご確認ください）';
+    tokenStatus.textContent = '✗ ' + e.message;
   }
 }
 
@@ -322,24 +385,52 @@ connectBtn.addEventListener('click', () => {
   TOKEN = tokenInput.value.trim();
   if (!TOKEN) {
     tokenStatus.className = 'status err';
-    tokenStatus.textContent = 'トークンを入力してください';
+    tokenStatus.textContent = MODE === 'php' ? 'パスワードを入力してください' : 'トークンを入力してください';
     return;
   }
   connect(true);
 });
 
 forgetBtn.addEventListener('click', () => {
-  localStorage.removeItem('caerleon_admin_token');
+  localStorage.removeItem(storageKey());
   TOKEN = '';
   location.reload();
 });
 
-if (TOKEN) {
-  tokenInput.value = TOKEN;
-  connect(false);
+/* ---- 保存（バックエンド別） ---- */
+async function saveImage(slot, base64) {
+  if (MODE === 'php') {
+    const res = await fetch(`${PHP_API}?action=upload`, {
+      method: 'POST',
+      headers: { 'X-Admin-Token': TOKEN, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ file: slot.file, content: base64 }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.ok) throw new Error(data.error || `保存に失敗しました (${res.status})`);
+    return '✓ 保存しました。サイトに即時反映されます（キャッシュにより数分かかる場合があります）。';
+  }
+  // GitHub モード
+  const getRes = await fetch(`${GH_API}images/${slot.file}?ref=${BRANCH}`, { headers: ghHeaders() });
+  if (!getRes.ok) throw new Error(`現在のファイル情報を取得できません (${getRes.status})`);
+  const current = await getRes.json();
+  const putRes = await fetch(`${GH_API}images/${slot.file}`, {
+    method: 'PUT',
+    headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      message: `photo: ${slot.label} の写真を差し替え (via admin)`,
+      content: base64,
+      sha: current.sha,
+      branch: BRANCH,
+    }),
+  });
+  if (!putRes.ok) {
+    const body = await putRes.json().catch(() => ({}));
+    throw new Error(body.message || `保存に失敗しました (${putRes.status})`);
+  }
+  return '✓ 保存しました。1〜2 分でサイトに反映されます。';
 }
 
-/* ---- slot rendering ---- */
+/* ---- スロット描画 ---- */
 function renderSlots() {
   slotsEl.innerHTML = '';
   SLOTS.forEach((slot, i) => {
@@ -356,6 +447,7 @@ function renderSlots() {
         <div class="slot__actions">
           <label class="btn">写真を選ぶ<input type="file" accept="image/*" data-i="${i}"></label>
           <button class="btn btn--solid" data-save="${i}" disabled>保存</button>
+          <a class="btn" href="images/${slot.file}" download="${slot.file}">取り出し</a>
         </div>
         <p class="slot__msg" data-msg="${i}"></p>
       </div>`;
@@ -370,7 +462,7 @@ function renderSlots() {
   });
 }
 
-const pendingData = {}; // i -> base64 (no prefix)
+const pendingData = {};
 
 function msgEl(i) { return slotsEl.querySelector(`[data-msg="${i}"]`); }
 function saveBtn(i) { return slotsEl.querySelector(`[data-save="${i}"]`); }
@@ -435,35 +527,28 @@ async function onSave(e) {
   m.className = 'slot__msg busy';
   m.textContent = '保存中…';
   try {
-    // 既存ファイルの SHA を取得
-    const getRes = await fetch(`${API}images/${slot.file}?ref=${BRANCH}`, { headers: headers() });
-    if (!getRes.ok) throw new Error(`現在のファイル情報を取得できません (${getRes.status})`);
-    const current = await getRes.json();
-
-    const putRes = await fetch(`${API}images/${slot.file}`, {
-      method: 'PUT',
-      headers: { ...headers(), 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message: `photo: ${slot.label} の写真を差し替え (via admin)`,
-        content,
-        sha: current.sha,
-        branch: BRANCH,
-      }),
-    });
-    if (!putRes.ok) {
-      const body = await putRes.json().catch(() => ({}));
-      throw new Error(body.message || `保存に失敗しました (${putRes.status})`);
-    }
+    const doneMsg = await saveImage(slot, content);
     delete pendingData[i];
     slotCard(i).classList.remove('pending');
     m.className = 'slot__msg ok';
-    m.textContent = '✓ 保存しました。1〜2 分でサイトに反映されます。';
+    m.textContent = doneMsg;
   } catch (err) {
     btn.disabled = false;
     m.className = 'slot__msg err';
     m.textContent = '✗ ' + err.message;
   }
 }
+
+/* ---- 起動 ---- */
+(async () => {
+  await detectBackend();
+  setupAuthUI();
+  TOKEN = localStorage.getItem(storageKey()) || '';
+  if (TOKEN) {
+    tokenInput.value = TOKEN;
+    connect(false);
+  }
+})();
 </script>
 
 </body>

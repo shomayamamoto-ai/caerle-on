@@ -47,6 +47,24 @@ Hero ／ Concept ／ Gallery ／ System（会員制・料金）／ Access ／ Re
 Pages の再デプロイ後（1〜2 分）にサイトへ反映されます。
 トークンは端末のブラウザ（localStorage）にのみ保存され、GitHub 以外へは送信されません。
 
+## 別サーバーへの移管（データ移管後の写真管理）
+
+admin.html は 2 つの動作モードを自動判別します。
+
+| モード | 動作環境 | 認証 | 仕組み |
+| --- | --- | --- | --- |
+| GitHub モード | GitHub Pages（現在） | Fine-grained PAT | GitHub API で images/ にコミット |
+| Server モード | PHP が動くサーバー（移管後） | 管理パスワード | 同梱の `admin-api.php` が images/ に直接書き込み |
+
+### 移管手順
+
+1. サイト一式（`index.html` / `admin.html` / `admin-api.php` / `images/` / `assets/` / `robots.txt` / `sitemap.xml`）を移管先サーバーへそのままアップロード
+2. `admin-api.php` 冒頭の `$ADMIN_PASSWORD = 'CHANGE_ME'` を推測されにくいパスワードに変更
+3. 移管先の `admin.html` を開くと自動で **Server モード** に切り替わるので、設定したパスワードでログイン
+
+これだけで、移管後も同じ画面で写真の差し替え・取り出しができます。
+（PHP が動けばレンタルサーバー・VPS など移管先を問いません。バックアップとして直前の写真が `images/_backup_*.jpg` に 1 世代残ります）
+
 ## 公開
 
 main ブランチへ push すると GitHub Actions で GitHub Pages に自動デプロイされます。
