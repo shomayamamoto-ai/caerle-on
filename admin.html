@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>写真管理｜Caerle'on Admin</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Serif+JP:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0908;
+  --bg-alt: #131210;
+  --bg-card: #1a1815;
+  --ink: #f4ede1;
+  --ink-soft: #c8bfae;
+  --mute: #807868;
+  --line: rgba(196, 162, 95, 0.18);
+  --gold: #c4a25f;
+  --gold-bright: #d9b977;
+  --ok: #7fb069;
+  --err: #c46b6b;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 300;
+  line-height: 1.8;
+  min-height: 100vh;
+  padding-bottom: 120px;
+}
+a { color: var(--gold-bright); text-decoration: none; }
+
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+header.bar {
+  border-bottom: 1px solid var(--line);
+  padding: 22px 0;
+  margin-bottom: 40px;
+  background: var(--bg-alt);
+}
+.bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.bar__brand { display: flex; align-items: center; gap: 16px; }
+.bar__brand img { height: 20px; }
+.bar__label {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.bar a.site-link {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  border: 1px solid var(--line);
+  padding: 8px 16px;
+}
+.bar a.site-link:hover { border-color: var(--gold); }
+
+h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(30px, 5vw, 44px);
+  margin-bottom: 8px;
+}
+h1 .italic { font-style: italic; color: var(--gold-bright); }
+.lead { color: var(--ink-soft); font-size: 14px; margin-bottom: 36px; }
+
+/* ---- token panel ---- */
+.token-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--gold);
+  padding: 24px;
+  margin-bottom: 40px;
+}
+.token-panel h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--gold-bright);
+  font-weight: 400;
+  margin-bottom: 12px;
+  letter-spacing: 0.08em;
+}
+.token-panel p { font-size: 12.5px; color: var(--ink-soft); margin-bottom: 14px; }
+.token-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.token-row input {
+  flex: 1;
+  min-width: 240px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 12px 14px;
+  font-family: monospace;
+  font-size: 13px;
+}
+.token-row input:focus { outline: none; border-color: var(--gold); }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: 1px solid var(--gold);
+  background: transparent;
+  color: var(--gold-bright);
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.btn:hover:not(:disabled) { background: var(--gold); color: var(--bg); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn--solid { background: var(--gold); color: var(--bg); }
+.btn--solid:hover:not(:disabled) { background: var(--gold-bright); }
+
+.status {
+  font-size: 12.5px;
+  margin-top: 12px;
+  min-height: 1.5em;
+}
+.status.ok { color: var(--ok); }
+.status.err { color: var(--err); }
+
+/* ---- slots grid ---- */
+.slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+.slot {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.slot__thumb {
+  aspect-ratio: 16/10;
+  overflow: hidden;
+  position: relative;
+  background: var(--bg-alt);
+}
+.slot__thumb img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.slot__thumb .badge {
+  position: absolute;
+  top: 10px; left: 10px;
+  background: rgba(10, 9, 8, 0.85);
+  border: 1px solid var(--line);
+  color: var(--gold-bright);
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  padding: 4px 10px;
+}
+.slot__body { padding: 18px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.slot__name {
+  font-size: 14px;
+  color: var(--ink);
+  letter-spacing: 0.05em;
+}
+.slot__file {
+  font-family: monospace;
+  font-size: 11px;
+  color: var(--mute);
+}
+.slot__actions { margin-top: auto; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.slot__actions .btn { padding: 9px 16px; font-size: 12px; }
+.slot__msg { font-size: 11.5px; min-height: 1.4em; }
+.slot__msg.ok { color: var(--ok); }
+.slot__msg.err { color: var(--err); }
+.slot__msg.busy { color: var(--gold-bright); }
+
+/* preview overlay before commit */
+.slot.pending .slot__thumb::after {
+  content: '未保存のプレビュー';
+  position: absolute;
+  right: 10px; bottom: 10px;
+  background: rgba(196, 162, 95, 0.92);
+  color: var(--bg);
+  font-size: 11px;
+  padding: 3px 10px;
+  letter-spacing: 0.08em;
+}
+
+.note {
+  margin-top: 40px;
+  font-size: 12px;
+  color: var(--mute);
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+  line-height: 2;
+}
+input[type="file"] { display: none; }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <div class="bar__brand">
+      <img src="assets/logo-light.png" alt="Caerle'on">
+      <span class="bar__label">Photo Admin</span>
+    </div>
+    <a class="site-link" href="index.html">← サイトを表示</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>写真の<span class="italic">差し替え</span></h1>
+  <p class="lead">各枠の「写真を選ぶ」から新しい写真を選択し、「保存」を押すとサイトに反映されます（反映まで 1〜2 分）。</p>
+
+  <section class="token-panel" id="tokenPanel">
+    <h2>接続設定</h2>
+    <p>
+      GitHub の Fine-grained personal access token（対象リポジトリ：<code>shomayamamoto-ai/caerle-on</code>、権限：Contents – Read and write）を入力してください。
+      トークンはこの端末のブラウザにのみ保存され、GitHub 以外へ送信されることはありません。
+      <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">トークンを作成する ↗</a>
+    </p>
+    <div class="token-row">
+      <input type="password" id="tokenInput" placeholder="github_pat_..." autocomplete="off">
+      <button class="btn btn--solid" id="connectBtn">接続</button>
+      <button class="btn" id="forgetBtn" hidden>接続を解除</button>
+    </div>
+    <p class="status" id="tokenStatus"></p>
+  </section>
+
+  <section class="slots" id="slots" hidden></section>
+
+  <p class="note">
+    ・選んだ写真は自動で横 1920px・JPEG に最適化されてから保存されます。<br>
+    ・保存すると main ブランチに直接コミットされ、GitHub Pages が自動で再公開します。<br>
+    ・反映後に古い写真が表示される場合は、ブラウザを強制リロード（Mac: ⌘+Shift+R / Windows: Ctrl+F5）してください。
+  </p>
+</main>
+
+<script>
+'use strict';
+
+const OWNER = 'shomayamamoto-ai';
+const REPO = 'caerle-on';
+const BRANCH = 'main';
+const API = `https://api.github.com/repos/${OWNER}/${REPO}/contents/`;
+
+/* サイト内の写真スロット定義（images/README.md と対応） */
+const SLOTS = [
+  { file: 'c0209891.jpg', label: 'ヒーロー背景',        note: 'トップの全画面背景 / Gallery「Main Floor」' },
+  { file: 'p0001.jpg',    label: 'Concept',             note: 'コンセプトの額装写真' },
+  { file: 'p0004.jpg',    label: 'Gallery — Live Piano', note: 'ギャラリー上段・右' },
+  { file: 'c0209615.jpg', label: 'Gallery — Lounge',    note: 'ギャラリー中段・左' },
+  { file: 'c0209876.jpg', label: 'Gallery — Floral Art', note: 'ギャラリー中段・中央' },
+  { file: 'c0209824.jpg', label: 'Gallery — Detail',    note: 'ギャラリー中段・右' },
+  { file: 'c0209748.jpg', label: 'Gallery — Private Booth', note: 'ギャラリー下段・ワイド' },
+  { file: 'c0209962.jpg', label: 'Gallery — Seasonal',  note: 'ギャラリー下段・縦型' },
+  { file: 'p0002.jpg',    label: 'Gallery — Bouquet',   note: 'ギャラリー末尾・左' },
+  { file: 'p0003.jpg',    label: 'Gallery — Texture',   note: 'ギャラリー末尾・中央' },
+  { file: 'p0005.jpg',    label: 'Gallery — Salon',     note: 'ギャラリー末尾・右' },
+  { file: 'c0209646.jpg', label: 'Access',              note: 'アクセス欄の看板写真' },
+  { file: 'c0209948.jpg', label: 'Recruit',             note: 'リクルート欄の写真' },
+];
+
+const tokenInput = document.getElementById('tokenInput');
+const tokenStatus = document.getElementById('tokenStatus');
+const connectBtn = document.getElementById('connectBtn');
+const forgetBtn = document.getElementById('forgetBtn');
+const slotsEl = document.getElementById('slots');
+
+let TOKEN = localStorage.getItem('caerleon_admin_token') || '';
+
+function headers() {
+  return {
+    'Authorization': `Bearer ${TOKEN}`,
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28',
+  };
+}
+
+async function verifyToken() {
+  const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}`, { headers: headers() });
+  if (!res.ok) throw new Error(`認証エラー (${res.status})`);
+  const data = await res.json();
+  if (!data.permissions || !(data.permissions.push || data.permissions.admin)) {
+    throw new Error('このトークンには書き込み権限がありません');
+  }
+  return data;
+}
+
+async function connect(saveToken) {
+  tokenStatus.className = 'status';
+  tokenStatus.textContent = '確認中…';
+  try {
+    await verifyToken();
+    if (saveToken) localStorage.setItem('caerleon_admin_token', TOKEN);
+    tokenStatus.className = 'status ok';
+    tokenStatus.textContent = '✓ 接続しました。下の一覧から写真を差し替えられます。';
+    connectBtn.hidden = true;
+    tokenInput.hidden = true;
+    forgetBtn.hidden = false;
+    renderSlots();
+    slotsEl.hidden = false;
+  } catch (e) {
+    tokenStatus.className = 'status err';
+    tokenStatus.textContent = '✗ ' + e.message + '（トークンと権限をご確認ください）';
+  }
+}
+
+connectBtn.addEventListener('click', () => {
+  TOKEN = tokenInput.value.trim();
+  if (!TOKEN) {
+    tokenStatus.className = 'status err';
+    tokenStatus.textContent = 'トークンを入力してください';
+    return;
+  }
+  connect(true);
+});
+
+forgetBtn.addEventListener('click', () => {
+  localStorage.removeItem('caerleon_admin_token');
+  TOKEN = '';
+  location.reload();
+});
+
+if (TOKEN) {
+  tokenInput.value = TOKEN;
+  connect(false);
+}
+
+/* ---- slot rendering ---- */
+function renderSlots() {
+  slotsEl.innerHTML = '';
+  SLOTS.forEach((slot, i) => {
+    const el = document.createElement('article');
+    el.className = 'slot';
+    el.innerHTML = `
+      <div class="slot__thumb">
+        <img src="images/${slot.file}?t=${Date.now()}" alt="${slot.label}" loading="lazy">
+        <span class="badge">${slot.label}</span>
+      </div>
+      <div class="slot__body">
+        <div class="slot__name">${slot.note}</div>
+        <div class="slot__file">images/${slot.file}</div>
+        <div class="slot__actions">
+          <label class="btn">写真を選ぶ<input type="file" accept="image/*" data-i="${i}"></label>
+          <button class="btn btn--solid" data-save="${i}" disabled>保存</button>
+        </div>
+        <p class="slot__msg" data-msg="${i}"></p>
+      </div>`;
+    slotsEl.appendChild(el);
+  });
+
+  slotsEl.querySelectorAll('input[type="file"]').forEach(input => {
+    input.addEventListener('change', onPick);
+  });
+  slotsEl.querySelectorAll('[data-save]').forEach(btn => {
+    btn.addEventListener('click', onSave);
+  });
+}
+
+const pendingData = {}; // i -> base64 (no prefix)
+
+function msgEl(i) { return slotsEl.querySelector(`[data-msg="${i}"]`); }
+function saveBtn(i) { return slotsEl.querySelector(`[data-save="${i}"]`); }
+function slotCard(i) { return slotsEl.children[i]; }
+
+async function onPick(e) {
+  const i = Number(e.target.dataset.i);
+  const file = e.target.files[0];
+  if (!file) return;
+  const m = msgEl(i);
+  m.className = 'slot__msg busy';
+  m.textContent = '画像を読み込み中…';
+  try {
+    const base64 = await resizeToJpeg(file, 1920, 0.85);
+    pendingData[i] = base64;
+    const img = slotCard(i).querySelector('.slot__thumb img');
+    img.src = 'data:image/jpeg;base64,' + base64;
+    slotCard(i).classList.add('pending');
+    saveBtn(i).disabled = false;
+    m.className = 'slot__msg';
+    m.textContent = 'プレビュー中。「保存」で確定します。';
+  } catch (err) {
+    m.className = 'slot__msg err';
+    m.textContent = '読み込みに失敗しました：' + err.message;
+  }
+}
+
+function resizeToJpeg(file, maxW, quality) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let { width, height } = img;
+      if (width > maxW) {
+        height = Math.round(height * maxW / width);
+        width = maxW;
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+      const dataUrl = canvas.toDataURL('image/jpeg', quality);
+      resolve(dataUrl.split(',')[1]);
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error('この形式の画像は読み込めません（JPEG/PNG を推奨）'));
+    };
+    img.src = url;
+  });
+}
+
+async function onSave(e) {
+  const i = Number(e.target.dataset.save);
+  const slot = SLOTS[i];
+  const content = pendingData[i];
+  if (!content) return;
+  const m = msgEl(i);
+  const btn = saveBtn(i);
+  btn.disabled = true;
+  m.className = 'slot__msg busy';
+  m.textContent = '保存中…';
+  try {
+    // 既存ファイルの SHA を取得
+    const getRes = await fetch(`${API}images/${slot.file}?ref=${BRANCH}`, { headers: headers() });
+    if (!getRes.ok) throw new Error(`現在のファイル情報を取得できません (${getRes.status})`);
+    const current = await getRes.json();
+
+    const putRes = await fetch(`${API}images/${slot.file}`, {
+      method: 'PUT',
+      headers: { ...headers(), 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: `photo: ${slot.label} の写真を差し替え (via admin)`,
+        content,
+        sha: current.sha,
+        branch: BRANCH,
+      }),
+    });
+    if (!putRes.ok) {
+      const body = await putRes.json().catch(() => ({}));
+      throw new Error(body.message || `保存に失敗しました (${putRes.status})`);
+    }
+    delete pendingData[i];
+    slotCard(i).classList.remove('pending');
+    m.className = 'slot__msg ok';
+    m.textContent = '✓ 保存しました。1〜2 分でサイトに反映されます。';
+  } catch (err) {
+    btn.disabled = false;
+    m.className = 'slot__msg err';
+    m.textContent = '✗ ' + err.message;
+  }
+}
+</script>
+
+</body>
+</html>
