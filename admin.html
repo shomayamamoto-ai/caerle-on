@@ -292,11 +292,15 @@ input[type="file"] { display: none; }
 
 .news-row {
   display: grid;
-  grid-template-columns: 110px 110px 1fr 40px;
+  grid-template-columns: 160px 110px 1fr 40px;
   gap: 10px;
   align-items: start;
   padding: 12px 0;
   border-bottom: 1px solid var(--line);
+}
+.news-row input[type="date"] {
+  color-scheme: dark;           /* カレンダー UI をダーク表示に */
+  cursor: pointer;
 }
 .news-row input, .news-row textarea {
   background: var(--bg);
@@ -813,13 +817,27 @@ async function onSave(e) {
 const newsRowsEl = document.getElementById('newsRows');
 const newsStatus = document.getElementById('newsStatus');
 
+/* 「2026.08」「2026.08.25」形式 → date input 用の「YYYY-MM-DD」へ */
+function toDateInput(s) {
+  const m = String(s ?? '').trim().match(/^(\d{4})[.\-\/](\d{1,2})(?:[.\-\/](\d{1,2}))?$/);
+  if (!m) return '';
+  const pad = n => String(n).padStart(2, '0');
+  return `${m[1]}-${pad(m[2])}-${pad(m[3] || 1)}`;
+}
+
+/* date input の「YYYY-MM-DD」→ サイト表示用の「YYYY.MM.DD」へ */
+function fromDateInput(s) {
+  if (!s) return '';
+  return s.replaceAll('-', '.');
+}
+
 function newsRowHtml(item) {
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => (
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
   ));
   return `
     <div class="news-row">
-      <input type="text" class="n-date" placeholder="2026.08" value="${esc(item.date)}">
+      <input type="date" class="n-date" value="${esc(toDateInput(item.date))}">
       <input type="text" class="n-tag" placeholder="Floral" value="${esc(item.tag)}">
       <textarea class="n-text" placeholder="お知らせの本文" rows="2">${esc(item.text)}</textarea>
       <button type="button" class="del" title="この行を削除">✕</button>
@@ -854,7 +872,7 @@ document.getElementById('newsAddBtn').addEventListener('click', () => {
 
 function collectNews() {
   return Array.from(newsRowsEl.querySelectorAll('.news-row')).map(row => ({
-    date: row.querySelector('.n-date').value.trim(),
+    date: fromDateInput(row.querySelector('.n-date').value.trim()),
     tag: row.querySelector('.n-tag').value.trim(),
     text: row.querySelector('.n-text').value.trim(),
   })).filter(n => n.text !== '');
