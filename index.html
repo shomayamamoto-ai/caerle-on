@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Caerle'on｜Members Only Lounge</title>
-<meta name="description" content="洗練された大人のためのプライベートラウンジ Caerle'on（カーリアン）。完全会員制。">
+<meta name="description" content="Caerle'on（カーリアン）｜東京・六本木の会員制ラウンジ。〒106-0032 東京都港区六本木4-11-11 六本木Gmビル6階／TEL 03-6434-0048">
 <meta name="theme-color" content="#0a0908">
 <link rel="canonical" href="https://shomayamamoto-ai.github.io/caerle-on/">
 <meta property="og:type" content="website">
@@ -27,9 +27,11 @@
     "@type": "PostalAddress",
     "addressLocality": "港区",
     "addressRegion": "東京都",
-    "streetAddress": "六本木4-11-11 GMビル6F",
+    "streetAddress": "六本木4-11-11 六本木Gmビル6階",
+    "postalCode": "106-0032",
     "addressCountry": "JP"
   },
+  "telephone": "+81-3-6434-0048",
   "openingHours": "Mo-Fr 20:00-25:00",
   "foundingDate": "2011-09",
   "url": "https://shomayamamoto-ai.github.io/caerle-on/",
@@ -757,10 +759,42 @@ section {
   background: linear-gradient(135deg, rgba(196,162,95,0.05), transparent);
 }
 
+.access__map {
+  position: relative;
+  min-height: 520px;
+  background: var(--bg-alt);
+}
+/* 地図が読み込めない環境向けのフォールバック（iframe の下に敷く） */
+.access__map-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+  padding: 24px;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 2;
+}
+.access__map-fallback .pin { font-size: 26px; color: var(--gold); }
+.access__map-fallback a { color: var(--gold-bright); border-bottom: 1px solid var(--line); }
+.access__map iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  filter: invert(0.92) hue-rotate(180deg) saturate(0.55) brightness(0.92);
+}
+
 @media (max-width: 900px) {
   .access__grid { grid-template-columns: 1fr; }
   .access__info { padding: 80px 24px; }
   .access__visual { min-height: 360px; }
+  .access__map { min-height: 380px; }
 }
 
 /* ============ RECRUIT ============ */
@@ -1313,11 +1347,10 @@ section {
   <div class="hero__corner hero__corner--br">Roppongi</div>
 
   <div class="hero__content">
-    <div class="hero__crown">A Private Sanctuary</div>
     <h1 class="hero__title">
       <img src="assets/logo-light.png" alt="Caerle'on" class="hero__title-img">
     </h1>
-    <div class="hero__sub">完 全 会 員 制 ラ ウ ン ジ</div>
+    <div class="hero__sub">Members Only Lounge ／ Roppongi</div>
   </div>
 </section>
 
@@ -1327,22 +1360,18 @@ section {
       <div class="concept__visual-frame"></div>
     </div>
     <div class="concept__text fade-in">
-      <div class="section__label">Concept</div>
-      <h2 class="section__title">夜に灯る<br>もう一つの<br><span class="italic">居場所</span></h2>
-      <p>
-        Caerle'on は、限られた方々のための、もう一つの居場所です。<br>
-        日常を離れ、上質な調度と静かな時間に身を委ねる。<br>
-        その先に在るのは、語らうべき相手と、語るに足る時間。
-      </p>
-      <blockquote class="concept__quote">
-        饒舌な空間ではなく、<br>
-        余白を愉しむための場所であること。
-      </blockquote>
-      <p>
-        色を抑えたインテリア、間接的な光、季節の花。<br>
-        すべてが、お客様という主役を引き立てるための背景として誂えられています。
-      </p>
-      <p class="concept__sig">— Caerle'on</p>
+      <div class="section__label">About</div>
+      <h2 class="section__title"><span class="italic">Caerle'on</span></h2>
+      <dl class="access__details" style="margin-top:0;border-top:0;padding-top:0;">
+        <dt>Type</dt>
+        <dd>会員制ラウンジ（完全会員制）</dd>
+        <dt>Area</dt>
+        <dd>東京・六本木</dd>
+        <dt>Open</dt>
+        <dd>20:00 — 翌 1:00<br>土・日・祝 定休</dd>
+        <dt>Tel</dt>
+        <dd><a href="tel:0364340048">03-6434-0048</a></dd>
+      </dl>
     </div>
   </div>
 </section>
@@ -1353,11 +1382,7 @@ section {
       <div class="section__label">Gallery</div>
       <h2 class="section__title"><span class="italic">Interior</span><br>＆ Atmosphere</h2>
     </div>
-    <p>
-      静かに灯る間接照明、深いベルベットのソファ、季節の花。<br>
-      一席ごとに異なる表情を持つ、<br>
-      Caerle'on の店内をご覧ください。
-    </p>
+    <p>店内の様子</p>
   </div>
 
   <div class="gallery__grid" id="galleryGrid">
@@ -1434,9 +1459,7 @@ section {
       <div class="section__label">System</div>
       <h2 class="section__title"><span class="italic">Membership</span><br>＆ Pricing</h2>
       <p>
-        Caerle'on は、<br>
-        既存会員様のご紹介により入会いただける完全会員制ラウンジです。<br>
-        お会計はすべて月締めにてご請求いたします。
+        完全会員制／ご紹介制。お会計は月締めにてご請求いたします。
       </p>
     </div>
 
@@ -1558,20 +1581,30 @@ section {
   <div class="access__grid">
     <div class="access__info">
       <div class="section__label">Access</div>
-      <h2 class="section__title"><span class="italic">Find</span><br>your way.</h2>
+      <h2 class="section__title"><span class="italic">Access</span></h2>
       <dl class="access__details">
         <dt>Address</dt>
-        <dd>東京都港区六本木 4-11-11<br>GM ビル 6F</dd>
+        <dd>〒106-0032<br>東京都港区六本木 4-11-11<br>六本木 Gm ビル 6 階</dd>
         <dt>Open</dt>
         <dd>20:00 — 1:00<br>Sat, Sun &amp; Holidays Closed</dd>
         <dt>Tel</dt>
-        <dd>03-XXXX-XXXX</dd>
-        <dt>Mail</dt>
-        <dd>contact@caerleon.tokyo</dd>
+        <dd><a href="tel:0364340048">03-6434-0048</a></dd>
       </dl>
-      <a href="#" class="btn">Reserve Now</a>
+      <a href="tel:0364340048" class="btn">03-6434-0048</a>
     </div>
-    <div class="access__visual"></div>
+    <div class="access__map">
+      <div class="access__map-fallback">
+        <span class="pin">◉</span>
+        〒106-0032 東京都港区六本木 4-11-11<br>六本木 Gm ビル 6 階
+        <a href="https://www.google.com/maps/search/?api=1&amp;query=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E5%85%AD%E6%9C%AC%E6%9C%A84-11-11%20%E5%85%AD%E6%9C%AC%E6%9C%A8Gm%E3%83%93%E3%83%AB" target="_blank" rel="noopener">Google マップで開く ↗</a>
+      </div>
+      <iframe
+        title="Caerle'on 所在地"
+        src="https://www.google.com/maps?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E5%85%AD%E6%9C%AC%E6%9C%A84-11-11%20%E5%85%AD%E6%9C%AC%E6%9C%A8Gm%E3%83%93%E3%83%AB&z=17&output=embed"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen></iframe>
+    </div>
   </div>
 </section>
 
@@ -1580,11 +1613,11 @@ section {
     <div class="recruit__visual fade-in"></div>
     <div class="recruit__text fade-in">
       <div class="section__label">Recruit</div>
-      <h3>あなたという、<br><span class="italic">特別</span>を探しています。</h3>
+      <h3>スタッフ<span class="italic">募集</span></h3>
       <p>
-        Caerle'on では、共に上質な空間をつくる仲間を募集しています。<br>
-        経験の有無は問いません。<br>
-        お客様への敬意と、自身を磨き続ける意欲のある方を歓迎いたします。
+        スタッフ募集中。経験不問。<br>
+        お問い合わせ・ご応募は下記までご連絡ください。<br>
+        <a href="tel:0364340048">03-6434-0048</a>
       </p>
 
       <dl class="recruit__benefits">
@@ -1638,7 +1671,7 @@ section {
       <div class="footer__col">
         <h5>Contact</h5>
         <ul>
-          <li>03-XXXX-XXXX</li>
+          <li><a href="tel:0364340048">03-6434-0048</a></li>
           <li>contact@caerleon.tokyo</li>
           <li>Open 20:00 — 1:00</li>
         </ul>
