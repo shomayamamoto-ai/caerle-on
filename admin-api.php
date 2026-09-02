@@ -168,5 +168,33 @@ if ($action === 'photos_save' && $_SERVER['REQUEST_METHOD'] === 'POST') {
   exit;
 }
 
+// ---- 文章（content.json）の更新 ----
+if ($action === 'content_save' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+  $body = json_decode(file_get_contents('php://input'), true);
+  $content = isset($body['content']) ? $body['content'] : null;
+  if (!is_array($content) || count($content) === 0) {
+    http_response_code(400);
+    echo json_encode(array('ok' => false, 'error' => '文章データが不正です'));
+    exit;
+  }
+  $json = json_encode($content, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+  if ($json === false || strlen($json) > 512 * 1024) {
+    http_response_code(400);
+    echo json_encode(array('ok' => false, 'error' => '文章データを保存できません（上限 512KB）'));
+    exit;
+  }
+  $path = __DIR__ . DIRECTORY_SEPARATOR . 'content.json';
+  if (file_exists($path)) {
+    @copy($path, __DIR__ . DIRECTORY_SEPARATOR . '_backup_content.json');
+  }
+  if (file_put_contents($path, $json) === false) {
+    http_response_code(500);
+    echo json_encode(array('ok' => false, 'error' => 'content.json に書き込めません（権限を確認してください）'));
+    exit;
+  }
+  echo json_encode(array('ok' => true));
+  exit;
+}
+
 http_response_code(400);
 echo json_encode(array('ok' => false, 'error' => '不明なリクエストです'));

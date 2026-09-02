@@ -1415,15 +1415,15 @@ section {
 
 <section class="hero">
   <div class="hero__bg"></div>
-  <div class="hero__corner hero__corner--tr">Members Only —</div>
-  <div class="hero__corner hero__corner--bl">№ 001</div>
-  <div class="hero__corner hero__corner--br">Roppongi</div>
+  <div class="hero__corner hero__corner--tr" data-c="hero.cornerTR">Members Only —</div>
+  <div class="hero__corner hero__corner--bl" data-c="hero.cornerBL">№ 001</div>
+  <div class="hero__corner hero__corner--br" data-c="hero.cornerBR">Roppongi</div>
 
   <div class="hero__content">
     <h1 class="hero__title">
       <img src="assets/logo-light.png" alt="Caerle'on" class="hero__title-img">
     </h1>
-    <div class="hero__sub">Members Only Lounge ／ Roppongi</div>
+    <div class="hero__sub" data-c="hero.sub">Members Only Lounge ／ Roppongi</div>
   </div>
 </section>
 
@@ -1433,9 +1433,9 @@ section {
       <div class="concept__visual-frame"></div>
     </div>
     <div class="concept__text fade-in">
-      <div class="section__label">About</div>
-      <h2 class="section__title"><span class="italic">Caerle'on</span></h2>
-      <dl class="access__details" style="margin-top:0;border-top:0;padding-top:0;">
+      <div class="section__label" data-c="about.label">About</div>
+      <h2 class="section__title"><span class="italic" data-c="about.title">Caerle'on</span></h2>
+      <dl class="access__details" id="aboutRows" style="margin-top:0;border-top:0;padding-top:0;">
         <dt>Type</dt>
         <dd>会員制ラウンジ（完全会員制）</dd>
         <dt>Area</dt>
@@ -1452,10 +1452,10 @@ section {
 <section id="gallery" class="gallery">
   <div class="gallery__head fade-in">
     <div>
-      <div class="section__label">Gallery</div>
-      <h2 class="section__title"><span class="italic">Interior</span><br>＆ Atmosphere</h2>
+      <div class="section__label" data-c="gallery.label">Gallery</div>
+      <h2 class="section__title"><span class="italic" data-c="gallery.titleTop">Interior</span><br><span data-c="gallery.titleBottom">＆ Atmosphere</span></h2>
     </div>
-    <p>店内の様子</p>
+    <p data-c="gallery.lead">店内の様子</p>
   </div>
 
   <div class="gallery__grid" id="galleryGrid">
@@ -1488,8 +1488,8 @@ section {
 
 <section id="news" class="news">
   <div class="news__inner fade-in">
-    <div class="section__label">News</div>
-    <h2 class="section__title">Latest <span class="italic">Information</span></h2>
+    <div class="section__label" data-c="news.label">News</div>
+    <h2 class="section__title"><span data-c="news.titleTop">Latest</span> <span class="italic" data-c="news.titleBottom">Information</span></h2>
     <ul class="news__list" id="newsList">
       <li>
         <span class="news__date">2026.08</span>
@@ -1513,14 +1513,14 @@ section {
 <section id="system" class="system">
   <div class="system__inner">
     <div class="system__intro fade-in">
-      <div class="section__label">System</div>
-      <h2 class="section__title"><span class="italic">Membership</span><br>＆ Pricing</h2>
+      <div class="section__label" data-c="system.label">System</div>
+      <h2 class="section__title"><span class="italic" data-c="system.titleTop">Membership</span><br><span data-c="system.titleBottom">＆ Pricing</span></h2>
       <p>
-        完全会員制／ご紹介制。お会計は月締めにてご請求いたします。
+        <span data-c="system.lead">完全会員制／ご紹介制。お会計は月締めにてご請求いたします。</span>
       </p>
     </div>
 
-    <div class="system__cards fade-in">
+    <div class="system__cards fade-in" id="systemCards">
       <div class="system__card">
         <div class="system__card-label">Membership</div>
         <div class="system__card-name">年会費</div>
@@ -1554,19 +1554,20 @@ section {
     </div>
 
     <div class="system__notes fade-in">
-      <h4>Notice</h4>
-      表示価格はすべて税抜きです。別途消費税を申し受けます。<br>
+      <h4 data-c="system.noticeTitle">Notice</h4>
+      <span data-c="system.noticeBody">表示価格はすべて税抜きです。別途消費税を申し受けます。<br>
       ご入会には、既存会員様のご紹介および所定の審査が必要となります。<br>
-      ドレスコード：スマートカジュアル以上。短パン・サンダルでのご入店はお断りしております。
+      ドレスコード：スマートカジュアル以上。短パン・サンダルでのご入店はお断りしております。</span>
     </div>
   </div>
 </section>
 
 <section id="faq" class="faq">
   <div class="faq__inner fade-in">
-    <div class="section__label">FAQ</div>
-    <h2 class="section__title">Questions <span class="italic">＆ Answers</span></h2>
+    <div class="section__label" data-c="faq.label">FAQ</div>
+    <h2 class="section__title"><span data-c="faq.titleTop">Questions</span> <span class="italic" data-c="faq.titleBottom">＆ Answers</span></h2>
 
+    <div id="faqList">
     <div class="faq__item">
       <button class="faq__q" aria-expanded="false" aria-controls="faq-a1">
         <span class="q-mark">Q.</span>
@@ -1631,15 +1632,16 @@ section {
         </div>
       </div>
     </div>
+    </div>
   </div>
 </section>
 
 <section id="access" class="access">
   <div class="access__grid">
     <div class="access__info">
-      <div class="section__label">Access</div>
-      <h2 class="section__title"><span class="italic">Access</span></h2>
-      <dl class="access__details">
+      <div class="section__label" data-c="access.label">Access</div>
+      <h2 class="section__title"><span class="italic" data-c="access.title">Access</span></h2>
+      <dl class="access__details" id="accessRows">
         <dt>Address</dt>
         <dd>〒106-0032<br>東京都港区六本木 4-11-11<br>六本木 Gm ビル 6 階</dd>
         <dt>Open</dt>
@@ -1647,20 +1649,20 @@ section {
         <dt>Tel</dt>
         <dd><a href="tel:0364340048">03-6434-0048</a></dd>
       </dl>
-      <a href="tel:0364340048" class="btn">03-6434-0048</a>
+      <a href="tel:0364340048" class="btn" id="accessTelBtn"><span data-c="access.tel">03-6434-0048</span></a>
     </div>
     <div class="access__map">
       <div class="access__map-inner">
         <span class="access__pin-wave" aria-hidden="true"></span>
         <span class="access__pin" aria-hidden="true"></span>
-        <p class="access__map-name">Caerle&#39;on</p>
-        <p class="access__map-addr">
+        <p class="access__map-name" data-c="access.mapName">Caerle&#39;on</p>
+        <p class="access__map-addr"><span data-c="access.mapAddr">
           〒106-0032<br>
           東京都港区六本木 4-11-11<br>
           六本木 Gm ビル 6 階
-        </p>
+        </span></p>
         <div class="access__map-actions">
-          <a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E5%85%AD%E6%9C%AC%E6%9C%A84-11-11%20%E5%85%AD%E6%9C%AC%E6%9C%A8Gm%E3%83%93%E3%83%AB&amp;travelmode=walking" target="_blank" rel="noopener">ここへの経路</a>
+          <a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E5%85%AD%E6%9C%AC%E6%9C%A84-11-11%20%E5%85%AD%E6%9C%AC%E6%9C%A8Gm%E3%83%93%E3%83%AB&amp;travelmode=walking" target="_blank" rel="noopener"><span data-c="access.mapBtn">ここへの経路</span></a>
         </div>
       </div>
     </div>
@@ -1671,15 +1673,15 @@ section {
   <div class="recruit__inner">
     <div class="recruit__visual fade-in"></div>
     <div class="recruit__text fade-in">
-      <div class="section__label">Recruit</div>
-      <h3>スタッフ<span class="italic">募集</span></h3>
+      <div class="section__label" data-c="recruit.label">Recruit</div>
+      <h3><span data-c="recruit.titleTop">スタッフ</span><span class="italic" data-c="recruit.titleBottom">募集</span></h3>
       <p>
-        スタッフ募集中。経験不問。<br>
-        お問い合わせ・ご応募は下記までご連絡ください。<br>
-        <a href="tel:0364340048">03-6434-0048</a>
+        <span data-c="recruit.body">スタッフ募集中。経験不問。<br>
+        お問い合わせ・ご応募は下記までご連絡ください。</span><br>
+        <a href="tel:0364340048" id="recruitTel" data-c="recruit.tel">03-6434-0048</a>
       </p>
 
-      <dl class="recruit__benefits">
+      <dl class="recruit__benefits" id="recruitBenefits">
         <div>
           <dt>Hourly</dt>
           <dd>¥6,000 〜</dd>
@@ -1699,9 +1701,9 @@ section {
       </dl>
 
       <p style="font-size:13px; color:var(--mute); font-style:italic;">
-        ※ 詳細な条件・面接については、下記よりお気軽にお問い合わせください。
+        <span data-c="recruit.note">※ 詳細な条件・面接については、下記よりお気軽にお問い合わせください。</span>
       </p>
-      <a href="#" class="btn">Apply Now</a>
+      <a href="#" class="btn"><span data-c="recruit.btn">Apply Now</span></a>
     </div>
   </div>
 </section>
@@ -1712,8 +1714,8 @@ section {
 
     <div class="footer__grid">
       <div class="footer__col">
-        <h5>Caerle'on Lounge</h5>
-        <p>洗練された大人のためのプライベートラウンジ。<br>完全会員制にて、選ばれた皆様をお迎えいたします。</p>
+        <h5 data-c="footer.aboutTitle">Caerle'on Lounge</h5>
+        <p data-c="footer.aboutBody">洗練された大人のためのプライベートラウンジ。<br>完全会員制にて、選ばれた皆様をお迎えいたします。</p>
       </div>
       <div class="footer__col">
         <h5>Navigation</h5>
@@ -1728,11 +1730,11 @@ section {
         </ul>
       </div>
       <div class="footer__col">
-        <h5>Contact</h5>
+        <h5 data-c="footer.contactTitle">Contact</h5>
         <ul>
-          <li><a href="tel:0364340048">03-6434-0048</a></li>
-          <li>contact@caerleon.tokyo</li>
-          <li>Open 20:00 — 1:00</li>
+          <li><a href="tel:0364340048" data-c="footer.contactTel">03-6434-0048</a></li>
+          <li data-c="footer.contactMail">contact@caerleon.tokyo</li>
+          <li data-c="footer.contactHours">Open 20:00 — 1:00</li>
         </ul>
       </div>
       <div class="footer__col">
@@ -1829,6 +1831,97 @@ window.addEventListener('load', () => {
 if (pageTop) {
   pageTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 }
+
+// content.json から全テキストを読み込んで反映（管理ページから編集可能）
+fetch('content.json?t=' + Date.now())
+  .then(r => (r.ok ? r.json() : null))
+  .then(c => {
+    if (!c) return;
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, ch => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]
+    ));
+    const nl2br = s => esc(s).replace(/\n/g, '<br>');
+    const get = path => path.split('.').reduce((o, k) => (o == null ? o : o[k]), c);
+
+    // 単純テキスト（data-c 属性）
+    document.querySelectorAll('[data-c]').forEach(el => {
+      const v = get(el.dataset.c);
+      if (typeof v === 'string') el.innerHTML = nl2br(v);
+    });
+
+    // 電話リンクの href も同期
+    const telDigits = t => 'tel:' + String(t || '').replace(/[^0-9+]/g, '');
+    const at = document.getElementById('accessTelBtn');
+    if (at && c.access && c.access.tel) at.href = telDigits(c.access.tel);
+    const rt = document.getElementById('recruitTel');
+    if (rt && c.recruit && c.recruit.tel) rt.href = telDigits(c.recruit.tel);
+
+    // 定義リスト（dt / dd の繰り返し）
+    const renderRows = (id, rows) => {
+      const el = document.getElementById(id);
+      if (!el || !Array.isArray(rows)) return;
+      el.innerHTML = rows.map(r =>
+        `<dt>${esc(r.dt)}</dt><dd>${nl2br(r.dd)}</dd>`).join('');
+    };
+    renderRows('aboutRows', c.about && c.about.rows);
+    renderRows('accessRows', c.access && c.access.rows);
+
+    // Access / About の電話番号をリンク化
+    ['aboutRows', 'accessRows'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.querySelectorAll('dd').forEach(dd => {
+        const m = dd.textContent.trim().match(/^0[\d-]{8,}$/);
+        if (m) dd.innerHTML = `<a href="${telDigits(m[0])}">${esc(m[0])}</a>`;
+      });
+    });
+
+    // 料金カード
+    if (c.system && Array.isArray(c.system.cards)) {
+      const el = document.getElementById('systemCards');
+      if (el) el.innerHTML = c.system.cards.map(card => `
+      <div class="system__card">
+        <div class="system__card-label">${esc(card.label)}</div>
+        <div class="system__card-name">${esc(card.name)}</div>
+        <div class="system__card-price">${esc(card.price)}${card.unit ? `<small>${esc(card.unit)}</small>` : ''}</div>
+      </div>`).join('');
+    }
+
+    // FAQ
+    if (c.faq && Array.isArray(c.faq.items)) {
+      const el = document.getElementById('faqList');
+      if (el) {
+        el.innerHTML = c.faq.items.map((f, i) => `
+    <div class="faq__item">
+      <button class="faq__q" aria-expanded="false" aria-controls="faq-a${i + 1}">
+        <span class="q-mark">Q.</span>
+        ${esc(f.q)}
+        <span class="q-icon" aria-hidden="true"></span>
+      </button>
+      <div class="faq__a" id="faq-a${i + 1}">
+        <div class="faq__a-body">${nl2br(f.a)}</div>
+      </div>
+    </div>`).join('');
+        // 再バインド
+        el.querySelectorAll('.faq__q').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const expanded = btn.getAttribute('aria-expanded') === 'true';
+            const panel = document.getElementById(btn.getAttribute('aria-controls'));
+            btn.setAttribute('aria-expanded', String(!expanded));
+            if (panel) panel.style.maxHeight = expanded ? '0' : panel.scrollHeight + 'px';
+          });
+        });
+      }
+    }
+
+    // Recruit の待遇
+    if (c.recruit && Array.isArray(c.recruit.benefits)) {
+      const el = document.getElementById('recruitBenefits');
+      if (el) el.innerHTML = c.recruit.benefits.map(b =>
+        `<div><dt>${esc(b.dt)}</dt><dd>${esc(b.dd)}</dd></div>`).join('');
+    }
+  })
+  .catch(() => { /* content.json が無い場合は HTML の初期値を表示 */ });
 
 // News を news.json から読み込み（管理ページから編集可能）
 fetch('news.json?t=' + Date.now())
