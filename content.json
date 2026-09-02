@@ -65,27 +65,7 @@
     "titleTop": "スタッフ",
     "titleBottom": "募集",
     "body": "スタッフ募集中。経験不問。\nお問い合わせ・ご応募は下記までご連絡ください。",
-    "tel": "03-6434-0048",
-    "benefits": [
-      {
-        "dt": "Hourly",
-        "dd": "¥6,000 〜"
-      },
-      {
-        "dt": "Shift",
-        "dd": "Flexible"
-      },
-      {
-        "dt": "Dress",
-        "dd": "Provided"
-      },
-      {
-        "dt": "Welfare",
-        "dd": "Full Support"
-      }
-    ],
-    "note": "※ 詳細な条件・面接については、下記よりお気軽にお問い合わせください。",
-    "btn": "Apply Now"
+    "tel": "03-6434-0048"
   },
   "footer": {
     "aboutTitle": "Caerle'on Lounge",

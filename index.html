@@ -1654,30 +1654,6 @@ section {
         お問い合わせ・ご応募は下記までご連絡ください。</span><br>
         <a href="tel:0364340048" id="recruitTel" data-c="recruit.tel">03-6434-0048</a>
       </p>
-
-      <dl class="recruit__benefits" id="recruitBenefits">
-        <div>
-          <dt>Hourly</dt>
-          <dd>¥6,000 〜</dd>
-        </div>
-        <div>
-          <dt>Shift</dt>
-          <dd>Flexible</dd>
-        </div>
-        <div>
-          <dt>Dress</dt>
-          <dd>Provided</dd>
-        </div>
-        <div>
-          <dt>Welfare</dt>
-          <dd>Full Support</dd>
-        </div>
-      </dl>
-
-      <p style="font-size:13px; color:var(--mute); font-style:italic;">
-        <span data-c="recruit.note">※ 詳細な条件・面接については、下記よりお気軽にお問い合わせください。</span>
-      </p>
-      <a href="#" class="btn"><span data-c="recruit.btn">Apply Now</span></a>
     </div>
   </div>
 </section>
@@ -1708,7 +1684,6 @@ section {
   <h3>採用</h3>
   <p>
     Caerle'on ではスタッフを募集しています。経験は問いません。
-    時給6,000円〜、シフト応相談、衣装貸与、福利厚生あり。
     お問い合わせ・ご応募は 03-6434-0048 まで。
   </p>
 </section>
@@ -1870,12 +1845,6 @@ fetch('content.json?t=' + Date.now())
 
 
 
-    // Recruit の待遇
-    if (c.recruit && Array.isArray(c.recruit.benefits)) {
-      const el = document.getElementById('recruitBenefits');
-      if (el) el.innerHTML = c.recruit.benefits.map(b =>
-        `<div><dt>${esc(b.dt)}</dt><dd>${esc(b.dd)}</dd></div>`).join('');
-    }
   })
   .catch(() => { /* content.json が無い場合は HTML の初期値を表示 */ });
 
