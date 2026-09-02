@@ -24,7 +24,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 // 注: Access の看板写真（c0209646.jpg）は店舗ロゴのため書き換え不可（対象外）
 $ALLOWED = array(
   'c0209891.jpg', 'p0004.jpg', 'c0209615.jpg',
-  'c0209876.jpg', 'c0209824.jpg', 'c0209748.jpg', 'c0209962.jpg',
+  'c0209824.jpg', 'c0209748.jpg', 'c0209962.jpg',
   'p0002.jpg', 'c0209948.jpg',
 );
 
