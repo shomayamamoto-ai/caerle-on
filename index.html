@@ -17,9 +17,17 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <script>
-  // リロード時にブラウザが前回のスクロール位置を復元するのを無効化し、
-  // 常にページ最上部から表示する（#access 等のアンカー指定時は除く）
+  // リロード時にブラウザが前回のスクロール位置を復元するのを無効化
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  // リロード（再読み込み）の場合は URL のアンカーも取り除き、必ず最上部から表示する
+  try {
+    var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+    var isReload = nav ? nav.type === 'reload'
+                       : (performance.navigation && performance.navigation.type === 1);
+    if (isReload && location.hash) {
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+  } catch (e) {}
 </script>
 <script type="application/ld+json">
 {
@@ -1807,12 +1815,16 @@ document.querySelectorAll('.faq__q').forEach(btn => {
 
 // リロード時は最上部から表示（URL にアンカーがある場合はその位置へ）
 window.addEventListener('load', () => {
+  const html = document.documentElement;
+  const prev = html.style.scrollBehavior;
+  html.style.scrollBehavior = 'auto';   // smooth を一時停止して確実に移動
   if (!location.hash) {
     window.scrollTo(0, 0);
   } else {
     const target = document.querySelector(location.hash);
     if (target) target.scrollIntoView();
   }
+  requestAnimationFrame(() => { html.style.scrollBehavior = prev; });
 });
 
 // ページトップ
