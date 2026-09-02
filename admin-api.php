@@ -23,9 +23,9 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 // サイトで使用している写真スロット（admin.html と対応）
 // 注: Access の看板写真（c0209646.jpg）は店舗ロゴのため書き換え不可（対象外）
 $ALLOWED = array(
-  'c0209891.jpg', 'p0001.jpg', 'p0004.jpg', 'c0209615.jpg',
+  'c0209891.jpg', 'p0004.jpg', 'c0209615.jpg',
   'c0209876.jpg', 'c0209824.jpg', 'c0209748.jpg', 'c0209962.jpg',
-  'p0002.jpg', 'p0003.jpg', 'p0005.jpg', 'c0209948.jpg',
+  'p0002.jpg', 'c0209948.jpg',
 );
 
 // 稼働確認（認証不要）

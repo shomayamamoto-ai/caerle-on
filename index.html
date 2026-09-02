@@ -432,7 +432,7 @@ section {
   content: '';
   position: absolute;
   inset: 0;
-  background: url('images/p0001.jpg') center/cover no-repeat;
+  background: url('images/c0209824.jpg') center/cover no-repeat;
   z-index: 0;
 }
 
@@ -559,9 +559,6 @@ section {
 .gallery__item--5 { grid-column: 9 / 13; aspect-ratio: 3/4; }
 .gallery__item--6 { grid-column: 1 / 8; aspect-ratio: 16/10; }
 .gallery__item--7 { grid-column: 8 / 13; aspect-ratio: 4/5; }
-.gallery__item--8 { grid-column: 1 / 5; aspect-ratio: 3/4; }
-.gallery__item--9 { grid-column: 5 / 9; aspect-ratio: 3/4; }
-.gallery__item--10 { grid-column: 9 / 13; aspect-ratio: 3/4; }
 
 .gallery__caption {
   position: absolute;
@@ -588,8 +585,7 @@ section {
   .gallery__grid { grid-template-columns: 1fr; }
   .gallery__item--1, .gallery__item--2, .gallery__item--3,
   .gallery__item--4, .gallery__item--5, .gallery__item--6,
-  .gallery__item--7, .gallery__item--8, .gallery__item--9,
-  .gallery__item--10 {
+  .gallery__item--7 {
     grid-column: 1;
     aspect-ratio: 4/3;
   }
@@ -1470,28 +1466,16 @@ section {
       <figcaption class="gallery__caption">— Floral Art</figcaption>
     </figure>
     <figure class="gallery__item gallery__item--5 fade-in">
-      <img src="images/c0209824.jpg" alt="詳細" loading="lazy">
-      <figcaption class="gallery__caption">— Detail</figcaption>
-    </figure>
-    <figure class="gallery__item gallery__item--6 fade-in">
       <img src="images/c0209748.jpg" alt="プライベート" loading="lazy">
       <figcaption class="gallery__caption">— Private Booth</figcaption>
     </figure>
-    <figure class="gallery__item gallery__item--7 fade-in">
+    <figure class="gallery__item gallery__item--6 fade-in">
       <img src="images/c0209962.jpg" alt="花" loading="lazy">
       <figcaption class="gallery__caption">— Seasonal</figcaption>
     </figure>
-    <figure class="gallery__item gallery__item--8 fade-in">
+    <figure class="gallery__item gallery__item--7 fade-in">
       <img src="images/p0002.jpg" alt="ダリアと百合のアレンジメント" loading="lazy">
       <figcaption class="gallery__caption">— Bouquet</figcaption>
-    </figure>
-    <figure class="gallery__item gallery__item--9 fade-in">
-      <img src="images/p0003.jpg" alt="大理石とガラスのディテール" loading="lazy">
-      <figcaption class="gallery__caption">— Texture</figcaption>
-    </figure>
-    <figure class="gallery__item gallery__item--10 fade-in">
-      <img src="images/p0005.jpg" alt="ボックス席" loading="lazy">
-      <figcaption class="gallery__caption">— Salon</figcaption>
     </figure>
   </div>
 </section>
@@ -1850,12 +1834,9 @@ const GALLERY_ITEMS = [
   { file: 'p0004.jpg',    caption: '— Live Piano',    alt: 'グランドピアノの鍵盤' },
   { file: 'c0209615.jpg', caption: '— Lounge',        alt: 'ソファ席' },
   { file: 'c0209876.jpg', caption: '— Floral Art',    alt: 'フローラル' },
-  { file: 'c0209824.jpg', caption: '— Detail',        alt: '詳細' },
   { file: 'c0209748.jpg', caption: '— Private Booth', alt: 'プライベート' },
   { file: 'c0209962.jpg', caption: '— Seasonal',      alt: '花' },
   { file: 'p0002.jpg',    caption: '— Bouquet',       alt: 'ダリアと百合のアレンジメント' },
-  { file: 'p0003.jpg',    caption: '— Texture',       alt: '大理石とガラスのディテール' },
-  { file: 'p0005.jpg',    caption: '— Salon',         alt: 'ボックス席' },
 ];
 fetch('photos.json?t=' + Date.now())
   .then(r => (r.ok ? r.json() : null))
@@ -1865,7 +1846,7 @@ fetch('photos.json?t=' + Date.now())
 
     // セクション固定のビジュアル（Concept / Access / Recruit）
     const structural = {
-      'p0001.jpg': () => {
+      'c0209824.jpg': () => {
         const el = document.querySelector('.concept__visual');
         const wrap = document.querySelector('.concept');
         if (el) el.style.display = 'none';
