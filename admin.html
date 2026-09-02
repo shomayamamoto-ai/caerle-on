@@ -330,6 +330,58 @@ input[type="file"] { display: none; }
 .login-gate .status { text-align: center; }
 .login-gate[hidden] { display: none; }
 
+/* ---- content editor ---- */
+.content-admin {
+  margin-top: 56px;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--gold);
+  padding: 24px;
+}
+.content-admin h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--gold-bright);
+  font-weight: 400;
+  margin-bottom: 6px;
+  letter-spacing: 0.08em;
+}
+.content-admin > p { font-size: 13.5px; color: var(--ink-soft); margin-bottom: 20px; line-height: 2; }
+
+.cgroup { border-top: 1px solid var(--line); padding: 20px 0; }
+.cgroup:first-of-type { border-top: 0; }
+.cgroup__title {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 16px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+}
+.cfield { display: grid; grid-template-columns: 190px 1fr; gap: 12px; align-items: start; margin-bottom: 10px; }
+.cfield > label { font-size: 13px; color: var(--ink-soft); padding-top: 11px; }
+.cfield input, .cfield textarea {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 11px 13px;
+  font-family: 'Noto Serif JP', serif;
+  font-size: 14px;
+  width: 100%;
+  line-height: 1.7;
+}
+.cfield textarea { resize: vertical; min-height: 46px; }
+.cfield input:focus, .cfield textarea:focus { outline: none; border-color: var(--gold); }
+.crow { display: grid; grid-template-columns: 190px 1fr; gap: 12px; margin-bottom: 10px; }
+.crow input { min-width: 0; }
+.content-actions { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+@media (max-width: 640px) {
+  .cfield, .crow { grid-template-columns: 1fr; }
+  .cfield > label { padding-top: 0; }
+}
+
 /* ---- news editor ---- */
 .news-admin {
   margin-top: 56px;
@@ -476,6 +528,17 @@ input[type="file"] { display: none; }
       <button class="btn btn--solid" id="newsSaveBtn">ニュースを保存</button>
     </div>
     <p class="status" id="newsStatus"></p>
+  </section>
+
+  <section class="content-admin" id="contentAdmin" hidden>
+    <h2>文章の編集</h2>
+    <p>サイト内の文章をここから変更できます。改行したい箇所では入力欄内で改行してください。</p>
+    <div id="contentFields"></div>
+    <div class="content-actions">
+      <button class="btn btn--solid" id="contentSaveBtn">文章を保存</button>
+      <button class="btn" id="contentReloadBtn">編集を取り消す</button>
+    </div>
+    <p class="status" id="contentStatus"></p>
   </section>
 
   <p class="note" id="footNote">
@@ -690,6 +753,8 @@ async function connect(saveToken) {
     document.getElementById('photosDesc').hidden = false;
     document.getElementById('newsAdmin').hidden = false;
     loadNews();
+    document.getElementById('contentAdmin').hidden = false;
+    loadContent();
   } catch (e) {
     tokenStatus.className = 'status err';
     tokenStatus.textContent = '✗ ' + e.message;
@@ -995,6 +1060,146 @@ document.getElementById('newsSaveBtn').addEventListener('click', async () => {
   } catch (err) {
     newsStatus.className = 'status err';
     newsStatus.textContent = '✗ ' + err.message;
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+/* ---- 文章（content.json）の編集 ---- */
+const CONTENT_SCHEMA = [
+  { key: 'hero', title: 'ヒーロー（トップ）', fields: [
+    ['cornerTR', '右上の表記'], ['cornerBL', '左下の表記'], ['cornerBR', '右下の表記'],
+    ['sub', 'ロゴ下のキャッチ'],
+  ]},
+  { key: 'about', title: 'About（店舗概要）', fields: [
+    ['label', '小見出し'], ['title', '見出し'],
+  ], rows: { key: 'rows', label: '項目', cols: [['dt', '項目名'], ['dd', '内容']] }},
+  { key: 'gallery', title: 'Gallery', fields: [
+    ['label', '小見出し'], ['titleTop', '見出し（1行目）'], ['titleBottom', '見出し（2行目）'], ['lead', '説明文'],
+  ]},
+  { key: 'news', title: 'News（見出し）', fields: [
+    ['label', '小見出し'], ['titleTop', '見出し（前半）'], ['titleBottom', '見出し（後半）'],
+  ]},
+  { key: 'system', title: 'System（料金）', fields: [
+    ['label', '小見出し'], ['titleTop', '見出し（1行目）'], ['titleBottom', '見出し（2行目）'],
+    ['lead', 'リード文'], ['noticeTitle', '注記の見出し'], ['noticeBody', '注記の本文'],
+  ], rows: { key: 'cards', label: '料金カード',
+    cols: [['label', '英字ラベル'], ['name', '項目名'], ['price', '金額'], ['unit', '単位']] }},
+  { key: 'faq', title: 'FAQ', fields: [
+    ['label', '小見出し'], ['titleTop', '見出し（前半）'], ['titleBottom', '見出し（後半）'],
+  ], rows: { key: 'items', label: '質問と回答', cols: [['q', '質問'], ['a', '回答']] }},
+  { key: 'access', title: 'Access', fields: [
+    ['label', '小見出し'], ['title', '見出し'], ['tel', '電話ボタン'],
+    ['mapName', '地図の店名'], ['mapAddr', '地図の住所'], ['mapBtn', '経路ボタン'],
+  ], rows: { key: 'rows', label: '項目', cols: [['dt', '項目名'], ['dd', '内容']] }},
+  { key: 'recruit', title: 'Recruit（採用）', fields: [
+    ['label', '小見出し'], ['titleTop', '見出し（前半）'], ['titleBottom', '見出し（後半）'],
+    ['body', '本文'], ['tel', '電話番号'], ['note', '注記'], ['btn', 'ボタン'],
+  ], rows: { key: 'benefits', label: '待遇', cols: [['dt', '項目名'], ['dd', '内容']] }},
+  { key: 'footer', title: 'フッター', fields: [
+    ['aboutTitle', '左段の見出し'], ['aboutBody', '左段の本文'],
+    ['contactTitle', '連絡先の見出し'], ['contactTel', '電話番号'],
+    ['contactMail', 'メール'], ['contactHours', '営業時間'],
+  ]},
+];
+
+const LONG_FIELDS = ['sub', 'lead', 'noticeBody', 'body', 'note', 'aboutBody', 'mapAddr', 'a', 'dd'];
+const contentFieldsEl = document.getElementById('contentFields');
+const contentStatus = document.getElementById('contentStatus');
+let CONTENT = null;
+
+function escAttr(v) {
+  return String(v ?? '').replace(/[&<>"']/g, ch => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]
+  ));
+}
+
+function inputFor(name, value, path) {
+  const long = LONG_FIELDS.includes(name);
+  const v = escAttr(value);
+  return long
+    ? `<textarea data-path="${path}" rows="2">${v}</textarea>`
+    : `<input type="text" data-path="${path}" value="${v}">`;
+}
+
+function renderContentEditor() {
+  if (!CONTENT) return;
+  contentFieldsEl.innerHTML = CONTENT_SCHEMA.map(group => {
+    const obj = CONTENT[group.key] || {};
+    let html = `<div class="cgroup"><div class="cgroup__title">${group.title}</div>`;
+    group.fields.forEach(([name, label]) => {
+      html += `<div class="cfield"><label>${label}</label>${inputFor(name, obj[name], group.key + '.' + name)}</div>`;
+    });
+    if (group.rows) {
+      const arr = Array.isArray(obj[group.rows.key]) ? obj[group.rows.key] : [];
+      html += `<div class="cfield"><label>${group.rows.label}</label><div>`;
+      arr.forEach((row, i) => {
+        html += '<div class="crow">' + group.rows.cols.map(([cn, cl]) =>
+          inputFor(cn, row[cn], `${group.key}.${group.rows.key}.${i}.${cn}`)
+        ).join('') + '</div>';
+      });
+      html += '</div></div>';
+    }
+    return html + '</div>';
+  }).join('');
+}
+
+function collectContent() {
+  const out = JSON.parse(JSON.stringify(CONTENT));
+  contentFieldsEl.querySelectorAll('[data-path]').forEach(el => {
+    const parts = el.dataset.path.split('.');
+    let cur = out;
+    for (let i = 0; i < parts.length - 1; i++) {
+      const k = parts[i];
+      const nextIsIndex = /^\d+$/.test(parts[i + 1]);
+      if (cur[k] == null) cur[k] = nextIsIndex ? [] : {};
+      cur = cur[k];
+    }
+    cur[parts[parts.length - 1]] = el.value;
+  });
+  return out;
+}
+
+async function loadContent() {
+  contentStatus.className = 'status';
+  contentStatus.textContent = '読み込み中…';
+  try {
+    const res = await fetch('content.json?t=' + Date.now());
+    CONTENT = res.ok ? await res.json() : {};
+  } catch (e) { CONTENT = {}; }
+  renderContentEditor();
+  contentStatus.textContent = '';
+}
+
+document.getElementById('contentReloadBtn').addEventListener('click', loadContent);
+
+document.getElementById('contentSaveBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('contentSaveBtn');
+  btn.disabled = true;
+  contentStatus.className = 'status';
+  contentStatus.textContent = '保存中…';
+  try {
+    const data = collectContent();
+    if (MODE === 'php') {
+      const res = await fetch(`${PHP_API}?action=content_save`, {
+        method: 'POST',
+        headers: { 'X-Admin-Token': TOKEN, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: data }),
+      });
+      const j = await res.json().catch(() => ({}));
+      if (!res.ok || !j.ok) throw new Error(j.error || `保存に失敗しました (${res.status})`);
+      contentStatus.className = 'status ok';
+      contentStatus.textContent = '✓ 保存しました。サイトに即時反映されます。';
+    } else {
+      const json = JSON.stringify(data, null, 2) + '\n';
+      await ghPut('content.json', utf8ToBase64(json), 'content: 文章を更新 (via admin)');
+      contentStatus.className = 'status ok';
+      contentStatus.textContent = '✓ 保存しました。1〜2 分でサイトに反映されます。';
+    }
+    CONTENT = data;
+  } catch (err) {
+    contentStatus.className = 'status err';
+    contentStatus.textContent = '✗ ' + err.message;
   } finally {
     btn.disabled = false;
   }
