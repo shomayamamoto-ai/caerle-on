@@ -1080,27 +1080,6 @@ const CONTENT_SCHEMA = [
   { key: 'news', title: 'News（見出し）', fields: [
     ['label', '小見出し'], ['titleTop', '見出し（前半）'], ['titleBottom', '見出し（後半）'],
   ]},
-  { key: 'system', title: 'System（料金）', fields: [
-    ['label', '小見出し'], ['titleTop', '見出し（1行目）'], ['titleBottom', '見出し（2行目）'],
-    ['lead', 'リード文'], ['noticeTitle', '注記の見出し'], ['noticeBody', '注記の本文'],
-  ], rows: { key: 'cards', label: '料金カード',
-    cols: [['label', '英字ラベル'], ['name', '項目名'], ['price', '金額'], ['unit', '単位']] }},
-  { key: 'faq', title: 'FAQ', fields: [
-    ['label', '小見出し'], ['titleTop', '見出し（前半）'], ['titleBottom', '見出し（後半）'],
-  ], rows: { key: 'items', label: '質問と回答', cols: [['q', '質問'], ['a', '回答']] }},
-  { key: 'access', title: 'Access', fields: [
-    ['label', '小見出し'], ['title', '見出し'], ['tel', '電話ボタン'],
-    ['mapName', '地図の店名'], ['mapAddr', '地図の住所'], ['mapBtn', '経路ボタン'],
-  ], rows: { key: 'rows', label: '項目', cols: [['dt', '項目名'], ['dd', '内容']] }},
-  { key: 'recruit', title: 'Recruit（採用）', fields: [
-    ['label', '小見出し'], ['titleTop', '見出し（前半）'], ['titleBottom', '見出し（後半）'],
-    ['body', '本文'], ['tel', '電話番号'], ['note', '注記'], ['btn', 'ボタン'],
-  ], rows: { key: 'benefits', label: '待遇', cols: [['dt', '項目名'], ['dd', '内容']] }},
-  { key: 'footer', title: 'フッター', fields: [
-    ['aboutTitle', '左段の見出し'], ['aboutBody', '左段の本文'],
-    ['contactTitle', '連絡先の見出し'], ['contactTel', '電話番号'],
-    ['contactMail', 'メール'], ['contactHours', '営業時間'],
-  ]},
 ];
 
 const LONG_FIELDS = ['sub', 'lead', 'noticeBody', 'body', 'note', 'aboutBody', 'mapAddr', 'a', 'dd'];
