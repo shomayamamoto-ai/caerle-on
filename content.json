@@ -9,10 +9,22 @@
     "label": "About",
     "title": "Caerle'on",
     "rows": [
-      { "dt": "Type", "dd": "会員制ラウンジ（完全会員制）" },
-      { "dt": "Area", "dd": "東京・六本木" },
-      { "dt": "Open", "dd": "20:00 — 翌 1:00\n土・日・祝 定休" },
-      { "dt": "Tel", "dd": "03-6434-0048" }
+      {
+        "dt": "Type",
+        "dd": "会員制ラウンジ（完全会員制）"
+      },
+      {
+        "dt": "Area",
+        "dd": "東京・六本木"
+      },
+      {
+        "dt": "Open",
+        "dd": "20:00 — 翌 1:00\n土・日・祝 定休"
+      },
+      {
+        "dt": "Tel",
+        "dd": "03-6434-0048"
+      }
     ]
   },
   "gallery": {
@@ -26,41 +38,22 @@
     "titleTop": "Latest",
     "titleBottom": "Information"
   },
-  "system": {
-    "label": "System",
-    "titleTop": "Membership",
-    "titleBottom": "＆ Pricing",
-    "lead": "完全会員制／ご紹介制。お会計は月締めにてご請求いたします。",
-    "cards": [
-      { "label": "Membership", "name": "年会費", "price": "¥30,000", "unit": "/ year" },
-      { "label": "Set Charge", "name": "セット料金（90分）", "price": "¥15,000", "unit": "" },
-      { "label": "Extension", "name": "延長（30分毎）", "price": "¥5,000", "unit": "" },
-      { "label": "VIP Room", "name": "プライベートルーム", "price": "¥30,000", "unit": "〜" },
-      { "label": "Bottle", "name": "ボトルキープ", "price": "Ask Staff", "unit": "" },
-      { "label": "Service", "name": "サービス料", "price": "20", "unit": "%" }
-    ],
-    "noticeTitle": "Notice",
-    "noticeBody": "表示価格はすべて税抜きです。別途消費税を申し受けます。\nご入会には、既存会員様のご紹介および所定の審査が必要となります。\nドレスコード：スマートカジュアル以上。短パン・サンダルでのご入店はお断りしております。"
-  },
-  "faq": {
-    "label": "FAQ",
-    "titleTop": "Questions",
-    "titleBottom": "＆ Answers",
-    "items": [
-      { "q": "初めてでも利用できますか？", "a": "当店は完全会員制でございます。ご新規のお客様は、既存会員様のご紹介のうえ、所定の審査を経てご入会いただけます。まずはお気軽にお問い合わせくださいませ。" },
-      { "q": "ドレスコードはありますか？", "a": "スマートカジュアル以上をお願いしております。短パン・サンダルでのご入店はご遠慮いただいております。" },
-      { "q": "お支払い方法を教えてください。", "a": "会員様のお会計は月締めにてご請求申し上げます。各種クレジットカード・現金でのお支払いも承ります。" },
-      { "q": "営業時間・定休日は？", "a": "営業時間は 20:00 – 翌 1:00、定休日は土曜・日曜・祝日でございます。" },
-      { "q": "個室の利用はできますか？", "a": "プライベートルームを複数ご用意しております。ご予約の際にお申し付けくださいませ。" }
-    ]
-  },
   "access": {
     "label": "Access",
     "title": "Access",
     "rows": [
-      { "dt": "Address", "dd": "〒106-0032\n東京都港区六本木 4-11-11\n六本木 Gm ビル 6 階" },
-      { "dt": "Open", "dd": "20:00 — 1:00\nSat, Sun & Holidays Closed" },
-      { "dt": "Tel", "dd": "03-6434-0048" }
+      {
+        "dt": "Address",
+        "dd": "〒106-0032\n東京都港区六本木 4-11-11\n六本木 Gm ビル 6 階"
+      },
+      {
+        "dt": "Open",
+        "dd": "20:00 — 1:00\nSat, Sun & Holidays Closed"
+      },
+      {
+        "dt": "Tel",
+        "dd": "03-6434-0048"
+      }
     ],
     "tel": "03-6434-0048",
     "mapName": "Caerle'on",
@@ -74,10 +67,22 @@
     "body": "スタッフ募集中。経験不問。\nお問い合わせ・ご応募は下記までご連絡ください。",
     "tel": "03-6434-0048",
     "benefits": [
-      { "dt": "Hourly", "dd": "¥6,000 〜" },
-      { "dt": "Shift", "dd": "Flexible" },
-      { "dt": "Dress", "dd": "Provided" },
-      { "dt": "Welfare", "dd": "Full Support" }
+      {
+        "dt": "Hourly",
+        "dd": "¥6,000 〜"
+      },
+      {
+        "dt": "Shift",
+        "dd": "Flexible"
+      },
+      {
+        "dt": "Dress",
+        "dd": "Provided"
+      },
+      {
+        "dt": "Welfare",
+        "dd": "Full Support"
+      }
     ],
     "note": "※ 詳細な条件・面接については、下記よりお気軽にお問い合わせください。",
     "btn": "Apply Now"
