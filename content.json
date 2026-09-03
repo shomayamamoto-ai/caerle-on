@@ -1,11 +1,10 @@
 {
   "hero": {
     "cornerTR": "Members Only —",
-    "cornerBL": "№ 001",
     "cornerBR": "Roppongi"
   },
   "about": {
-    "label": "About",
+    "label": "Concept",
     "title": "Caerle'on"
   },
   "gallery": {
