@@ -1,0 +1,6 @@
+# 移管用に生成する配布パッケージ（サイト本体から自動生成されるため管理対象外）
+caerleon-php-package.zip
+
+# admin-api.php が保存前に作成するバックアップ
+_backup_*
+images/_backup_*
