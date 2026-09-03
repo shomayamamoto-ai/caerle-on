@@ -556,6 +556,20 @@ section {
   font-weight: 400;
 }
 
+.concept__lead {
+  margin-top: 34px;
+  margin-bottom: 0;
+  max-width: 30em;
+  font-size: 17px;
+  line-height: 2.3;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 900px) {
+  .concept__lead { font-size: 16px; }
+}
+
 .concept__quote {
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
@@ -1547,6 +1561,7 @@ section {
     <div class="concept__text fade-in">
       <div class="section__label" data-c="about.label">Concept</div>
       <h2 class="section__title"><span class="italic" data-c="about.title">Caerle'on</span></h2>
+      <p class="concept__lead" data-c="about.body">六本木の喧騒からひと呼吸おいた静かな灯りのなかで、心をほどき、大切な方とのひとときを重ねていただくための会員制ラウンジです。</p>
     </div>
   </div>
 </section>
