@@ -516,20 +516,6 @@ input[type="file"] { display: none; }
   <p class="sec-desc" id="photosDesc" hidden>「写真を選ぶ」→「保存」で差し替え。「サイトから消す」で非表示にできます。</p>
   <section class="slots" id="slots" hidden></section>
 
-  <section class="news-admin" id="newsAdmin" hidden>
-    <h2>News の編集</h2>
-    <p>サイトの「Latest Information」に表示されるお知らせです。上の行ほど新しく表示されます。</p>
-    <div class="news-cols" aria-hidden="true">
-      <span>日付</span><span>タグ</span><span>本文</span><span></span>
-    </div>
-    <div id="newsRows"></div>
-    <div class="news-actions">
-      <button class="btn" id="newsAddBtn">行を追加</button>
-      <button class="btn btn--solid" id="newsSaveBtn">ニュースを保存</button>
-    </div>
-    <p class="status" id="newsStatus"></p>
-  </section>
-
   <section class="content-admin" id="contentAdmin" hidden>
     <h2>文章の編集</h2>
     <p>サイト内の文章をここから変更できます。改行したい箇所では入力欄内で改行してください。</p>
@@ -751,8 +737,6 @@ async function connect(saveToken) {
     slotsEl.hidden = false;
     document.getElementById('photosTitle').hidden = false;
     document.getElementById('photosDesc').hidden = false;
-    document.getElementById('newsAdmin').hidden = false;
-    loadNews();
     document.getElementById('contentAdmin').hidden = false;
     loadContent();
   } catch (e) {
@@ -965,106 +949,6 @@ async function onSave(e) {
   }
 }
 
-/* ---- News 編集 ---- */
-const newsRowsEl = document.getElementById('newsRows');
-const newsStatus = document.getElementById('newsStatus');
-
-/* 「2026.08」「2026.08.25」形式 → date input 用の「YYYY-MM-DD」へ */
-function toDateInput(s) {
-  const m = String(s ?? '').trim().match(/^(\d{4})[.\-\/](\d{1,2})(?:[.\-\/](\d{1,2}))?$/);
-  if (!m) return '';
-  const pad = n => String(n).padStart(2, '0');
-  return `${m[1]}-${pad(m[2])}-${pad(m[3] || 1)}`;
-}
-
-/* date input の「YYYY-MM-DD」→ サイト表示用の「YYYY.MM.DD」へ */
-function fromDateInput(s) {
-  if (!s) return '';
-  return s.replaceAll('-', '.');
-}
-
-function newsRowHtml(item) {
-  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => (
-    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-  ));
-  return `
-    <div class="news-row">
-      <input type="date" class="n-date" value="${esc(toDateInput(item.date))}">
-      <input type="text" class="n-tag" placeholder="Floral" value="${esc(item.tag)}">
-      <textarea class="n-text" placeholder="お知らせの本文" rows="2">${esc(item.text)}</textarea>
-      <button type="button" class="del" title="この行を削除">✕</button>
-    </div>`;
-}
-
-function bindNewsRowEvents() {
-  newsRowsEl.querySelectorAll('.del').forEach(btn => {
-    btn.onclick = () => { btn.closest('.news-row').remove(); };
-  });
-}
-
-async function loadNews() {
-  newsStatus.className = 'status';
-  newsStatus.textContent = '読み込み中…';
-  let items = [];
-  try {
-    const res = await fetch('news.json?t=' + Date.now());
-    if (res.ok) items = await res.json();
-  } catch (e) { /* 初回は空でも OK */ }
-  if (!Array.isArray(items)) items = [];
-  if (!items.length) items = [{ date: '', tag: '', text: '' }];
-  newsRowsEl.innerHTML = items.map(newsRowHtml).join('');
-  bindNewsRowEvents();
-  newsStatus.textContent = '';
-}
-
-document.getElementById('newsAddBtn').addEventListener('click', () => {
-  newsRowsEl.insertAdjacentHTML('beforeend', newsRowHtml({ date: '', tag: '', text: '' }));
-  bindNewsRowEvents();
-});
-
-function collectNews() {
-  return Array.from(newsRowsEl.querySelectorAll('.news-row')).map(row => ({
-    date: fromDateInput(row.querySelector('.n-date').value.trim()),
-    tag: row.querySelector('.n-tag').value.trim(),
-    text: row.querySelector('.n-text').value.trim(),
-  })).filter(n => n.text !== '');
-}
-
-function utf8ToBase64(str) {
-  return btoa(String.fromCharCode(...new TextEncoder().encode(str)));
-}
-
-document.getElementById('newsSaveBtn').addEventListener('click', async () => {
-  const items = collectNews();
-  const btn = document.getElementById('newsSaveBtn');
-  btn.disabled = true;
-  newsStatus.className = 'status';
-  newsStatus.textContent = '保存中…';
-  try {
-    if (MODE === 'php') {
-      const res = await fetch(`${PHP_API}?action=news_save`, {
-        method: 'POST',
-        headers: { 'X-Admin-Token': TOKEN, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok || !data.ok) throw new Error(data.error || `保存に失敗しました (${res.status})`);
-      newsStatus.className = 'status ok';
-      newsStatus.textContent = '✓ 保存しました。サイトに即時反映されます。';
-    } else {
-      const json = JSON.stringify(items, null, 2) + '\n';
-      await ghPut('news.json', utf8ToBase64(json), 'news: お知らせを更新 (via admin)');
-      newsStatus.className = 'status ok';
-      newsStatus.textContent = '✓ 保存しました。1〜2 分でサイトに反映されます。';
-    }
-  } catch (err) {
-    newsStatus.className = 'status err';
-    newsStatus.textContent = '✗ ' + err.message;
-  } finally {
-    btn.disabled = false;
-  }
-});
-
 /* ---- 文章（content.json）の編集 ---- */
 const CONTENT_SCHEMA = [
   { key: 'hero', title: 'ヒーロー（トップ）', fields: [
@@ -1073,12 +957,9 @@ const CONTENT_SCHEMA = [
   ]},
   { key: 'about', title: 'About（店舗概要）', fields: [
     ['label', '小見出し'], ['title', '見出し'],
-  ], rows: { key: 'rows', label: '項目', cols: [['dt', '項目名'], ['dd', '内容']] }},
-  { key: 'gallery', title: 'Gallery', fields: [
-    ['label', '小見出し'], ['titleTop', '見出し（1行目）'], ['titleBottom', '見出し（2行目）'], ['lead', '説明文'],
   ]},
-  { key: 'news', title: 'News（見出し）', fields: [
-    ['label', '小見出し'], ['titleTop', '見出し（前半）'], ['titleBottom', '見出し（後半）'],
+  { key: 'gallery', title: 'Gallery', fields: [
+    ['label', '小見出し'], ['titleTop', '見出し（1行目）'], ['titleBottom', '見出し（2行目）'],
   ]},
 ];
 

@@ -1205,7 +1205,7 @@ section {
 
 .footer__grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 60px;
   padding-bottom: 64px;
   border-bottom: 1px solid var(--line);
@@ -1539,7 +1539,6 @@ section {
   <nav class="header__nav">
     <a href="#concept">Concept</a>
     <a href="#gallery">Gallery</a>
-    <a href="#news">News</a>
     <a href="#access">Access</a>
     <a href="#recruit">Recruit</a>
   </nav>
@@ -1551,7 +1550,6 @@ section {
 <nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
   <a href="#concept">Concept</a>
   <a href="#gallery">Gallery</a>
-  <a href="#news">News</a>
   <a href="#access">Access</a>
   <a href="#recruit">Recruit</a>
 </nav>
@@ -1579,16 +1577,6 @@ section {
     <div class="concept__text fade-in">
       <div class="section__label" data-c="about.label">About</div>
       <h2 class="section__title"><span class="italic" data-c="about.title">Caerle'on</span></h2>
-      <dl class="access__details" id="aboutRows" style="margin-top:0;border-top:0;padding-top:0;">
-        <dt>Type</dt>
-        <dd>会員制ラウンジ（完全会員制）</dd>
-        <dt>Area</dt>
-        <dd>東京・六本木</dd>
-        <dt>Open</dt>
-        <dd>20:00 — 翌 1:00<br>土・日・祝 定休</dd>
-        <dt>Tel</dt>
-        <dd><a href="tel:0364340048">03-6434-0048</a></dd>
-      </dl>
     </div>
   </div>
 </section>
@@ -1599,7 +1587,6 @@ section {
       <div class="section__label" data-c="gallery.label">Gallery</div>
       <h2 class="section__title"><span class="italic" data-c="gallery.titleTop">Interior</span><br><span data-c="gallery.titleBottom">＆ Atmosphere</span></h2>
     </div>
-    <p data-c="gallery.lead">店内の様子</p>
   </div>
 
   <div class="gallery__grid" id="galleryGrid">
@@ -1627,30 +1614,6 @@ section {
       <img src="images/p0002.jpg" alt="ダリアと百合を用いた店内のフラワーアレンジメント" loading="lazy">
       <figcaption class="gallery__caption">— Bouquet</figcaption>
     </figure>
-  </div>
-</section>
-
-<section id="news" class="news">
-  <div class="news__inner fade-in">
-    <div class="section__label" data-c="news.label">News</div>
-    <h2 class="section__title"><span data-c="news.titleTop">Latest</span> <span class="italic" data-c="news.titleBottom">Information</span></h2>
-    <ul class="news__list" id="newsList">
-      <li>
-        <span class="news__date">2026.08</span>
-        <span class="news__tag">Floral</span>
-        <p class="news__text">盛夏のフラワーアレンジメントへ装いを改めました。ダリアと百合が皆様をお迎えいたします。</p>
-      </li>
-      <li>
-        <span class="news__date">2026.07</span>
-        <span class="news__tag">Piano</span>
-        <p class="news__text">金曜・土曜のピアノ生演奏を 21:00 – 23:00 にて開催しております。</p>
-      </li>
-      <li>
-        <span class="news__date">2026.06</span>
-        <span class="news__tag">Drink</span>
-        <p class="news__text">季節のフルーツを使ったシーズナルカクテルが登場いたしました。スタッフまでお申し付けください。</p>
-      </li>
-    </ul>
   </div>
 </section>
 
@@ -1705,15 +1668,6 @@ section {
         <span data-c="recruit.body">スタッフ募集中。経験不問。<br>
         お問い合わせ・ご応募は下記までご連絡ください。</span>
       </p>
-      <a href="tel:0364340048" class="btn-tel" id="recruitTel" aria-label="電話をかける">
-        <svg class="btn-tel__icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.2.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.2 2.2Z"/>
-        </svg>
-        <span class="btn-tel__body">
-          <span class="btn-tel__label">Tel</span>
-          <span class="btn-tel__num" data-c="recruit.tel">03-6434-0048</span>
-        </span>
-      </a>
     </div>
   </div>
 </section>
@@ -1758,7 +1712,6 @@ section {
         <ul>
           <li><a href="#concept">Concept</a></li>
           <li><a href="#gallery">Gallery</a></li>
-          <li><a href="#news">News</a></li>
           <li><a href="#access">Access</a></li>
           <li><a href="#recruit">Recruit</a></li>
         </ul>
@@ -1768,13 +1721,6 @@ section {
         <ul>
           <li><a href="tel:0364340048" data-c="footer.contactTel">03-6434-0048</a></li>
           <li data-c="footer.contactHours">Open 20:00 — 1:00</li>
-        </ul>
-      </div>
-      <div class="footer__col">
-        <h5>Follow</h5>
-        <ul>
-          <li><a href="#">Instagram</a></li>
-          <li><a href="#">X (Twitter)</a></li>
         </ul>
       </div>
     </div>
@@ -1875,8 +1821,6 @@ fetch('content.json?t=' + Date.now())
     const telDigits = t => 'tel:' + String(t || '').replace(/[^0-9+]/g, '');
     const at = document.getElementById('accessTelBtn');
     if (at && c.access && c.access.tel) at.href = telDigits(c.access.tel);
-    const rt = document.getElementById('recruitTel');
-    if (rt && c.recruit && c.recruit.tel) rt.href = telDigits(c.recruit.tel);
 
     // 定義リスト（dt / dd の繰り返し）
     const renderRows = (id, rows) => {
@@ -1885,11 +1829,10 @@ fetch('content.json?t=' + Date.now())
       el.innerHTML = rows.map(r =>
         `<dt>${esc(r.dt)}</dt><dd>${nl2br(r.dd)}</dd>`).join('');
     };
-    renderRows('aboutRows', c.about && c.about.rows);
     renderRows('accessRows', c.access && c.access.rows);
 
     // Access / About の電話番号をリンク化
-    ['aboutRows', 'accessRows'].forEach(id => {
+    ['accessRows'].forEach(id => {
       const el = document.getElementById(id);
       if (!el) return;
       el.querySelectorAll('dd').forEach(dd => {
@@ -1903,23 +1846,6 @@ fetch('content.json?t=' + Date.now())
   })
   .catch(() => { /* content.json が無い場合は HTML の初期値を表示 */ });
 
-// News を news.json から読み込み（管理ページから編集可能）
-fetch('news.json?t=' + Date.now())
-  .then(r => (r.ok ? r.json() : null))
-  .then(items => {
-    if (!Array.isArray(items) || !items.length) return;
-    const ul = document.getElementById('newsList');
-    if (!ul) return;
-    const esc = s => String(s).replace(/[&<>"']/g, c => (
-      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-    ));
-    ul.innerHTML = items.map(n =>
-      `<li><span class="news__date">${esc(n.date || '')}</span>` +
-      `<span class="news__tag">${esc(n.tag || '')}</span>` +
-      `<p class="news__text">${esc(n.text || '')}</p></li>`
-    ).join('');
-  })
-  .catch(() => { /* news.json が無い場合は HTML 内の内容を表示 */ });
 
 // ギャラリーの表示制御（管理ページの「サイトから消す」と連動）
 const GALLERY_ITEMS = [

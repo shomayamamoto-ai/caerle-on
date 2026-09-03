@@ -7,36 +7,12 @@
   },
   "about": {
     "label": "About",
-    "title": "Caerle'on",
-    "rows": [
-      {
-        "dt": "Type",
-        "dd": "会員制ラウンジ（完全会員制）"
-      },
-      {
-        "dt": "Area",
-        "dd": "東京・六本木"
-      },
-      {
-        "dt": "Open",
-        "dd": "20:00 — 翌 1:00\n土・日・祝 定休"
-      },
-      {
-        "dt": "Tel",
-        "dd": "03-6434-0048"
-      }
-    ]
+    "title": "Caerle'on"
   },
   "gallery": {
     "label": "Gallery",
     "titleTop": "Interior",
-    "titleBottom": "＆ Atmosphere",
-    "lead": "店内の様子"
-  },
-  "news": {
-    "label": "News",
-    "titleTop": "Latest",
-    "titleBottom": "Information"
+    "titleBottom": "＆ Atmosphere"
   },
   "access": {
     "label": "Access",
@@ -64,8 +40,7 @@
     "label": "Recruit",
     "titleTop": "スタッフ",
     "titleBottom": "募集",
-    "body": "スタッフ募集中。経験不問。\nお問い合わせ・ご応募は下記までご連絡ください。",
-    "tel": "03-6434-0048"
+    "body": "スタッフ募集中。経験不問。\nお問い合わせ・ご応募は下記までご連絡ください。"
   },
   "footer": {
     "contactTitle": "Contact",
