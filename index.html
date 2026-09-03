@@ -427,29 +427,10 @@ img { display: block; max-width: 100%; height: auto; }
           drop-shadow(0 0 46px rgba(217, 185, 119, 0.14));
 }
 
-.hero__sub {
-  font-family: 'Noto Serif JP', serif;
-  font-size: 18px;
-  letter-spacing: 0.5em;
-  color: #ffffff;
-  font-weight: 500;
-  /* 背景写真の明るさに左右されない黒帯 */
-  background: rgba(10, 9, 8, 0.72);
-  border: 1px solid rgba(217, 185, 119, 0.35);
-  padding: 12px 28px 12px 38px;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-}
-
-.hero__sub { position: relative; }
-.hero__sub::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: calc(100% + 28px);
-  transform: translateX(-50%);
+.hero__scroll {
   width: 1px;
   height: 40px;
+  margin-top: 8px;
   background: var(--gold);
   animation: pulse 2.5s ease-in-out infinite;
   transform-origin: top;
@@ -1565,7 +1546,7 @@ section {
       <img src="assets/logo-light.png" alt="Caerle'on（カーリアン）" class="hero__title-img">
       <span class="sr-only">Caerle'on（カーリアン）｜六本木の会員制ラウンジ</span>
     </h1>
-    <div class="hero__sub" data-c="hero.sub">Members Only Lounge ／ Roppongi</div>
+    <span class="hero__scroll" aria-hidden="true"></span>
   </div>
 </section>
 

@@ -953,7 +953,6 @@ async function onSave(e) {
 const CONTENT_SCHEMA = [
   { key: 'hero', title: 'ヒーロー（トップ）', fields: [
     ['cornerTR', '右上の表記'], ['cornerBL', '左下の表記'], ['cornerBR', '右下の表記'],
-    ['sub', 'ロゴ下のキャッチ'],
   ]},
   { key: 'about', title: 'About（店舗概要）', fields: [
     ['label', '小見出し'], ['title', '見出し'],
@@ -961,9 +960,25 @@ const CONTENT_SCHEMA = [
   { key: 'gallery', title: 'Gallery', fields: [
     ['label', '小見出し'], ['titleTop', '見出し（1行目）'], ['titleBottom', '見出し（2行目）'],
   ]},
+  { key: 'access', title: 'Access（アクセス）', fields: [
+    ['label', '小見出し'], ['title', '見出し'],
+    ['tel', '電話ボタンの番号'],
+    ['mapName', '地図パネルの店名'], ['mapAddr', '地図パネルの住所'],
+    ['mapBtn', '経路ボタンの文言'],
+  ], rows: {
+    key: 'rows', label: '住所・営業時間などの項目（左：見出し／右：内容）',
+    cols: [['dt', '見出し'], ['dd', '内容']],
+  }},
+  { key: 'recruit', title: 'Recruit（採用）', fields: [
+    ['label', '小見出し'], ['titleTop', '見出し（1行目）'], ['titleBottom', '見出し（2行目）'],
+    ['body', '本文'],
+  ]},
+  { key: 'footer', title: 'フッター', fields: [
+    ['contactTitle', '見出し'], ['contactTel', '電話番号'], ['contactHours', '営業時間'],
+  ]},
 ];
 
-const LONG_FIELDS = ['sub', 'lead', 'body', 'mapAddr', 'dd'];
+const LONG_FIELDS = ['lead', 'body', 'mapAddr', 'dd'];
 const contentFieldsEl = document.getElementById('contentFields');
 const contentStatus = document.getElementById('contentStatus');
 let CONTENT = null;
