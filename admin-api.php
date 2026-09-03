@@ -104,44 +104,6 @@ if ($action === 'upload' && $_SERVER['REQUEST_METHOD'] === 'POST') {
   exit;
 }
 
-// ---- ニュース更新 ----
-if ($action === 'news_save' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-  $body = json_decode(file_get_contents('php://input'), true);
-  $items = isset($body['items']) ? $body['items'] : null;
-  if (!is_array($items) || count($items) > 20) {
-    http_response_code(400);
-    echo json_encode(array('ok' => false, 'error' => 'ニュースデータが不正です（最大 20 件）'));
-    exit;
-  }
-  $trimTo = function ($s, $len) {
-    $s = trim((string)$s);
-    return function_exists('mb_substr') ? mb_substr($s, 0, $len, 'UTF-8') : substr($s, 0, $len * 4);
-  };
-  $clean = array();
-  foreach ($items as $it) {
-    if (!is_array($it)) { continue; }
-    $text = $trimTo(isset($it['text']) ? $it['text'] : '', 300);
-    if ($text === '') { continue; }
-    $clean[] = array(
-      'date' => $trimTo(isset($it['date']) ? $it['date'] : '', 20),
-      'tag'  => $trimTo(isset($it['tag'])  ? $it['tag']  : '', 20),
-      'text' => $text,
-    );
-  }
-  $json = json_encode($clean, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-  $path = __DIR__ . DIRECTORY_SEPARATOR . 'news.json';
-  if (file_exists($path)) {
-    @copy($path, __DIR__ . DIRECTORY_SEPARATOR . '_backup_news.json');
-  }
-  if (file_put_contents($path, $json) === false) {
-    http_response_code(500);
-    echo json_encode(array('ok' => false, 'error' => 'news.json に書き込めません（権限を確認してください）'));
-    exit;
-  }
-  echo json_encode(array('ok' => true, 'count' => count($clean)));
-  exit;
-}
-
 // ---- ギャラリー表示設定（サイトから消す／表示に戻す） ----
 if ($action === 'photos_save' && $_SERVER['REQUEST_METHOD'] === 'POST') {
   $body = json_decode(file_get_contents('php://input'), true);
