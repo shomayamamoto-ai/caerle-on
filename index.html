@@ -561,6 +561,20 @@ section[id] { scroll-margin-top: 100px; }
   font-weight: 400;
 }
 
+/* コンセプトのキャッチコピー */
+.concept__catch {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(26px, 2.9vw, 42px);
+  font-weight: 400;
+  line-height: 1.75;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+  margin-bottom: 0;
+  /* 語の途中で改行されないように */
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
 .concept__lead {
   margin-top: 34px;
   margin-bottom: 0;
@@ -1698,7 +1712,7 @@ section[id] { scroll-margin-top: 100px; }
     </div>
     <div class="concept__text fade-in">
       <div class="section__label" data-c="about.label">Concept</div>
-      <h2 class="section__title"><span class="italic" data-c="about.title">Caerle'on</span></h2>
+      <h2 class="concept__catch" data-c="about.catch">扉の先に、<br>東京でいちばん静かな夜を。</h2>
       <p class="concept__lead" data-c="about.body">六本木の喧騒からひと呼吸おいた静かな灯りのなかで、心をほどき、大切な方とのひとときを重ねていただくための会員制ラウンジです。</p>
     </div>
   </div>
