@@ -960,6 +960,13 @@ const CONTENT_SCHEMA = [
   { key: 'gallery', title: 'Gallery', fields: [
     ['label', '小見出し'], ['titleTop', '見出し（1行目）'], ['titleBottom', '見出し（2行目）'],
   ]},
+  { key: 'information', title: 'Information（料金システム）', fields: [
+    ['label', '小見出し'], ['titleTop', '見出し（1行目）'], ['titleBottom', '見出し（2行目）'],
+    ['baseName', '基本料金の名称'], ['baseUnit', '基本料金の単位'], ['basePrice', '基本料金の金額'],
+  ], rowGroups: [
+    { key: 'rows', label: '料金の項目（名称／単位／金額）', cols: [['name', '名称'], ['unit', '単位'], ['price', '金額']] },
+    { key: 'notes', label: 'サービス料・TAX（名称／料率）', cols: [['name', '名称'], ['price', '料率']] },
+  ]},
   { key: 'access', title: 'Access（アクセス）', fields: [
     ['label', '小見出し'], ['title', '見出し'],
     ['mapName', '地図パネルの店名'], ['mapAddr', '地図パネルの住所'],
@@ -1004,16 +1011,18 @@ function renderContentEditor() {
     group.fields.forEach(([name, label]) => {
       html += `<div class="cfield"><label>${label}</label>${inputFor(name, obj[name], group.key + '.' + name)}</div>`;
     });
-    if (group.rows) {
-      const arr = Array.isArray(obj[group.rows.key]) ? obj[group.rows.key] : [];
-      html += `<div class="cfield"><label>${group.rows.label}</label><div>`;
+    // 繰り返し項目は 1 セクションに複数持てる
+    const rowGroups = group.rowGroups || (group.rows ? [group.rows] : []);
+    rowGroups.forEach(rg => {
+      const arr = Array.isArray(obj[rg.key]) ? obj[rg.key] : [];
+      html += `<div class="cfield"><label>${rg.label}</label><div>`;
       arr.forEach((row, i) => {
-        html += '<div class="crow">' + group.rows.cols.map(([cn, cl]) =>
-          inputFor(cn, row[cn], `${group.key}.${group.rows.key}.${i}.${cn}`)
+        html += '<div class="crow">' + rg.cols.map(([cn, cl]) =>
+          inputFor(cn, row[cn], `${group.key}.${rg.key}.${i}.${cn}`)
         ).join('') + '</div>';
       });
       html += '</div></div>';
-    }
+    });
     return html + '</div>';
   }).join('');
 }

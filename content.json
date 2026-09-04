@@ -13,6 +13,25 @@
     "titleTop": "Interior",
     "titleBottom": "＆ Atmosphere"
   },
+  "information": {
+    "label": "Information",
+    "titleTop": "料金",
+    "titleBottom": "システム",
+    "baseName": "基本料金",
+    "baseUnit": "1set(90min)　1名様に付き",
+    "basePrice": "¥22,000",
+    "rows": [
+      { "name": "ホステスチャージ", "unit": "1組様に付き", "price": "¥3,000" },
+      { "name": "テーブルチャージ", "unit": "1名様に付き", "price": "¥2,000" },
+      { "name": "タイムチャージ(30min)", "unit": "1名様に付き", "price": "¥5,000" },
+      { "name": "同伴料", "unit": "1名様に付き", "price": "¥6,000" },
+      { "name": "指名料", "unit": "1名に付き", "price": "¥3,000" }
+    ],
+    "notes": [
+      { "name": "サービス料", "price": "40%" },
+      { "name": "TAX", "price": "10%" }
+    ]
+  },
   "access": {
     "label": "Access",
     "title": "Access",

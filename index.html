@@ -76,6 +76,7 @@
       "foundingDate": "2011-09",
       "currenciesAccepted": "JPY",
       "paymentAccepted": "現金, クレジットカード",
+      "priceRange": "¥22,000〜",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "六本木4-11-11 六本木Gmビル6階",
@@ -469,8 +470,12 @@ section {
   z-index: 2;
 }
 
+/* ナビから飛んだときに固定ヘッダーで見出しが隠れないようにする */
+section[id] { scroll-margin-top: 100px; }
+
 @media (max-width: 768px) {
   section { padding: 90px 24px; }
+  section[id] { scroll-margin-top: 92px; }
 }
 
 .section__label {
@@ -619,18 +624,34 @@ section {
   line-height: 2.1;
 }
 
-.gallery__grid {
+/* 横スライド式のギャラリー */
+.gallery__slider {
   max-width: var(--max);
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 20px;
+  position: relative;
 }
+
+.gallery__grid {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  /* スクロールバーは隠す（操作は矢印・スワイプ・ドットで） */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 4px;
+}
+.gallery__grid::-webkit-scrollbar { display: none; }
 
 .gallery__item {
   position: relative;
   overflow: hidden;
   cursor: pointer;
+  flex: 0 0 clamp(320px, 38vw, 560px);
+  aspect-ratio: 4 / 3;
+  scroll-snap-align: start;
 }
 
 .gallery__item::after {
@@ -661,12 +682,53 @@ section {
   filter: brightness(1);
 }
 
-.gallery__item--1 { grid-column: 1 / 7;  grid-row: 1; aspect-ratio: 4/3; }
-.gallery__item--2 { grid-column: 7 / 13; grid-row: 1; aspect-ratio: 4/3; }
-.gallery__item--3 { grid-column: 1 / 5;  grid-row: 2; aspect-ratio: 3/4; }
-.gallery__item--4 { grid-column: 5 / 9;  grid-row: 2; aspect-ratio: 3/4; }
-.gallery__item--5 { grid-column: 9 / 13; grid-row: 2; aspect-ratio: 3/4; }
-.gallery__item--6 { grid-column: 1 / 13; grid-row: 3; aspect-ratio: 21/9; }
+/* 前後送りの矢印 */
+.gallery__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 4;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 9, 8, 0.72);
+  border: 1px solid rgba(217, 185, 119, 0.4);
+  color: var(--gold-bright);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: background 0.3s, opacity 0.3s, border-color 0.3s;
+}
+.gallery__nav:hover { background: rgba(10, 9, 8, 0.92); border-color: var(--gold-bright); }
+.gallery__nav--prev { left: -14px; }
+.gallery__nav--next { right: -14px; }
+.gallery__nav[disabled] { opacity: 0.25; cursor: default; }
+
+/* 現在位置を示すドット */
+.gallery__dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 28px;
+}
+.gallery__dot {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(217, 185, 119, 0.5);
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
+}
+.gallery__dot[aria-current="true"] {
+  background: var(--gold-bright);
+  transform: scale(1.35);
+}
 
 .gallery__caption {
   position: absolute;
@@ -690,14 +752,119 @@ section {
 }
 
 @media (max-width: 768px) {
-  .gallery__grid { grid-template-columns: 1fr; }
-  .gallery__item--1, .gallery__item--2, .gallery__item--3,
-  .gallery__item--4, .gallery__item--5, .gallery__item--6 {
-    grid-column: 1;
-    grid-row: auto;
-    aspect-ratio: 4/3;
-  }
+  /* スマートフォンでは 1 枚ずつ大きく見せ、次の写真を少しだけのぞかせる */
+  .gallery__item { flex: 0 0 88%; }
+  .gallery__grid { gap: 12px; }
+  .gallery__nav { display: none; }
+  /* タップ操作では hover がないので説明を常に表示 */
+  .gallery__caption { opacity: 1; transform: none; }
   .gallery__head { flex-direction: column; align-items: flex-start; }
+}
+
+/* ============ INFORMATION（料金システム） ============ */
+.information {
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+}
+
+.information__inner {
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.information .section__title { margin-bottom: 56px; }
+
+.price {
+  border: 1px solid var(--line);
+  padding: 40px 44px 34px;
+  background: var(--bg-alt);
+}
+
+/* 基本料金は他と区別して大きく見せる */
+.price__base {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 18px;
+  padding-bottom: 26px;
+  margin-bottom: 26px;
+  border-bottom: 1px solid rgba(196, 162, 95, 0.32);
+}
+
+.price__base-name {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--gold-bright);
+  letter-spacing: 0.08em;
+}
+
+.price__base-unit {
+  font-size: 14px;
+  color: var(--mute);
+  letter-spacing: 0.04em;
+}
+
+.price__base-price {
+  margin-left: auto;
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--gold-bright);
+  letter-spacing: 0.03em;
+  text-shadow: 0 0 26px rgba(217, 185, 119, 0.25);
+}
+
+.price__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 13px 0;
+  border-bottom: 1px dashed rgba(196, 162, 95, 0.16);
+}
+
+.price__list .price__row:last-child { border-bottom: 0; }
+
+.price__row dt {
+  color: var(--ink);
+  font-size: 15px;
+  letter-spacing: 0.03em;
+}
+
+.price__unit {
+  display: inline-block;
+  margin-left: 14px;
+  font-size: 13px;
+  color: var(--mute);
+}
+
+.price__row dd {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+/* サービス料・TAX */
+.price__notes {
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(196, 162, 95, 0.32);
+}
+
+.price__notes .price__row {
+  border-bottom: 0;
+  padding: 7px 0;
+}
+
+.price__notes dt { color: var(--ink-soft); }
+.price__notes dd { color: var(--gold-bright); }
+
+@media (max-width: 768px) {
+  .price { padding: 28px 22px 24px; }
+  .price__base-price { font-size: 26px; width: 100%; margin-left: 0; }
+  .price__row { flex-wrap: wrap; }
+  .price__unit { display: block; margin-left: 0; margin-top: 4px; }
 }
 
 /* ============ SYSTEM ============ */
@@ -1493,6 +1660,7 @@ section {
   <nav class="header__nav">
     <a href="#concept">Concept</a>
     <a href="#gallery">Gallery</a>
+    <a href="#information">Information</a>
     <a href="#access">Access</a>
     <a href="#recruit">Recruit</a>
   </nav>
@@ -1504,6 +1672,7 @@ section {
 <nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
   <a href="#concept">Concept</a>
   <a href="#gallery">Gallery</a>
+  <a href="#information">Information</a>
   <a href="#access">Access</a>
   <a href="#recruit">Recruit</a>
 </nav>
@@ -1543,31 +1712,85 @@ section {
     </div>
   </div>
 
-  <div class="gallery__grid" id="galleryGrid">
-    <figure class="gallery__item gallery__item--1 fade-in">
-      <img src="images/c0209891.jpg" alt="Caerle'on のメインフロア。木組みの間仕切りと季節の花で設えたラウンジ空間" loading="lazy">
-      <figcaption class="gallery__caption">— Main Floor</figcaption>
-    </figure>
-    <figure class="gallery__item gallery__item--2 fade-in">
-      <img src="images/p0004.jpg" alt="Caerle'on 店内のヤマハ製グランドピアノ" loading="lazy">
-      <figcaption class="gallery__caption">— Live Piano</figcaption>
-    </figure>
-    <figure class="gallery__item gallery__item--3 fade-in">
-      <img src="images/c0209615.jpg" alt="間接照明に照らされたベルベットのソファ席" loading="lazy">
-      <figcaption class="gallery__caption">— Lounge</figcaption>
-    </figure>
-    <figure class="gallery__item gallery__item--4 fade-in">
-      <img src="images/c0209748.jpg" alt="大理石のテーブルを備えたバンケット席" loading="lazy">
-      <figcaption class="gallery__caption">— Private Booth</figcaption>
-    </figure>
-    <figure class="gallery__item gallery__item--5 fade-in">
-      <img src="images/c0209962.jpg" alt="大理石の壁面を背にした季節のフラワーアレンジメント" loading="lazy">
-      <figcaption class="gallery__caption">— Seasonal</figcaption>
-    </figure>
-    <figure class="gallery__item gallery__item--6 fade-in">
-      <img src="images/p0002.jpg" alt="ダリアと百合を用いた店内のフラワーアレンジメント" loading="lazy">
-      <figcaption class="gallery__caption">— Bouquet</figcaption>
-    </figure>
+  <div class="gallery__slider">
+    <div class="gallery__grid" id="galleryGrid" role="group" aria-roledescription="カルーセル" aria-label="店内写真">
+      <figure class="gallery__item">
+        <img src="images/c0209891.jpg" alt="Caerle'on のメインフロア。木組みの間仕切りと季節の花で設えたラウンジ空間" loading="lazy">
+        <figcaption class="gallery__caption">— Main Floor</figcaption>
+      </figure>
+      <figure class="gallery__item">
+        <img src="images/p0004.jpg" alt="Caerle'on 店内のヤマハ製グランドピアノ" loading="lazy">
+        <figcaption class="gallery__caption">— Live Piano</figcaption>
+      </figure>
+      <figure class="gallery__item">
+        <img src="images/c0209615.jpg" alt="間接照明に照らされたベルベットのソファ席" loading="lazy">
+        <figcaption class="gallery__caption">— Lounge</figcaption>
+      </figure>
+      <figure class="gallery__item">
+        <img src="images/c0209748.jpg" alt="大理石のテーブルを備えたバンケット席" loading="lazy">
+        <figcaption class="gallery__caption">— Private Booth</figcaption>
+      </figure>
+      <figure class="gallery__item">
+        <img src="images/c0209962.jpg" alt="大理石の壁面を背にした季節のフラワーアレンジメント" loading="lazy">
+        <figcaption class="gallery__caption">— Seasonal</figcaption>
+      </figure>
+      <figure class="gallery__item">
+        <img src="images/p0002.jpg" alt="ダリアと百合を用いた店内のフラワーアレンジメント" loading="lazy">
+        <figcaption class="gallery__caption">— Bouquet</figcaption>
+      </figure>
+    </div>
+    <button class="gallery__nav gallery__nav--prev" id="galleryPrev" type="button" aria-label="前の写真">‹</button>
+    <button class="gallery__nav gallery__nav--next" id="galleryNext" type="button" aria-label="次の写真">›</button>
+  </div>
+  <div class="gallery__dots" id="galleryDots"></div>
+</section>
+
+<section id="information" class="information">
+  <div class="information__inner">
+    <div class="section__label" data-c="information.label">Information</div>
+    <h2 class="section__title"><span class="italic" data-c="information.titleTop">料金</span><br><span data-c="information.titleBottom">システム</span></h2>
+
+    <div class="price">
+      <div class="price__base">
+        <span class="price__base-name" data-c="information.baseName">基本料金</span>
+        <span class="price__base-unit" data-c="information.baseUnit">1set(90min)　1名様に付き</span>
+        <span class="price__base-price" data-c="information.basePrice">¥22,000</span>
+      </div>
+
+      <dl class="price__list" id="priceRows">
+        <div class="price__row">
+          <dt>ホステスチャージ<span class="price__unit">1組様に付き</span></dt>
+          <dd>¥3,000</dd>
+        </div>
+        <div class="price__row">
+          <dt>テーブルチャージ<span class="price__unit">1名様に付き</span></dt>
+          <dd>¥2,000</dd>
+        </div>
+        <div class="price__row">
+          <dt>タイムチャージ(30min)<span class="price__unit">1名様に付き</span></dt>
+          <dd>¥5,000</dd>
+        </div>
+        <div class="price__row">
+          <dt>同伴料<span class="price__unit">1名様に付き</span></dt>
+          <dd>¥6,000</dd>
+        </div>
+        <div class="price__row">
+          <dt>指名料<span class="price__unit">1名に付き</span></dt>
+          <dd>¥3,000</dd>
+        </div>
+      </dl>
+
+      <dl class="price__notes" id="priceNotes">
+        <div class="price__row">
+          <dt>サービス料</dt>
+          <dd>40%</dd>
+        </div>
+        <div class="price__row">
+          <dt>TAX</dt>
+          <dd>10%</dd>
+        </div>
+      </dl>
+    </div>
   </div>
 </section>
 
@@ -1664,6 +1887,7 @@ section {
         <ul>
           <li><a href="#concept">Concept</a></li>
           <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#information">Information</a></li>
           <li><a href="#access">Access</a></li>
           <li><a href="#recruit">Recruit</a></li>
         </ul>
@@ -1784,6 +2008,18 @@ fetch('content.json?t=' + Date.now())
     };
     renderRows('accessRows', c.access && c.access.rows);
 
+    // 料金表（名称・単位・金額の 3 列）
+    const renderPrices = (id, rows, withUnit) => {
+      const el = document.getElementById(id);
+      if (!el || !Array.isArray(rows)) return;
+      el.innerHTML = rows.map(r =>
+        '<div class="price__row"><dt>' + esc(r.name) +
+        (withUnit && r.unit ? `<span class="price__unit">${esc(r.unit)}</span>` : '') +
+        `</dt><dd>${esc(r.price)}</dd></div>`).join('');
+    };
+    renderPrices('priceRows', c.information && c.information.rows, true);
+    renderPrices('priceNotes', c.information && c.information.notes, false);
+
     // Access / About の電話番号をリンク化
     ['accessRows'].forEach(id => {
       const el = document.getElementById(id);
@@ -1837,13 +2073,74 @@ fetch('photos.json?t=' + Date.now())
     if (!grid) return;
     const visible = GALLERY_ITEMS.filter(g => !hidden.includes(g.file));
     if (visible.length === GALLERY_ITEMS.length) return;
-    grid.innerHTML = visible.map((g, i) =>
-      `<figure class="gallery__item gallery__item--${i + 1} fade-in visible">` +
+    grid.innerHTML = visible.map(g =>
+      `<figure class="gallery__item">` +
       `<img src="images/${g.file}" alt="${g.alt}" loading="lazy">` +
       `<figcaption class="gallery__caption">${g.caption}</figcaption></figure>`
     ).join('');
+    initGallerySlider();
   })
   .catch(() => { /* photos.json が無い場合は全て表示 */ });
+
+
+/* ギャラリーの横スライド操作（矢印・ドット・スワイプ） */
+function initGallerySlider() {
+  const track = document.getElementById('galleryGrid');
+  const dotsEl = document.getElementById('galleryDots');
+  const prev = document.getElementById('galleryPrev');
+  const next = document.getElementById('galleryNext');
+  if (!track || !dotsEl || !prev || !next) return;
+
+  const items = Array.from(track.querySelectorAll('.gallery__item'));
+  dotsEl.innerHTML = items.map((_, i) =>
+    `<button class="gallery__dot" type="button" data-i="${i}" aria-label="${i + 1} 枚目へ"></button>`
+  ).join('');
+  const dots = Array.from(dotsEl.querySelectorAll('.gallery__dot'));
+
+  // 左端に最も近い写真を現在位置とみなす
+  const current = () => {
+    let best = 0, bestDist = Infinity;
+    items.forEach((el, i) => {
+      const d = Math.abs(el.offsetLeft - track.scrollLeft);
+      if (d < bestDist) { bestDist = d; best = i; }
+    });
+    return best;
+  };
+
+  const sync = () => {
+    const i = current();
+    dots.forEach((d, n) => d.setAttribute('aria-current', String(n === i)));
+    prev.disabled = track.scrollLeft <= 1;
+    next.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 1;
+  };
+
+  const goTo = i => {
+    const el = items[Math.max(0, Math.min(items.length - 1, i))];
+    if (!el) return;
+    track.scrollTo({ left: el.offsetLeft, behavior: 'smooth' });
+  };
+
+  prev.addEventListener('click', () => goTo(current() - 1));
+  next.addEventListener('click', () => goTo(current() + 1));
+  dots.forEach(d => d.addEventListener('click', () => goTo(Number(d.dataset.i))));
+
+  let raf = 0;
+  track.addEventListener('scroll', () => {
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(sync);
+  }, { passive: true });
+  window.addEventListener('resize', sync);
+
+  // 写真が 1 枚だけのときは操作要素を隠す
+  const solo = items.length < 2;
+  dotsEl.style.display = solo ? 'none' : '';
+  prev.style.display = solo ? 'none' : '';
+  next.style.display = solo ? 'none' : '';
+
+  sync();
+}
+
+initGallerySlider();
 </script>
 
 <a href="#access" class="sticky-cta" id="stickyCta">Reservation</a>
