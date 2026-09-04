@@ -904,83 +904,37 @@ section {
   position: relative;
   min-height: 520px;
   overflow: hidden;
-  background:
-    radial-gradient(circle at 50% 46%, rgba(196,162,95,0.10), transparent 62%),
-    var(--bg-alt);
-}
-/* 街区を思わせる方眼 */
-.access__map::before {
-  content: '';
-  position: absolute;
-  inset: -10%;
-  background-image:
-    linear-gradient(rgba(196,162,95,0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(196,162,95,0.07) 1px, transparent 1px);
-  background-size: 68px 68px;
-  transform: rotate(-8deg);
-}
-/* 交差する大通り */
-.access__map::after {
-  content: '';
-  position: absolute;
-  inset: -10%;
-  background:
-    linear-gradient(rgba(255,255,255,0.05) 14px, transparent 14px),
-    linear-gradient(90deg, rgba(255,255,255,0.04) 10px, transparent 10px);
-  background-size: 100% 320px, 420px 100%;
-  background-position: 0 46%, 42% 0;
-  transform: rotate(-8deg);
+  background: var(--bg-alt);
 }
 
-.access__map-inner {
-  position: relative;
-  z-index: 2;
+/* Google マップの埋め込み。周囲の黒基調になじむよう彩度と明度を落とす */
+.access__map-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
   height: 100%;
-  min-height: 520px;
+  border: 0;
+  filter: grayscale(0.55) contrast(1.05) brightness(0.82);
+}
+
+/* 地図の上に重ねる店名カード */
+.access__map-inner {
+  position: absolute;
+  z-index: 2;
+  left: 28px;
+  bottom: 28px;
+  right: auto;
+  max-width: min(340px, calc(100% - 56px));
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  text-align: center;
-  padding: 32px 24px;
-}
-
-/* 中心のピン */
-.access__pin {
-  position: relative;
-  width: 22px;
-  height: 22px;
-  border-radius: 50% 50% 50% 0;
-  background: var(--gold);
-  transform: rotate(-45deg);
-  box-shadow: 0 0 0 6px rgba(196,162,95,0.18), 0 8px 20px rgba(0,0,0,0.55);
-  margin-bottom: 14px;
-}
-.access__pin::after {
-  content: '';
-  position: absolute;
-  left: 50%; top: 50%;
-  transform: translate(-50%, -50%);
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--bg);
-}
-/* ピンの波紋 */
-.access__pin-wave {
-  position: absolute;
-  left: 50%;
-  top: calc(50% - 26px);
-  transform: translate(-50%, -50%);
-  width: 90px; height: 90px;
-  border: 1px solid rgba(196,162,95,0.45);
-  border-radius: 50%;
-  animation: pinWave 3s ease-out infinite;
-  pointer-events: none;
-}
-@keyframes pinWave {
-  0%   { transform: translate(-50%, -50%) scale(0.5); opacity: 0.9; }
-  100% { transform: translate(-50%, -50%) scale(1.7); opacity: 0; }
+  align-items: flex-start;
+  gap: 12px;
+  text-align: left;
+  padding: 24px 26px;
+  background: rgba(10, 9, 8, 0.86);
+  border: 1px solid rgba(217, 185, 119, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 .access__map-name {
@@ -995,14 +949,24 @@ section {
   line-height: 2;
   color: var(--ink);
 }
-.access__map-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 6px; }
-.access__map-actions .btn { margin-top: 0; padding: 14px 24px; font-size: 12px; }
+.access__map-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: flex-start; margin-top: 6px; }
+.access__map-actions .btn { margin-top: 0; padding: 12px 20px; font-size: 11px; }
 
 @media (max-width: 900px) {
   .access__grid { grid-template-columns: 1fr; }
   .access__info { padding: 80px 24px; }
   .access__visual { min-height: 360px; }
-  .access__map { min-height: 380px; }
+  .access__map { min-height: 420px; }
+}
+
+@media (max-width: 560px) {
+  .access__map-inner {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    max-width: none;
+    padding: 20px;
+  }
 }
 
 /* ============ RECRUIT ============ */
@@ -1622,9 +1586,14 @@ section {
       </dl>
     </div>
     <div class="access__map">
+      <iframe
+        class="access__map-frame"
+        src="https://maps.google.com/maps?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E5%85%AD%E6%9C%AC%E6%9C%A84-11-11&amp;z=18&amp;hl=ja&amp;iwloc=&amp;output=embed"
+        title="Caerle'on の所在地（東京都港区六本木 4-11-11 六本木 Gm ビル 6 階）"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen></iframe>
       <div class="access__map-inner">
-        <span class="access__pin-wave" aria-hidden="true"></span>
-        <span class="access__pin" aria-hidden="true"></span>
         <p class="access__map-name" data-c="access.mapName">Caerle&#39;on</p>
         <p class="access__map-addr"><span data-c="access.mapAddr">
           〒106-0032<br>
