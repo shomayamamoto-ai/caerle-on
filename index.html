@@ -849,23 +849,26 @@ section {
   line-height: 1.9;
 }
 
-/* 電話番号は問い合わせ導線なので大きめの金色で目立たせる */
-.access__details dd a[href^="tel:"] {
+/* 電話番号は問い合わせ導線なので大きめの金色で目立たせる
+   （書体は周囲の本文と同じものに揃える） */
+.access__details dd a[href^="tel:"],
+.tel-link {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 30px;
+  font-family: inherit;
+  font-size: 24px;
   font-weight: 600;
-  letter-spacing: 0.05em;
-  line-height: 1.2;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
   color: var(--gold-bright);
   text-decoration: none;
   text-shadow: 0 0 26px rgba(217, 185, 119, 0.28);
   transition: color 0.3s, opacity 0.3s;
 }
 
-.access__details dd a[href^="tel:"]::before {
+.access__details dd a[href^="tel:"]::before,
+.tel-link::before {
   content: '';
   width: 19px;
   height: 19px;
@@ -875,10 +878,12 @@ section {
   mask: var(--tel-icon) center / contain no-repeat;
 }
 
-.access__details dd a[href^="tel:"]:hover { opacity: 0.75; }
+.access__details dd a[href^="tel:"]:hover,
+.tel-link:hover { opacity: 0.75; }
 
 @media (max-width: 560px) {
-  .access__details dd a[href^="tel:"] { font-size: 26px; }
+  .access__details dd a[href^="tel:"],
+  .tel-link { font-size: 21px; }
 }
 
 .access__visual {
@@ -1611,7 +1616,7 @@ section {
         <dt>Address</dt>
         <dd>〒106-0032<br>東京都港区六本木 4-11-11<br>六本木 Gm ビル 6 階</dd>
         <dt>Open</dt>
-        <dd>20:00 — 1:00<br>Sat, Sun &amp; Holidays Closed</dd>
+        <dd>20:00 - 翌1:00<br>定休日　土・日・祝</dd>
         <dt>Tel</dt>
         <dd><a href="tel:0364340048">03-6434-0048</a></dd>
       </dl>
@@ -1644,6 +1649,7 @@ section {
         <span data-c="recruit.body">ホステス・スタッフ募集中。経験不問。<br>
         お問い合わせ・ご応募は下記までご連絡ください。</span>
       </p>
+      <a href="tel:0364340048" class="tel-link" id="recruitTel" aria-label="採用について電話で問い合わせる"><span data-c="recruit.tel">03-6434-0048</span></a>
     </div>
   </div>
 </section>
@@ -1794,6 +1800,10 @@ fetch('content.json?t=' + Date.now())
     });
 
     const telDigits = t => 'tel:' + String(t || '').replace(/[^0-9+]/g, '');
+
+    // 採用欄の電話リンクの href も番号にあわせて同期
+    const rt = document.getElementById('recruitTel');
+    if (rt && c.recruit && c.recruit.tel) rt.href = telDigits(c.recruit.tel);
 
     // 定義リスト（dt / dd の繰り返し）
     const renderRows = (id, rows) => {
