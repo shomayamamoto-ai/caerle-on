@@ -740,34 +740,11 @@ section[id] { scroll-margin-top: 100px; }
   transform: scale(1.35);
 }
 
-.gallery__caption {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  font-family: 'Cormorant Garamond', serif;
-  font-style: italic;
-  font-size: 14px;
-  letter-spacing: 0.2em;
-  color: var(--gold-bright);
-  text-shadow: 0 2px 12px rgba(0,0,0,0.6);
-  z-index: 3;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: all 0.4s;
-}
-
-.gallery__item:hover .gallery__caption {
-  opacity: 1;
-  transform: translateY(0);
-}
-
 @media (max-width: 768px) {
   /* スマートフォンでは 1 枚ずつ大きく見せ、次の写真を少しだけのぞかせる */
   .gallery__item { flex: 0 0 88%; }
   .gallery__grid { gap: 12px; }
   .gallery__nav { display: none; }
-  /* タップ操作では hover がないので説明を常に表示 */
-  .gallery__caption { opacity: 1; transform: none; }
   .gallery__head { flex-direction: column; align-items: flex-start; }
 }
 
@@ -1680,27 +1657,21 @@ section[id] { scroll-margin-top: 100px; }
     <div class="gallery__grid" id="galleryGrid" role="group" aria-roledescription="カルーセル" aria-label="店内写真">
       <figure class="gallery__item">
         <img src="images/c0209891.jpg" alt="Caerle'on のメインフロア。木組みの間仕切りと季節の花で設えたラウンジ空間" loading="lazy">
-        <figcaption class="gallery__caption">— Main Floor</figcaption>
       </figure>
       <figure class="gallery__item">
         <img src="images/p0004.jpg" alt="Caerle'on 店内のヤマハ製グランドピアノ" loading="lazy">
-        <figcaption class="gallery__caption">— Live Piano</figcaption>
       </figure>
       <figure class="gallery__item">
         <img src="images/c0209615.jpg" alt="間接照明に照らされたベルベットのソファ席" loading="lazy">
-        <figcaption class="gallery__caption">— Lounge</figcaption>
       </figure>
       <figure class="gallery__item">
         <img src="images/c0209748.jpg" alt="大理石のテーブルを備えたバンケット席" loading="lazy">
-        <figcaption class="gallery__caption">— Private Booth</figcaption>
       </figure>
       <figure class="gallery__item">
         <img src="images/c0209962.jpg" alt="大理石の壁面を背にした季節のフラワーアレンジメント" loading="lazy">
-        <figcaption class="gallery__caption">— Seasonal</figcaption>
       </figure>
       <figure class="gallery__item">
         <img src="images/p0002.jpg" alt="ダリアと百合を用いた店内のフラワーアレンジメント" loading="lazy">
-        <figcaption class="gallery__caption">— Bouquet</figcaption>
       </figure>
     </div>
     <button class="gallery__nav gallery__nav--prev" id="galleryPrev" type="button" aria-label="前の写真">‹</button>
@@ -1990,12 +1961,12 @@ fetch('content.json?t=' + Date.now())
 
 // ギャラリーの表示制御（管理ページの「サイトから消す」と連動）
 const GALLERY_ITEMS = [
-  { file: 'c0209891.jpg', caption: '— Main Floor',    alt: 'Caerle\'on のメインフロア。木組みの間仕切りと季節の花で設えたラウンジ空間' },
-  { file: 'p0004.jpg',    caption: '— Live Piano',    alt: 'Caerle\'on 店内のヤマハ製グランドピアノ' },
-  { file: 'c0209615.jpg', caption: '— Lounge',        alt: '間接照明に照らされたベルベットのソファ席' },
-  { file: 'c0209748.jpg', caption: '— Private Booth', alt: '大理石のテーブルを備えたバンケット席' },
-  { file: 'c0209962.jpg', caption: '— Seasonal',      alt: '大理石の壁面を背にした季節のフラワーアレンジメント' },
-  { file: 'p0002.jpg',    caption: '— Bouquet',       alt: 'ダリアと百合を用いた店内のフラワーアレンジメント' },
+  { file: 'c0209891.jpg', alt: 'Caerle\'on のメインフロア。木組みの間仕切りと季節の花で設えたラウンジ空間' },
+  { file: 'p0004.jpg',    alt: 'Caerle\'on 店内のヤマハ製グランドピアノ' },
+  { file: 'c0209615.jpg', alt: '間接照明に照らされたベルベットのソファ席' },
+  { file: 'c0209748.jpg', alt: '大理石のテーブルを備えたバンケット席' },
+  { file: 'c0209962.jpg', alt: '大理石の壁面を背にした季節のフラワーアレンジメント' },
+  { file: 'p0002.jpg',    alt: 'ダリアと百合を用いた店内のフラワーアレンジメント' },
 ];
 fetch('photos.json?t=' + Date.now())
   .then(r => (r.ok ? r.json() : null))
@@ -2027,8 +1998,7 @@ fetch('photos.json?t=' + Date.now())
     if (visible.length === GALLERY_ITEMS.length) return;
     grid.innerHTML = visible.map(g =>
       `<figure class="gallery__item">` +
-      `<img src="images/${g.file}" alt="${g.alt}" loading="lazy">` +
-      `<figcaption class="gallery__caption">${g.caption}</figcaption></figure>`
+      `<img src="images/${g.file}" alt="${g.alt}" loading="lazy"></figure>`
     ).join('');
     initGallerySlider();
   })
