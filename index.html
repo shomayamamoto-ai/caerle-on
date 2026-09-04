@@ -417,7 +417,7 @@ img { display: block; max-width: 100%; height: auto; }
 }
 
 .hero__title {
-  margin-bottom: 40px;
+  margin-bottom: 0;
   line-height: 0;
 }
 
@@ -429,13 +429,22 @@ img { display: block; max-width: 100%; height: auto; }
           drop-shadow(0 0 46px rgba(217, 185, 119, 0.14));
 }
 
+/* スクロールを促す縦線。画面下端の中央に置く */
 .hero__scroll {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: 56px;
+  margin-left: -0.5px;
   width: 1px;
-  height: 40px;
-  margin-top: 8px;
+  height: 48px;
   background: var(--gold);
   animation: pulse 2.5s ease-in-out infinite;
   transform-origin: top;
+}
+
+@media (max-width: 768px) {
+  .hero__scroll { bottom: 36px; height: 36px; }
 }
 
 @keyframes pulse {
@@ -1641,8 +1650,9 @@ section[id] { scroll-margin-top: 100px; }
       <img src="assets/logo-light.png" alt="Caerle'on（カーリアン）" class="hero__title-img">
       <span class="sr-only">Caerle'on（カーリアン）｜六本木の会員制ラウンジ</span>
     </h1>
-    <span class="hero__scroll" aria-hidden="true"></span>
   </div>
+
+  <span class="hero__scroll" aria-hidden="true"></span>
 </section>
 
 <section id="concept">
