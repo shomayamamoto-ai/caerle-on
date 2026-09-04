@@ -575,20 +575,6 @@ section[id] { scroll-margin-top: 100px; }
   overflow-wrap: break-word;
 }
 
-.concept__lead {
-  margin-top: 34px;
-  margin-bottom: 0;
-  max-width: 30em;
-  font-size: 17px;
-  line-height: 2.3;
-  letter-spacing: 0.04em;
-  color: var(--ink-soft);
-}
-
-@media (max-width: 900px) {
-  .concept__lead { font-size: 16px; }
-}
-
 .concept__quote {
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
@@ -1098,56 +1084,11 @@ section[id] { scroll-margin-top: 100px; }
   filter: grayscale(0.55) contrast(1.05) brightness(0.82);
 }
 
-/* 地図の上に重ねる店名カード */
-.access__map-inner {
-  position: absolute;
-  z-index: 2;
-  left: 28px;
-  bottom: 28px;
-  right: auto;
-  max-width: min(340px, calc(100% - 56px));
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-  text-align: left;
-  padding: 24px 26px;
-  background: rgba(10, 9, 8, 0.86);
-  border: 1px solid rgba(217, 185, 119, 0.35);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-}
-
-.access__map-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-style: italic;
-  font-size: 22px;
-  letter-spacing: 0.18em;
-  color: var(--gold-bright);
-}
-.access__map-addr {
-  font-size: 15px;
-  line-height: 2;
-  color: var(--ink);
-}
-.access__map-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: flex-start; margin-top: 6px; }
-.access__map-actions .btn { margin-top: 0; padding: 12px 20px; font-size: 11px; }
-
 @media (max-width: 900px) {
   .access__grid { grid-template-columns: 1fr; }
   .access__info { padding: 80px 24px; }
   .access__visual { min-height: 360px; }
   .access__map { min-height: 420px; }
-}
-
-@media (max-width: 560px) {
-  .access__map-inner {
-    left: 16px;
-    right: 16px;
-    bottom: 16px;
-    max-width: none;
-    padding: 20px;
-  }
 }
 
 /* ============ RECRUIT ============ */
@@ -1713,7 +1654,6 @@ section[id] { scroll-margin-top: 100px; }
     <div class="concept__text fade-in">
       <div class="section__label" data-c="about.label">Concept</div>
       <h2 class="concept__catch" data-c="about.catch">至福な時間と上質な空間で<br>皆様をお迎えいたします</h2>
-      <p class="concept__lead" data-c="about.body">六本木の喧騒からひと呼吸おいた静かな灯りのなかで、心をほどき、大切な方とのひとときを重ねていただくための会員制ラウンジです。</p>
     </div>
   </div>
 </section>
@@ -1830,18 +1770,6 @@ section[id] { scroll-margin-top: 100px; }
         loading="lazy"
         referrerpolicy="no-referrer-when-downgrade"
         allowfullscreen></iframe>
-      <div class="access__map-inner">
-        <p class="access__map-name" data-c="access.mapName">Caerle&#39;on</p>
-        <p class="access__map-addr"><span data-c="access.mapAddr">
-          〒106-0032<br>
-          東京都港区六本木 4-11-11<br>
-          六本木 Gm ビル 6 階
-        </span></p>
-        <div class="access__map-actions">
-          <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E5%85%AD%E6%9C%AC%E6%9C%A84-11-11%20%E5%85%AD%E6%9C%AC%E6%9C%A8Gm%E3%83%93%E3%83%AB" target="_blank" rel="noopener"><span data-c="access.mapViewBtn">Google マップで見る</span></a>
-          <a class="btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8C%BA%E5%85%AD%E6%9C%AC%E6%9C%A84-11-11%20%E5%85%AD%E6%9C%AC%E6%9C%A8Gm%E3%83%93%E3%83%AB&amp;travelmode=walking" target="_blank" rel="noopener"><span data-c="access.mapBtn">ここへの経路</span></a>
-        </div>
-      </div>
     </div>
   </div>
 </section>
