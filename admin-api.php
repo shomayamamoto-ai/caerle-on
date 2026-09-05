@@ -25,7 +25,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 $ALLOWED = array(
   'c0209891.jpg', 'p0004.jpg', 'c0209615.jpg',
   'c0209824.jpg', 'c0209748.jpg', 'c0209962.jpg',
-  'p0002.jpg', 'c0209948.jpg',
+  'p0002.jpg', 'c0209948.jpg', 'p0005.jpg',
 );
 
 // 稼働確認（認証不要）
