@@ -1151,6 +1151,12 @@ section[id] { scroll-margin-top: 100px; }
   color: var(--gold-bright);
 }
 
+/* 採用本文の 2 つ目の改行はスマートフォンのみ有効
+   （PC では 1 行に収まるためつなげて表示する） */
+@media (min-width: 769px) {
+  .recruit__text p .nl-2 { display: none; }
+}
+
 .recruit__text p {
   color: var(--ink-soft);
   font-size: 16px;
@@ -1763,8 +1769,7 @@ section[id] { scroll-margin-top: 100px; }
       <div class="section__label" data-c="recruit.label">Recruit</div>
       <h3><span data-c="recruit.titleTop">ホステス・スタッフ</span><br><span class="italic" data-c="recruit.titleBottom">募集</span></h3>
       <p>
-        <span data-c="recruit.body">ホステス・スタッフ募集中。経験不問。<br>
-        お問い合わせ・ご応募は下記までご連絡ください。</span>
+        <span data-c="recruit.body">ホステス・スタッフ募集中。経験不問。<br class="nl nl-1">お問い合わせ・ご応募は下記まで<br class="nl nl-2">ご連絡ください。</span>
       </p>
       <a href="tel:0364340048" class="tel-link" id="recruitTel" aria-label="採用について電話で問い合わせる"><span data-c="recruit.tel">03-6434-0048</span></a>
     </div>
@@ -1916,7 +1921,11 @@ fetch('content.json?t=' + Date.now())
     const esc = s => String(s ?? '').replace(/[&<>"']/g, ch => (
       { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]
     ));
-    const nl2br = s => esc(s).replace(/\n/g, '<br>');
+    // 改行に通し番号を振り、画面幅ごとに特定の改行だけ無効にできるようにする
+    const nl2br = s => {
+      let n = 0;
+      return esc(s).replace(/\n/g, () => `<br class="nl nl-${++n}">`);
+    };
     const get = path => path.split('.').reduce((o, k) => (o == null ? o : o[k]), c);
 
     // 単純テキスト（data-c 属性）
