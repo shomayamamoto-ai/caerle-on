@@ -646,7 +646,6 @@ section[id] { scroll-margin-top: 100px; }
   gap: 20px;
   overflow-x: auto;
   overscroll-behavior-x: contain;
-  scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   /* スクロールバーは隠す（操作は矢印・スワイプ・ドットで） */
   scrollbar-width: none;
@@ -743,7 +742,8 @@ section[id] { scroll-margin-top: 100px; }
 @media (max-width: 768px) {
   /* スマートフォンでは 1 枚ずつ大きく見せ、次の写真を少しだけのぞかせる */
   .gallery__item { flex: 0 0 88%; }
-  .gallery__grid { gap: 12px; }
+  /* 1 枚がほぼ画面幅なので、スワイプ時に 1 枚単位で止まるようにする */
+  .gallery__grid { gap: 12px; scroll-snap-type: x mandatory; }
   .gallery__nav { display: none; }
   .gallery__head { flex-direction: column; align-items: flex-start; }
 }
@@ -2019,27 +2019,28 @@ function initGallerySlider() {
   ).join('');
   const dots = Array.from(dotsEl.querySelectorAll('.gallery__dot'));
 
-  // 左端に最も近い写真を現在位置とみなす
+  // 最後の写真は左端まで送れない（右端で止まる）ため、
+  // 写真の位置ではなくスクロール量の割合でドットと対応させる
+  const lastIndex = () => items.length - 1;
+  const maxScroll = () => Math.max(1, track.scrollWidth - track.clientWidth);
+
   const current = () => {
-    let best = 0, bestDist = Infinity;
-    items.forEach((el, i) => {
-      const d = Math.abs(el.offsetLeft - track.scrollLeft);
-      if (d < bestDist) { bestDist = d; best = i; }
-    });
-    return best;
+    if (lastIndex() < 1) return 0;
+    const ratio = track.scrollLeft / maxScroll();
+    return Math.max(0, Math.min(lastIndex(), Math.round(ratio * lastIndex())));
   };
 
   const sync = () => {
     const i = current();
     dots.forEach((d, n) => d.setAttribute('aria-current', String(n === i)));
     prev.disabled = track.scrollLeft <= 1;
-    next.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 1;
+    next.disabled = track.scrollLeft >= maxScroll() - 1;
   };
 
   const goTo = i => {
-    const el = items[Math.max(0, Math.min(items.length - 1, i))];
-    if (!el) return;
-    track.scrollTo({ left: el.offsetLeft, behavior: 'smooth' });
+    if (lastIndex() < 1) return;
+    const n = Math.max(0, Math.min(lastIndex(), i));
+    track.scrollTo({ left: (maxScroll() * n) / lastIndex(), behavior: 'smooth' });
   };
 
   prev.addEventListener('click', () => goTo(current() - 1));
