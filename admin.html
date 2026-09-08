@@ -136,7 +136,6 @@ h1 .italic { font-style: italic; color: var(--gold-bright); }
   background: linear-gradient(90deg, var(--line), transparent);
 }
 .sec-desc { font-size: 13.5px; color: var(--ink-soft); margin-bottom: 22px; }
-.cfield__hint { display: block; font-size: 12.5px; color: var(--mute); margin-top: 6px; line-height: 1.9; }
 .sec-title[hidden], .sec-desc[hidden] { display: none; }
 
 /* ---- auth panel ---- */
@@ -528,20 +527,6 @@ input[type="file"] { display: none; }
     <p class="status" id="contentStatus"></p>
   </section>
 
-  <section class="content-admin" id="seoAdmin" hidden>
-    <h2>ページ情報（検索結果・SNS での見え方）</h2>
-    <p>
-      画面には表示されませんが、<strong>ブラウザのタブ・Google の検索結果・SNS で共有したときの表示</strong>に使われます。
-      ページのソースを見ると誰でも読める部分なので、店舗の表記と揃えてください。
-    </p>
-    <div id="seoFields"></div>
-    <div class="content-actions">
-      <button class="btn btn--solid" id="seoSaveBtn">ページ情報を保存</button>
-      <button class="btn" id="seoReloadBtn">編集を取り消す</button>
-    </div>
-    <p class="status" id="seoStatus"></p>
-  </section>
-
   <p class="note" id="footNote">
     ・選んだ写真は自動で横 1920px・JPEG に最適化されてから保存されます。<br>
     ・「サイトから消す」でその写真をサイトから非表示にできます（ギャラリーは残りの写真を自動で詰めて配置、
@@ -754,9 +739,7 @@ async function connect(saveToken) {
     document.getElementById('photosTitle').hidden = false;
     document.getElementById('photosDesc').hidden = false;
     document.getElementById('contentAdmin').hidden = false;
-    document.getElementById('seoAdmin').hidden = false;
     loadContent();
-    loadSeo();
   } catch (e) {
     tokenStatus.className = 'status err';
     tokenStatus.textContent = '✗ ' + e.message;
@@ -1099,128 +1082,6 @@ document.getElementById('contentSaveBtn').addEventListener('click', async () => 
   } catch (err) {
     contentStatus.className = 'status err';
     contentStatus.textContent = '✗ ' + err.message;
-  } finally {
-    btn.disabled = false;
-  }
-});
-
-/* ---- ページ情報（タイトル・説明文・キーワード）の編集 ----
-   これらは画面に表示されず index.html の <head> に直接書かれているため、
-   content.json ではなく index.html の SEO ブロックを書き換える。 */
-const SEO_FIELDS = [
-  ['title', 'タイトル', 'ブラウザのタブと Google の検索結果に表示されます。30〜40 文字程度が目安です。'],
-  ['description', '説明文', 'Google の検索結果でタイトルの下に出る文章です。120 文字程度が目安です。'],
-  ['keywords', 'キーワード', '検索エンジン向けの単語です。読点ではなくカンマ（,）で区切ってください。'],
-];
-const SEO_START = '<!-- SEO:START';
-const SEO_END = '<!-- SEO:END -->';
-const seoStatus = document.getElementById('seoStatus');
-let SEO = null;
-
-/* index.html から現在の値を読み取る */
-function parseSeo(html) {
-  const pick = (re) => { const m = html.match(re); return m ? decodeEntities(m[1]) : ''; };
-  return {
-    title: pick(/<title>([\s\S]*?)<\/title>/),
-    description: pick(/<meta name="description" content="([^"]*)"/),
-    keywords: pick(/<meta name="keywords" content="([^"]*)"/),
-  };
-}
-
-function decodeEntities(t) {
-  const el = document.createElement('textarea');
-  el.innerHTML = t;
-  return el.value;
-}
-
-function escapeAttr(t) {
-  return String(t ?? '').replace(/[&<>"']/g, ch => (
-    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]
-  ));
-}
-
-/* 入力値から SEO ブロックを組み立てる */
-function buildSeoBlock(v) {
-  const t = escapeAttr(v.title);
-  const d = escapeAttr(v.description);
-  const k = escapeAttr(v.keywords);
-  return SEO_START + ' 管理ページ「ページ情報（検索結果の見え方）」から書き換えられます。この範囲は自動生成されます -->\n' +
-    `<title>${t}</title>\n` +
-    `<meta name="description" content="${d}">\n` +
-    `<meta name="keywords" content="${k}">\n` +
-    `<meta property="og:title" content="${t}">\n` +
-    `<meta property="og:description" content="${d}">\n` +
-    `<meta name="twitter:title" content="${t}">\n` +
-    `<meta name="twitter:description" content="${d}">\n` +
-    SEO_END;
-}
-
-/* index.html の該当範囲だけを差し替える */
-function replaceSeoBlock(html, v) {
-  const start = html.indexOf(SEO_START);
-  const end = html.indexOf(SEO_END);
-  if (start === -1 || end === -1) throw new Error('index.html に SEO ブロックが見つかりません');
-  return html.slice(0, start) + buildSeoBlock(v) + html.slice(end + SEO_END.length);
-}
-
-function renderSeoEditor() {
-  if (!SEO) return;
-  document.getElementById('seoFields').innerHTML = SEO_FIELDS.map(([key, label, hint]) => {
-    const long = key !== 'title';
-    const v = escAttr(SEO[key]);
-    const input = long
-      ? `<textarea data-seo="${key}" rows="3">${v}</textarea>`
-      : `<input type="text" data-seo="${key}" value="${v}">`;
-    return `<div class="cfield"><label>${label}</label>${input}` +
-      `<span class="cfield__hint">${hint}</span></div>`;
-  }).join('');
-}
-
-async function loadSeo() {
-  seoStatus.className = 'status';
-  seoStatus.textContent = '読み込み中…';
-  try {
-    const res = await fetch('index.html?t=' + Date.now(), { cache: 'no-store' });
-    SEO = parseSeo(await res.text());
-  } catch (e) { SEO = { title: '', description: '', keywords: '' }; }
-  renderSeoEditor();
-  seoStatus.textContent = '';
-}
-
-document.getElementById('seoReloadBtn').addEventListener('click', loadSeo);
-
-document.getElementById('seoSaveBtn').addEventListener('click', async () => {
-  const btn = document.getElementById('seoSaveBtn');
-  btn.disabled = true;
-  seoStatus.className = 'status';
-  seoStatus.textContent = '保存中…';
-  try {
-    const v = {};
-    document.querySelectorAll('#seoFields [data-seo]').forEach(el => { v[el.dataset.seo] = el.value.trim(); });
-    if (!v.title) throw new Error('タイトルを入力してください');
-
-    if (MODE === 'php') {
-      const res = await fetch(`${PHP_API}?action=seo_save`, {
-        method: 'POST',
-        headers: { 'X-Admin-Token': TOKEN, 'Content-Type': 'application/json' },
-        body: JSON.stringify(v),
-      });
-      const j = await res.json().catch(() => ({}));
-      if (!res.ok || !j.ok) throw new Error(j.error || `保存に失敗しました (${res.status})`);
-      seoStatus.className = 'status ok';
-      seoStatus.textContent = '✓ 保存しました。サイトに即時反映されます。';
-    } else {
-      const res = await fetch('index.html?t=' + Date.now(), { cache: 'no-store' });
-      if (!res.ok) throw new Error('index.html を読み込めません');
-      const updated = replaceSeoBlock(await res.text(), v);
-      await ghPut('index.html', utf8ToBase64(updated), 'seo: ページ情報を更新 (via admin)');
-      seoStatus.className = 'status ok';
-      seoStatus.textContent = '✓ 保存しました。1〜2 分でサイトに反映されます。';
-    }
-    SEO = v;
-  } catch (err) {
-    seoStatus.className = 'status err';
-    seoStatus.textContent = '✗ ' + err.message;
   } finally {
     btn.disabled = false;
   }
