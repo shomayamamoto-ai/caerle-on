@@ -26,6 +26,9 @@ $caerleon_nav = array(
 <meta charset="<?php bloginfo( 'charset' ); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="<?php echo esc_attr( $caerleon_desc ); ?>">
+<?php if ( caerleon_opt( 'seo_keywords' ) ) : ?>
+<meta name="keywords" content="<?php echo esc_attr( wp_strip_all_tags( caerleon_opt( 'seo_keywords' ) ) ); ?>">
+<?php endif; ?>
 <meta name="theme-color" content="#0a0908">
 <meta name="format-detection" content="telephone=no">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">

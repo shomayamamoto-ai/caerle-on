@@ -1,6 +1,6 @@
 # Caerle'on（カーリアン）
 
-会員制ラウンジ Caerle'on の公式ホームページ。
+六本木クラブ「カーリアン」（Club Caerle'on）の公式ホームページ。
 黒×金を基調としたシングルページ構成で、CSS / JS は `index.html` に一体化しています。
 
 ## 構成
@@ -17,7 +17,7 @@ caerle-on/
 
 ## セクション
 
-Hero ／ Concept ／ Gallery ／ System（会員制・料金）／ Access ／ Recruit ／ Footer
+Hero ／ Concept ／ Gallery ／ System（料金）／ Access ／ Recruit ／ Footer
 
 ## 実装済みの演出
 

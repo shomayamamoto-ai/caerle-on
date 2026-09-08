@@ -111,8 +111,9 @@ function caerleon_defaults() {
 		'footer_tagline'       => 'Tokyo — Members Only',
 
 		// SEO
-		'seo_title'            => "Caerle'on（カーリアン）｜六本木の会員制ラウンジ",
-		'seo_description'      => "六本木の会員制ラウンジ Caerle'on（カーリアン）。2011年開業。完全会員制・ご紹介制のラウンジとして、六本木駅徒歩2分の六本木Gmビル6階で営業しております。営業時間20:00〜翌1:00、土日祝定休。ご予約・お問い合わせは03-6434-0048。",
+		'seo_title'            => '六本木クラブ「カーリアン」｜Club Caerle\'on',
+		'seo_keywords'         => "Caerle'on,Club Caerle'on,カーリアン,六本木クラブ,六本木,クラブ,港区,六本木駅,紹介制",
+		'seo_description'      => "六本木のクラブ「カーリアン」（Club Caerle'on）。2011年開業、六本木駅徒歩2分の六本木Gmビル6階。ご紹介制で営業しております。営業時間20:00〜翌1:00、土日祝定休。ご予約・お問い合わせは03-6434-0048。",
 	);
 }
 
@@ -206,6 +207,26 @@ function caerleon_tel_href( $tel ) {
 }
 
 /**
+ * ページタイトルを設定値から出力する
+ *
+ * WordPress の初期状態では「サイトのタイトル」が使われるため、
+ * カスタマイザーの「ページタイトル」を優先させる。
+ *
+ * @param string $title 元のタイトル。
+ * @return string
+ */
+function caerleon_document_title( $title ) {
+	if ( is_front_page() ) {
+		$custom = caerleon_opt( 'seo_title' );
+		if ( '' !== $custom ) {
+			return $custom;
+		}
+	}
+	return $title;
+}
+add_filter( 'pre_get_document_title', 'caerleon_document_title' );
+
+/**
  * 構造化データ（JSON-LD）を出力する
  *
  * 設定値から生成するため、カスタマイザーで内容を変えると自動で追従します。
@@ -231,7 +252,7 @@ function caerleon_structured_data() {
 	}
 
 	$business = array(
-		'@type'          => array( 'LocalBusiness', 'BarOrPub' ),
+		'@type'          => array( 'LocalBusiness', 'NightClub' ),
 		'@id'            => $home . '#business',
 		'name'           => get_bloginfo( 'name' ),
 		'description'    => wp_strip_all_tags( caerleon_opt( 'seo_description' ) ),

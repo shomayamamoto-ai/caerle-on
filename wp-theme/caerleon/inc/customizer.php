@@ -214,14 +214,23 @@ function caerleon_customize_register( $wp_customize ) {
 
 	// ---------------- SEO ----------------
 	$s = $section( 'caerleon_seo', __( 'SEO・共有設定', 'caerleon' ), __( '検索結果や SNS で共有されたときの表示内容です。', 'caerleon' ) );
-	caerleon_add_text( $wp_customize, $s, 'seo_title', __( 'ページタイトル', 'caerleon' ), 'Caerle\'on（カーリアン）｜六本木の会員制ラウンジ' );
+	caerleon_add_text( $wp_customize, $s, 'seo_title', __( 'ページタイトル', 'caerleon' ), '六本木クラブ「カーリアン」｜Club Caerle\'on' );
 	caerleon_add_text(
 		$wp_customize,
 		$s,
 		'seo_description',
 		__( 'ページの説明', 'caerleon' ),
-		'六本木の会員制ラウンジ Caerle\'on（カーリアン）。2011年開業。完全会員制・ご紹介制のラウンジとして、六本木駅徒歩2分の六本木Gmビル6階で営業しております。営業時間20:00〜翌1:00、土日祝定休。ご予約・お問い合わせは03-6434-0048。',
+		'六本木のクラブ「カーリアン」（Club Caerle\'on）。2011年開業、六本木駅徒歩2分の六本木Gmビル6階。ご紹介制で営業しております。営業時間20:00〜翌1:00、土日祝定休。ご予約・お問い合わせは03-6434-0048。',
 		'textarea'
+	);
+	caerleon_add_text(
+		$wp_customize,
+		$s,
+		'seo_keywords',
+		__( 'キーワード', 'caerleon' ),
+		'',
+		'textarea',
+		__( '検索エンジン向けの単語をカンマ（,）で区切って入力します。', 'caerleon' )
 	);
 	caerleon_add_image( $wp_customize, $s, 'seo_image', __( '共有時の画像（OGP）', 'caerleon' ) );
 }
