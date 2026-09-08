@@ -158,5 +158,68 @@ if ($action === 'content_save' && $_SERVER['REQUEST_METHOD'] === 'POST') {
   exit;
 }
 
+// ---- ページ情報（タイトル・説明文・キーワード）の更新 ----
+// index.html の SEO ブロックのみを、受け取った文字列から組み立て直す。
+// HTML はサーバー側で生成するため、タグを送り込まれる心配がない。
+if ($action === 'seo_save' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+  $body  = json_decode(file_get_contents('php://input'), true);
+  $title = isset($body['title']) ? trim((string) $body['title']) : '';
+  $desc  = isset($body['description']) ? trim((string) $body['description']) : '';
+  $keys  = isset($body['keywords']) ? trim((string) $body['keywords']) : '';
+
+  if ($title === '' || mb_strlen($title) > 200 || mb_strlen($desc) > 500 || mb_strlen($keys) > 500) {
+    http_response_code(400);
+    echo json_encode(array('ok' => false, 'error' => 'タイトルは必須です（タイトル 200 字・説明文 500 字以内）'));
+    exit;
+  }
+  // 改行やタグは受け付けない
+  foreach (array($title, $desc, $keys) as $v) {
+    if (preg_match('/[<>\r\n]/u', $v)) {
+      http_response_code(400);
+      echo json_encode(array('ok' => false, 'error' => '改行や記号 < > は使用できません'));
+      exit;
+    }
+  }
+
+  $path = __DIR__ . DIRECTORY_SEPARATOR . 'index.html';
+  $html = @file_get_contents($path);
+  if ($html === false) {
+    http_response_code(500);
+    echo json_encode(array('ok' => false, 'error' => 'index.html を読み込めません'));
+    exit;
+  }
+
+  $start = strpos($html, '<!-- SEO:START');
+  $end   = strpos($html, '<!-- SEO:END -->');
+  if ($start === false || $end === false) {
+    http_response_code(500);
+    echo json_encode(array('ok' => false, 'error' => 'index.html に SEO ブロックが見つかりません'));
+    exit;
+  }
+
+  $e = function ($v) { return htmlspecialchars($v, ENT_QUOTES, 'UTF-8'); };
+  $t = $e($title); $d = $e($desc); $k = $e($keys);
+  $block = "<!-- SEO:START 管理ページ「ページ情報（検索結果の見え方）」から書き換えられます。この範囲は自動生成されます -->\n"
+    . "<title>{$t}</title>\n"
+    . "<meta name=\"description\" content=\"{$d}\">\n"
+    . "<meta name=\"keywords\" content=\"{$k}\">\n"
+    . "<meta property=\"og:title\" content=\"{$t}\">\n"
+    . "<meta property=\"og:description\" content=\"{$d}\">\n"
+    . "<meta name=\"twitter:title\" content=\"{$t}\">\n"
+    . "<meta name=\"twitter:description\" content=\"{$d}\">\n"
+    . "<!-- SEO:END -->";
+
+  $updated = substr($html, 0, $start) . $block . substr($html, $end + strlen('<!-- SEO:END -->'));
+
+  @copy($path, __DIR__ . DIRECTORY_SEPARATOR . '_backup_index.html');
+  if (file_put_contents($path, $updated) === false) {
+    http_response_code(500);
+    echo json_encode(array('ok' => false, 'error' => 'index.html に書き込めません（権限を確認してください）'));
+    exit;
+  }
+  echo json_encode(array('ok' => true));
+  exit;
+}
+
 http_response_code(400);
 echo json_encode(array('ok' => false, 'error' => '不明なリクエストです'));
