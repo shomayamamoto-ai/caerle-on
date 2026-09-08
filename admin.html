@@ -593,15 +593,15 @@ const GH_API = `https://api.github.com/repos/${OWNER}/${REPO}/contents/`;
 const PHP_API = 'admin-api.php';
 
 const SLOTS = [
-  { file: 'c0209891.jpg', label: 'ヒーロー背景',        note: 'トップの全画面背景', hideable: true },
-  { file: 'p0005.jpg',    label: 'Gallery — Main Floor', note: 'ギャラリー 1 枚目', hideable: true },
-  { file: 'p0004.jpg',    label: 'Gallery — Live Piano', note: 'ギャラリー上段・右', hideable: true },
-  { file: 'c0209615.jpg', label: 'Gallery — Lounge',    note: 'ギャラリー中段・左', hideable: true },
-  { file: 'c0209824.jpg', label: 'Concept',             note: 'コンセプトの額装写真', hideable: true },
-  { file: 'c0209748.jpg', label: 'Gallery — Private Booth', note: 'ギャラリー下段・ワイド', hideable: true },
-  { file: 'c0209962.jpg', label: 'Gallery — Seasonal',  note: 'ギャラリー下段・縦型', hideable: true },
-  { file: 'p0002.jpg',    label: 'Gallery — Bouquet',   note: 'ギャラリー末尾・左', hideable: true },
-  { file: 'c0209948.jpg', label: 'Recruit',             note: 'リクルート欄の写真', hideable: true },
+  { file: 'c0209891.jpg', label: 'ヒーロー背景',   note: 'トップの全画面背景', hideable: true },
+  { file: 'c0209824.jpg', label: 'Concept',        note: 'コンセプト欄の写真', hideable: true },
+  { file: 'p0005.jpg',    label: 'Gallery 1 枚目', note: 'メインフロア', hideable: true },
+  { file: 'p0004.jpg',    label: 'Gallery 2 枚目', note: 'グランドピアノ', hideable: true },
+  { file: 'c0209615.jpg', label: 'Gallery 3 枚目', note: 'ソファ席', hideable: true },
+  { file: 'c0209748.jpg', label: 'Gallery 4 枚目', note: 'バンケット席', hideable: true },
+  { file: 'c0209962.jpg', label: 'Gallery 5 枚目', note: '季節の花', hideable: true },
+  { file: 'p0002.jpg',    label: 'Gallery 6 枚目', note: 'フラワーアレンジメント', hideable: true },
+  { file: 'c0209948.jpg', label: 'Recruit',        note: '採用欄の写真', hideable: true },
 ];
 /* 注: Access の看板写真（c0209646.jpg）は店舗ロゴのため管理対象外（固定） */
 
@@ -729,7 +729,7 @@ async function connect(saveToken) {
     await verifyAuth();
     if (saveToken) localStorage.setItem(storageKey(), TOKEN);
     tokenStatus.className = 'status ok';
-    tokenStatus.textContent = '✓ 接続しました。写真の出し入れとニュースの編集ができます。';
+    tokenStatus.textContent = '✓ 接続しました。写真の差し替えと文章の編集ができます。';
     connectBtn.hidden = true;
     tokenInput.hidden = true;
     forgetBtn.hidden = false;
