@@ -29,10 +29,23 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      - name: Collect site files
+        # 公開に必要なファイルだけを集める（配布用 zip や WordPress テーマ、
+        # 手順書は公開対象ではないため除外する）
+        run: |
+          mkdir -p _site
+          cp index.html admin.html admin-api.php _site/
+          cp content.json photos.json robots.txt sitemap.xml llms.txt _site/
+          cp -r images assets _site/
+          rm -f _site/images/_backup_* _site/_backup_*
+          # サイトで表示していない写真・予備のロゴは公開しない（元データはリポジトリに保管）
+          rm -f _site/assets/logo-dark.png _site/images/c0209646.jpg
+          du -sh _site
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
 
       - name: Deploy to GitHub Pages
         id: deployment

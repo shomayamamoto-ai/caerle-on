@@ -1044,20 +1044,6 @@ section[id] { scroll-margin-top: 100px; }
   .tel-link { font-size: 21px; }
 }
 
-.access__visual {
-  /* ロゴの文字が欠けないよう、切り抜き(cover)ではなく全体表示(contain) */
-  background: #000 url('images/c0209646.jpg') center/contain no-repeat;
-  position: relative;
-  filter: saturate(1.1);
-}
-
-.access__visual::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(196,162,95,0.05), transparent);
-}
-
 .access__map {
   position: relative;
   min-height: 520px;
@@ -1077,7 +1063,6 @@ section[id] { scroll-margin-top: 100px; }
 @media (max-width: 900px) {
   .access__grid { grid-template-columns: 1fr; }
   .access__info { padding: 80px 24px; }
-  .access__visual { min-height: 360px; }
   .access__map { min-height: 420px; }
 }
 
