@@ -66,17 +66,14 @@ add_action( 'wp_enqueue_scripts', 'caerleon_scripts' );
 function caerleon_defaults() {
 	return array(
 		// トップ画面
-		'hero_corner_tr'       => 'Members Only —',
 		'hero_corner_br'       => 'Roppongi',
 
 		// Concept
 		'concept_label'        => 'Concept',
-		'concept_catch'        => "至福な時間と上質な空間で\n皆様をお迎えいたします",
+		'concept_catch'        => "至福の時間と上質な空間で\n皆様をお迎えいたします",
 
 		// Gallery
 		'gallery_label'        => 'Gallery',
-		'gallery_title_top'    => 'Interior',
-		'gallery_title_bottom' => '＆ Atmosphere',
 
 		// System（料金）
 		'system_label'         => 'System',
@@ -90,7 +87,6 @@ function caerleon_defaults() {
 
 		// Access
 		'access_label'         => 'Access',
-		'access_title'         => 'Access',
 		'access_addr_label'    => 'Address',
 		'access_addr'          => "〒106-0032\n東京都港区六本木 4-11-11\n六本木 Gm ビル 6 階",
 		'access_open_label'    => 'Open',

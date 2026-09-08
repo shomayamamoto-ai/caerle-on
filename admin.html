@@ -953,13 +953,13 @@ async function onSave(e) {
 /* ---- 文章（content.json）の編集 ---- */
 const CONTENT_SCHEMA = [
   { key: 'hero', title: 'ヒーロー（トップ）', fields: [
-    ['cornerTR', '右上の表記'], ['cornerBR', '右下の表記'],
+    ['cornerBR', '右下の表記'],
   ]},
   { key: 'about', title: 'Concept（コンセプト）', fields: [
     ['label', '小見出し'], ['catch', 'キャッチコピー'],
   ]},
   { key: 'gallery', title: 'Gallery', fields: [
-    ['label', '小見出し'], ['titleTop', '見出し（1行目）'], ['titleBottom', '見出し（2行目）'],
+    ['label', '小見出し'],
   ]},
   { key: 'information', title: 'System（料金システム）', fields: [
     ['label', '小見出し'], ['titleTop', '見出し（1行目）'], ['titleBottom', '見出し（2行目）'],
@@ -969,7 +969,7 @@ const CONTENT_SCHEMA = [
     { key: 'notes', label: 'サービス料・TAX（名称／料率）', cols: [['name', '名称'], ['price', '料率']] },
   ]},
   { key: 'access', title: 'Access（アクセス）', fields: [
-    ['label', '小見出し'], ['title', '見出し'],
+    ['label', '小見出し'],
   ], rows: {
     key: 'rows', label: '住所・営業時間などの項目（左：見出し／右：内容）',
     cols: [['dt', '見出し'], ['dd', '内容']],

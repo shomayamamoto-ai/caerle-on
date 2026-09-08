@@ -117,7 +117,6 @@ function caerleon_customize_register( $wp_customize ) {
 	$s = $section( 'caerleon_hero', __( 'トップ画面', 'caerleon' ) );
 	caerleon_add_image( $wp_customize, $s, 'hero_bg', __( '背景写真', 'caerleon' ), __( '推奨サイズ：横 1600px 以上', 'caerleon' ) );
 	caerleon_add_image( $wp_customize, $s, 'logo_light', __( 'ロゴ（明色・ヘッダーとトップ用）', 'caerleon' ) );
-	caerleon_add_text( $wp_customize, $s, 'hero_corner_tr', __( '右上の表記', 'caerleon' ), 'Members Only —' );
 	caerleon_add_text( $wp_customize, $s, 'hero_corner_br', __( '右下の表記', 'caerleon' ), 'Roppongi' );
 
 	// ---------------- Concept ----------------
@@ -129,7 +128,7 @@ function caerleon_customize_register( $wp_customize ) {
 		$s,
 		'concept_catch',
 		__( 'キャッチコピー', 'caerleon' ),
-		"至福な時間と上質な空間で\n皆様をお迎えいたします",
+		"至福の時間と上質な空間で\n皆様をお迎えいたします",
 		'textarea',
 		__( '改行するとそのまま反映されます。', 'caerleon' )
 	);
@@ -137,8 +136,6 @@ function caerleon_customize_register( $wp_customize ) {
 	// ---------------- Gallery ----------------
 	$s = $section( 'caerleon_gallery', __( 'Gallery（店内写真）', 'caerleon' ), __( '写真は最大 6 枚です。削除した枠はサイトに表示されません。', 'caerleon' ) );
 	caerleon_add_text( $wp_customize, $s, 'gallery_label', __( '小見出し', 'caerleon' ), 'Gallery' );
-	caerleon_add_text( $wp_customize, $s, 'gallery_title_top', __( '見出し（1行目）', 'caerleon' ), 'Interior' );
-	caerleon_add_text( $wp_customize, $s, 'gallery_title_bottom', __( '見出し（2行目）', 'caerleon' ), '＆ Atmosphere' );
 	for ( $i = 1; $i <= 6; $i++ ) {
 		/* translators: %d: 写真の番号 */
 		caerleon_add_image( $wp_customize, $s, 'gallery_image_' . $i, sprintf( __( '写真 %d 枚目', 'caerleon' ), $i ) );
@@ -174,7 +171,6 @@ function caerleon_customize_register( $wp_customize ) {
 	// ---------------- Access ----------------
 	$s = $section( 'caerleon_access', __( 'Access（アクセス）', 'caerleon' ) );
 	caerleon_add_text( $wp_customize, $s, 'access_label', __( '小見出し', 'caerleon' ), 'Access' );
-	caerleon_add_text( $wp_customize, $s, 'access_title', __( '見出し', 'caerleon' ), 'Access' );
 	caerleon_add_text( $wp_customize, $s, 'access_addr_label', __( '住所の見出し', 'caerleon' ), 'Address' );
 	caerleon_add_text( $wp_customize, $s, 'access_addr', __( '住所', 'caerleon' ), "〒106-0032\n東京都港区六本木 4-11-11\n六本木 Gm ビル 6 階", 'textarea' );
 	caerleon_add_text( $wp_customize, $s, 'access_open_label', __( '営業時間の見出し', 'caerleon' ), 'Open' );
@@ -209,7 +205,6 @@ function caerleon_customize_register( $wp_customize ) {
 
 	// ---------------- フッター ----------------
 	$s = $section( 'caerleon_footer', __( 'フッター', 'caerleon' ) );
-	caerleon_add_image( $wp_customize, $s, 'logo_gold', __( 'ロゴ（金色・フッター用）', 'caerleon' ) );
 	caerleon_add_text( $wp_customize, $s, 'footer_nav_title', __( 'ナビゲーションの見出し', 'caerleon' ), 'Navigation' );
 	caerleon_add_text( $wp_customize, $s, 'footer_contact_title', __( '連絡先の見出し', 'caerleon' ), 'Contact' );
 	caerleon_add_text( $wp_customize, $s, 'footer_contact_tel', __( '電話番号', 'caerleon' ), '03-6434-0048' );

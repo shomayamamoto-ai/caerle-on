@@ -37,7 +37,6 @@ foreach ( $gallery_defaults as $i => $file ) {
 
 <section class="hero">
 	<div class="hero__bg"></div>
-	<div class="hero__corner hero__corner--tr"><?php echo esc_html( caerleon_opt( 'hero_corner_tr' ) ); ?></div>
 	<div class="hero__corner hero__corner--br"><?php echo esc_html( caerleon_opt( 'hero_corner_br' ) ); ?></div>
 
 	<div class="hero__content">
@@ -68,10 +67,6 @@ foreach ( $gallery_defaults as $i => $file ) {
 	<div class="gallery__head fade-in">
 		<div>
 			<div class="section__label"><?php echo esc_html( caerleon_opt( 'gallery_label' ) ); ?></div>
-			<h2 class="section__title">
-				<span class="italic"><?php echo esc_html( caerleon_opt( 'gallery_title_top' ) ); ?></span><br>
-				<span><?php echo esc_html( caerleon_opt( 'gallery_title_bottom' ) ); ?></span>
-			</h2>
 		</div>
 	</div>
 
@@ -134,7 +129,6 @@ foreach ( $gallery_defaults as $i => $file ) {
 	<div class="access__grid">
 		<div class="access__info">
 			<div class="section__label"><?php echo esc_html( caerleon_opt( 'access_label' ) ); ?></div>
-			<h2 class="section__title"><span class="italic"><?php echo esc_html( caerleon_opt( 'access_title' ) ); ?></span></h2>
 			<dl class="access__details" id="accessRows">
 				<dt><?php echo esc_html( caerleon_opt( 'access_addr_label' ) ); ?></dt>
 				<dd><?php caerleon_nl( caerleon_opt( 'access_addr' ) ); ?></dd>

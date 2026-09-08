@@ -471,7 +471,6 @@ img { display: block; max-width: 100%; height: auto; }
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.95);
 }
 
-.hero__corner--tr { top: 100px; right: 56px; }
 .hero__corner--br { bottom: 56px; right: 56px; }
 
 @media (max-width: 768px) {
@@ -1267,19 +1266,6 @@ section[id] { scroll-margin-top: 100px; }
   margin: 0 auto;
 }
 
-.footer__brand {
-  margin-bottom: 80px;
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 48px;
-  line-height: 0;
-}
-
-.footer__brand img {
-  width: min(760px, 88%);
-  height: auto;
-  opacity: 0.9;
-}
-
 .footer__grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1637,7 +1623,6 @@ section[id] { scroll-margin-top: 100px; }
 
 <section class="hero">
   <div class="hero__bg"></div>
-  <div class="hero__corner hero__corner--tr" data-c="hero.cornerTR">Members Only —</div>
   <div class="hero__corner hero__corner--br" data-c="hero.cornerBR">Roppongi</div>
 
   <div class="hero__content">
@@ -1657,7 +1642,7 @@ section[id] { scroll-margin-top: 100px; }
     </div>
     <div class="concept__text fade-in">
       <div class="section__label" data-c="about.label">Concept</div>
-      <h2 class="concept__catch" data-c="about.catch">至福な時間と上質な空間で<br>皆様をお迎えいたします</h2>
+      <h2 class="concept__catch" data-c="about.catch">至福の時間と上質な空間で<br>皆様をお迎えいたします</h2>
     </div>
   </div>
 </section>
@@ -1666,7 +1651,6 @@ section[id] { scroll-margin-top: 100px; }
   <div class="gallery__head fade-in">
     <div>
       <div class="section__label" data-c="gallery.label">Gallery</div>
-      <h2 class="section__title"><span class="italic" data-c="gallery.titleTop">Interior</span><br><span data-c="gallery.titleBottom">＆ Atmosphere</span></h2>
     </div>
   </div>
 
@@ -1750,7 +1734,6 @@ section[id] { scroll-margin-top: 100px; }
   <div class="access__grid">
     <div class="access__info">
       <div class="section__label" data-c="access.label">Access</div>
-      <h2 class="section__title"><span class="italic" data-c="access.title">Access</span></h2>
       <dl class="access__details" id="accessRows">
         <dt>Address</dt>
         <dd>〒106-0032<br>東京都港区六本木 4-11-11<br>六本木 Gm ビル 6 階</dd>
@@ -1818,8 +1801,6 @@ section[id] { scroll-margin-top: 100px; }
 
 <footer class="footer">
   <div class="footer__inner">
-    <div class="footer__brand"><img src="assets/logo-gold.png" alt="Caerle'on（カーリアン）"></div>
-
     <div class="footer__grid">
       <div class="footer__col">
         <h5>Navigation</h5>
