@@ -2,33 +2,48 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://shomayamamoto-ai.github.io/caerle-on/</loc>
+    <loc>https://xs518179.xsrv.jp/</loc>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://shomayamamoto-ai.github.io/caerle-on/images/c0209891.jpg</image:loc>
+      <image:loc>https://xs518179.xsrv.jp/images/p0005.jpg</image:loc>
       <image:title>Caerle'on メインフロア</image:title>
       <image:caption>木組みの間仕切りと季節の花で設えたラウンジ空間</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://shomayamamoto-ai.github.io/caerle-on/images/c0209615.jpg</image:loc>
-      <image:title>Caerle'on ソファ席</image:title>
-      <image:caption>間接照明に照らされたベルベットのソファ席</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://shomayamamoto-ai.github.io/caerle-on/images/c0209748.jpg</image:loc>
-      <image:title>Caerle'on バンケット席</image:title>
-      <image:caption>大理石のテーブルを備えたバンケット席</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://shomayamamoto-ai.github.io/caerle-on/images/p0004.jpg</image:loc>
+      <image:loc>https://xs518179.xsrv.jp/images/p0004.jpg</image:loc>
       <image:title>Caerle'on グランドピアノ</image:title>
       <image:caption>店内に設置されたヤマハ製グランドピアノ</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://shomayamamoto-ai.github.io/caerle-on/images/c0209646.jpg</image:loc>
-      <image:title>Caerle'on 看板</image:title>
-      <image:caption>六本木Gmビル6階の店舗サイン</image:caption>
+      <image:loc>https://xs518179.xsrv.jp/images/c0209615.jpg</image:loc>
+      <image:title>Caerle'on ソファ席</image:title>
+      <image:caption>間接照明に照らされたベルベットのソファ席</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://xs518179.xsrv.jp/images/c0209748.jpg</image:loc>
+      <image:title>Caerle'on バンケット席</image:title>
+      <image:caption>大理石のテーブルを備えたバンケット席</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://xs518179.xsrv.jp/images/c0209962.jpg</image:loc>
+      <image:title>Caerle'on 季節のフラワーアレンジメント</image:title>
+      <image:caption>大理石の壁面を背にした季節のフラワーアレンジメント</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://xs518179.xsrv.jp/images/p0002.jpg</image:loc>
+      <image:title>Caerle'on フラワーアレンジメント</image:title>
+      <image:caption>ダリアと百合を用いた店内のフラワーアレンジメント</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://xs518179.xsrv.jp/images/c0209824.jpg</image:loc>
+      <image:title>Caerle'on コンセプト</image:title>
+      <image:caption>季節の花で設えた店内の一角</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://xs518179.xsrv.jp/images/c0209948.jpg</image:loc>
+      <image:title>Caerle'on 店内</image:title>
+      <image:caption>ベルベットのソファを配したテーブル席</image:caption>
     </image:image>
   </url>
 </urlset>
