@@ -31,4 +31,4 @@ Allow: /
 User-agent: Bingbot
 Allow: /
 
-Sitemap: https://xs518179.xsrv.jp/sitemap.xml
+Sitemap: https://caerleon-club.com/sitemap.xml

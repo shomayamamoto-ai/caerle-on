@@ -26,7 +26,19 @@ def main() -> int:
 
     new = normalize(sys.argv[1])
     root = Path(__file__).resolve().parent.parent
-    old_pat = re.compile(r'https://shomayamamoto-ai\.github\.io/caerle-on/')
+
+    # 現在のアドレスは index.html の canonical から読み取る
+    index = (root / 'index.html').read_text(encoding='utf-8')
+    m = re.search(r'<link rel="canonical" href="([^"]+)"', index)
+    if not m:
+        print('  index.html の canonical が見つかりません')
+        return 1
+    current = m.group(1)
+    if not current.endswith('/'):
+        current += '/'
+    print(f'  現在のアドレス: {current}')
+    print(f'  新しいアドレス: {new}\n')
+    old_pat = re.compile(re.escape(current))
 
     total = 0
     for name in TARGETS:
