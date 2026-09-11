@@ -4,3 +4,7 @@ caerleon-php-package.zip
 # admin-api.php が保存前に作成するバックアップ
 _backup_*
 images/_backup_*
+
+# パスワード等を含む納品物（公開リポジトリに置かない）
+caerleon-アップロード用.zip
+XSERVER手順書-設定済み.md
